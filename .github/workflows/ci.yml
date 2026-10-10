@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  # ── 代码质量检查 ──
+  lint:
+    name: Lint (ruff)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # 固定 ruff 0.15.x：新版默认启用 UP007/BLE001 等新规则，会把既有 Optional 风格全标出来
+      - run: python -m pip install 'ruff>=0.15,<0.16'
+      - run: ruff check src/
+
+  # ── 单元测试 ──
+  test:
+    name: Test (pytest)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      # setup-python 的 Python 非 externally-managed，pip 可直接装
+      - run: python -m pip install -r requirements.txt pytest pytest-asyncio pytest-cov
+      - run: |
+          python -m pytest tests/ \
+            -m "not slow and not integration" \
+            -v --tb=short \
+            --cov=src/ \
+            --cov-report=term-missing \
+            --cov-report=xml
+      - name: Upload coverage
+        uses: codecov/codecov-action@v5
+        with:
+          files: ./coverage.xml
+          flags: unittests
+
+  # ── 类型检查（可选，非阻断） ──
+  typecheck:
+    name: Type check (mypy)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements.txt mypy
+      - run: python -m mypy src/ --ignore-missing-imports || echo "类型检查有警告（非阻断）"
+
+  # ── 安全检查 ──
+  security:
+    name: Security scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for hardcoded secrets
+        run: |
+          if grep -r "sk-[a-zA-Z0-9]\{20,\}" src/ --include="*.py" 2>/dev/null; then
+            echo "⚠️  发现可能的 API Key 硬编码"
+          fi
+          if grep -r "password.*=.*\"[^\"]\{3,\}\"" src/ --include="*.py" 2>/dev/null; then
+            echo "⚠️  发现可能的密码硬编码"
+          fi

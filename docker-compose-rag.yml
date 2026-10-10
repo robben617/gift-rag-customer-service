@@ -1,0 +1,175 @@
+# ══════════════════════════════════════════════════════════════
+# 电商智能客服 RAG 系统 — Docker Compose
+#
+# 使用方法:
+#   1. 准备 .env:  cp .env.example .env   并填写必填项
+#   2. 把 local_models/ 放在本文件同级目录（模型权重不打进镜像，见 README「本地模型」）
+#   3. docker compose -f docker-compose-rag.yml up -d --build
+#   4. 访问:
+#        http://<HOST>:8000/docs   API 文档
+#        http://<HOST>:7860        知识库入库平台
+#        http://<HOST>:7861        用户聊天界面
+#        http://<HOST>:7862        管理员控制台
+#
+# 说明: 向量库使用 Chroma（容器内 /app/data/chroma 本地持久化），
+#       不依赖任何外部 Milvus 服务，因此本文件可独立启动。
+# ══════════════════════════════════════════════════════════════
+
+x-rag-env: &rag-env
+  TZ: Asia/Shanghai
+  # ── 向量库：Chroma 本地持久化（无需外部服务）──
+  CHROMA_PERSIST_DIR: /app/data/chroma
+  # ── 本地 BGE 模型：权重经 volume 挂载，不打进镜像 ──
+  EMBEDDING_MODEL_PATH: ${EMBEDDING_MODEL_PATH:-/app/local_models/models/BAAI--bge-small-zh-v1.5/snapshots/master}
+  RERANKER_MODEL_PATH: ${RERANKER_MODEL_PATH:-/app/local_models/models/BAAI--bge-reranker-base/snapshots/master}
+  EMBEDDING_DIM: ${EMBEDDING_DIM:-512}
+  RERANKER_TOP_N: ${RERANKER_TOP_N:-5}
+  # ── LLM 与联网搜索 ──
+  DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:?请在 .env 设置 DEEPSEEK_API_KEY}
+  ZHIPU_API_KEY: ${ZHIPU_API_KEY:-}
+  TAVILY_API_KEY: ${TAVILY_API_KEY:-}
+  WEB_SEARCH_ENABLED: ${WEB_SEARCH_ENABLED:-true}
+  SILICONFLOW_API_KEY: ${SILICONFLOW_API_KEY:-}
+  # ── 缓存 ──
+  REDIS_HOST: redis
+  REDIS_PORT: "6379"
+  # ── 鉴权（模块33）──
+  JWT_SECRET: ${JWT_SECRET:?请在 .env 设置强随机 JWT_SECRET}
+  ENABLE_DEMO_USERS: ${ENABLE_DEMO_USERS:-true}
+  # ── 订单/物流 MySQL（可选：未配置时自动降级为 mock 数据）──
+  MYSQL_HOST: ${MYSQL_HOST:-}
+  MYSQL_PORT: ${MYSQL_PORT:-3306}
+  MYSQL_USER: ${MYSQL_USER:-}
+  MYSQL_PASSWORD: ${MYSQL_PASSWORD:-}
+  MYSQL_DATABASE: ${MYSQL_DATABASE:-copilot}
+
+x-rag-volumes: &rag-volumes
+  - ./data:/app/data
+  - ./logs:/app/logs
+  - ./local_models:/app/local_models:ro
+
+services:
+  # ── Redis 缓存 ──
+  redis:
+    container_name: rag-redis
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ── FastAPI 应用 ──
+  api:
+    container_name: rag-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      <<: *rag-env
+    volumes: *rag-volumes
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # ── 知识库入库平台 ──
+  gradio:
+    container_name: rag-gradio
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["python", "-m", "src.admin.gradio_app"]
+    ports:
+      - "7860:7860"
+    environment:
+      <<: *rag-env
+      GRADIO_USERNAME: ${GRADIO_USERNAME:?请在 .env 设置 UI 访问用户名}
+      GRADIO_PASSWORD: ${GRADIO_PASSWORD:?请在 .env 设置 UI 访问密码}
+    volumes: *rag-volumes
+    depends_on:
+      redis:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7860"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # ── 用户聊天界面 ──
+  chat-ui:
+    container_name: rag-chat-ui
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["python", "-m", "src.admin.chat_ui"]
+    ports:
+      - "7861:7861"
+    environment:
+      <<: *rag-env
+      GRADIO_USERNAME: ${GRADIO_USERNAME:?请在 .env 设置 UI 访问用户名}
+      GRADIO_PASSWORD: ${GRADIO_PASSWORD:?请在 .env 设置 UI 访问密码}
+      API_USERNAME: ${API_USERNAME:?请在 .env 设置 API 服务账号}
+      API_PASSWORD: ${API_PASSWORD:?请在 .env 设置 API 服务账号密码}
+    volumes: *rag-volumes
+    depends_on:
+      redis:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7861"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # ── 管理员控制台 ──
+  admin-ui:
+    container_name: rag-admin-ui
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["python", "-m", "src.admin.admin_ui"]
+    ports:
+      - "7862:7862"
+    environment:
+      <<: *rag-env
+      GRADIO_USERNAME: ${GRADIO_USERNAME:?请在 .env 设置 UI 访问用户名}
+      GRADIO_PASSWORD: ${GRADIO_PASSWORD:?请在 .env 设置 UI 访问密码}
+      API_USERNAME: ${API_USERNAME:?请在 .env 设置 API 服务账号}
+      API_PASSWORD: ${API_PASSWORD:?请在 .env 设置 API 服务账号密码}
+    volumes: *rag-volumes
+    depends_on:
+      redis:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7862"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  redis_data:
+
+networks:
+  default:
+    name: rag-net

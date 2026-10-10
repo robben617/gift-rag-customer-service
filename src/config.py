@@ -1,0 +1,185 @@
+"""统一配置中心 — 所有模块从这里读取配置
+
+pydantic-settings 自动从以下来源加载（优先级从高到低）：
+  1. 环境变量 (export DEEPSEEK_API_KEY=...)
+  2. .env 文件
+  3. 类定义的默认值
+
+因此字段默认值应设为空字符串或合理默认值，
+NOT os.getenv() —— 后者在类定义时求值，此时 .env 尚未加载。
+
+模型方案 (2026-08):
+  向量库:     Chroma（本地持久化）
+  Embedding:  本地 BAAI/bge-small-zh-v1.5 → 512 维（query 侧 instruction + L2 归一化）
+  Reranker:   本地 BAAI/bge-reranker-base（CrossEncoder，query-doc 逐对打分）
+  PDF 解析:   fitz 文本快路径 + 本地 RapidOCR（扫描页，无需云端 Key）
+  对话 LLM:   DeepSeek（意图分类 / 生成 / 幻觉断言 / 查询改写）
+  联网搜索:   智谱 GLM-4-Flash（优先）/ Tavily（备选）
+"""
+
+import json
+from pathlib import Path
+
+from pydantic import field_validator
+from pydantic_settings import BaseSettings
+
+PROJECT_ROOT = Path(__file__).parent.parent
+
+
+class Settings(BaseSettings):
+    """应用配置，自动从 .env / 环境变量读取"""
+
+    # ========== 智谱 GLM（联网搜索）==========
+    zhipu_api_key: str = ""
+    zhipu_base_url: str = "https://open.bigmodel.cn/api/paas/v4"
+    zhipu_web_search_enabled: bool = True  # 是否启用智谱联网搜索
+
+    # ========== DeepSeek ==========
+    deepseek_api_key: str = ""
+    deepseek_base_url: str = "https://api.deepseek.com/v1"
+
+    # ========== OpenAI 兼容 ==========
+    openai_api_key: str = ""
+    openai_base_url: str = "https://api.openai.com/v1"
+
+    # ========== SiliconFlow（图片理解 VLM，OpenAI 兼容，替代百炼/智谱）==========
+    siliconflow_api_key: str = ""
+    siliconflow_base_url: str = "https://api.siliconflow.cn/v1"
+    siliconflow_vl_model: str = "Qwen/Qwen3-VL-8B-Instruct"
+
+    # ========== LLM 主/备模型 ==========
+    default_model: str = "deepseek-chat"
+    fallback_model: str = "qwen-plus"
+    vision_model: str = "Qwen/Qwen3-VL-8B-Instruct"  # 图片理解（SiliconFlow）
+    ocr_model: str = "rapidocr"  # 本地 OCR（RapidOCR，替代 qwen-vl-ocr）
+
+    # ========== 文档解析 ==========
+    pdf_max_pages: int = 50  # PDF单次最大解析页数
+    pdf_ocr_enabled: bool = True  # 扫描件自动OCR
+    doc_parse_timeout: int = 120  # 文档解析超时(秒)
+
+    # ========== Embedding（本地 BAAI/bge，替代 DashScope 多模态）==========
+    embedding_model: str = "bge-small-zh-v1.5"
+    embedding_model_path: str = ""  # 本地模型目录，.env: EMBEDDING_MODEL_PATH
+    embedding_dim: int = 512  # bge-small-zh-v1.5 输出维度
+    embedding_batch_size: int = 64  # 本地 batch 编码条数
+
+    # ========== Reranker（本地 BAAI/bge-reranker，替代 DashScope）==========
+    reranker_model: str = "bge-reranker-base"
+    reranker_model_path: str = ""  # 本地模型目录，.env: RERANKER_MODEL_PATH
+    reranker_enabled: bool = True  # 是否启用重排序
+    reranker_top_n: int = 5  # 重排序后返回数
+
+    # ========== Chroma 向量库 ==========
+    chroma_persist_dir: Path = PROJECT_ROOT / "data" / "chroma"
+    chroma_collection: str = "ecommerce_knowledge"
+
+    # ========== Redis ==========
+    redis_host: str = "127.0.0.1"
+    redis_port: int = 6379
+    redis_db: int = 0
+
+    # ========== 订单/物流数据库（复用第二项目 copilot MySQL，src/orders） ==========
+    mysql_host: str = "127.0.0.1"
+    mysql_port: int = 3306
+    mysql_user: str = "agent_ro"  # 只读账号
+    mysql_password: str = ""  # .env 提供
+    mysql_database: str = "copilot"
+
+    # ========== 联网搜索 ==========
+    tavily_api_key: str = ""  # Tavily Search API Key (可选)
+    web_search_enabled: bool = True  # 是否启用联网搜索降级
+    retrieval_top_k: int = 5
+    retrieval_dense_top_k: int = 20
+    retrieval_similarity_threshold: float = 0.4  # BGE 余弦相似度量纲
+
+    # ========== 幻觉检测 ==========
+    max_correction_rounds: int = 2
+    faithfulness_threshold: float = 0.8
+
+    # ========== 缓存 ==========
+    query_cache_ttl: int = 3600
+    embedding_cache_enabled: bool = True
+
+    # ========== 服务 ==========
+    api_host: str = "0.0.0.0"
+    api_port: int = 8000
+
+    # ========== 鉴权 (JWT, 模块33) ==========
+    jwt_secret: str = ""  # 必须通过 .env / 环境变量显式设置；为空时应用启动校验拒绝启动
+    jwt_algorithm: str = "HS256"
+    token_expire_minutes: int = 720  # 12 小时
+    # 是否启用内置 demo 用户（明文弱密码，仅演示/测试）。生产必须为 False。
+    enable_demo_users: bool = False
+    # ========== Gradio UI 鉴权 ==========
+    gradio_username: str = ""  # UI 访问凭据；为空时三个 UI 拒绝无鉴权启动
+    gradio_password: str = ""
+    # demo 用户: {"username": {"password": "...", "role": "...", "access_level": "..."}}
+    # .env 里用 JSON 字符串覆盖 (DEMO_USERS={"admin":{"password":"...",...}})
+    demo_users: dict = {
+        # seed_user_id: 对应 copilot 库 orders.user_id（订单归属隔离用）；admin=None 可查任意订单
+        "admin": {
+            "password": "admin123",
+            "role": "admin",
+            "access_level": "vip",
+            "seed_user_id": None,
+        },
+        "vip": {
+            "password": "vip123",
+            "role": "vip",
+            "access_level": "vip",
+            "seed_user_id": 3,
+        },
+        "member": {
+            "password": "member123",
+            "role": "member",
+            "access_level": "member",
+            "seed_user_id": 2,
+        },
+        "normal": {
+            "password": "normal123",
+            "role": "normal",
+            "access_level": "public",
+            "seed_user_id": 1,
+        },
+    }
+
+    @field_validator("demo_users", mode="before")
+    @classmethod
+    def _parse_demo_users(cls, v):
+        """支持 .env 里 JSON 字符串形式的 DEMO_USERS"""
+        if isinstance(v, str):
+            v = v.strip()
+            if v:
+                return json.loads(v)
+        return v
+
+    # ========== CORS ==========
+    cors_origins: list = [
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+        "http://localhost:7860",  # gradio 知识库入库平台
+        "http://localhost:7861",  # gradio 客户聊天
+        "http://localhost:7862",  # gradio 管理员控制台
+    ]
+
+    @field_validator("cors_origins", mode="before")
+    @classmethod
+    def _parse_cors_origins(cls, v):
+        """支持 .env 里逗号分隔字符串 CORS_ORIGINS"""
+        if isinstance(v, str):
+            return [x.strip() for x in v.split(",") if x.strip()]
+        return v
+
+    # ========== 路径 ==========
+    data_dir: Path = PROJECT_ROOT / "data"
+    raw_data_dir: Path = PROJECT_ROOT / "data" / "raw"
+    processed_data_dir: Path = PROJECT_ROOT / "data" / "processed"
+    faq_dir: Path = PROJECT_ROOT / "data" / "faq"
+    log_dir: Path = PROJECT_ROOT / "logs"
+    model_dir: Path = PROJECT_ROOT / "models"
+
+    model_config = {"env_file": ".env", "extra": "ignore"}
+
+
+settings = Settings()

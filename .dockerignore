@@ -1,0 +1,53 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+.venv
+venv
+.eggs
+*.egg-info
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# 环境文件（镜像内用 .env.example 作模板，真实密钥由 compose 注入）
+.env
+.env.local
+
+# 本地模型权重（3.4GB，经 volume 挂载进容器，绝不进构建上下文）
+local_models/
+
+# 数据和日志（挂载卷）
+data/
+logs/
+output/
+uploads/
+.tmp/
+
+# AI 协作工作区
+.workbuddy/
+
+# 文档
+*.md
+docs/
+
+# 测试与 CI
+tests/
+pytest.ini
+.github/
+
+# 个人文件
+Chinese.jpg
+HCAI-AI证书.pdf
+
+# 其他
+Dockerfile
+docker-compose*.yml
+.dockerignore

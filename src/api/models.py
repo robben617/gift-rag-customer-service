@@ -1,0 +1,145 @@
+"""模块12 Pydantic 模型 — 请求/响应数据结构"""
+
+from pydantic import BaseModel, Field
+
+# ── 鉴权 (模块33) ──
+
+
+class LoginRequest(BaseModel):
+    """登录请求"""
+
+    username: str = Field(..., min_length=1, max_length=64, description="用户名")
+    password: str = Field(..., min_length=1, max_length=128, description="密码")
+
+
+# ── 查询 ──
+
+
+class QueryRequest(BaseModel):
+    """检索请求"""
+
+    query: str = Field(..., min_length=1, max_length=1000, description="查询文本")
+    top_k: int = Field(5, ge=1, le=50, description="返回结果数")
+    use_reranker: bool = Field(True, description="是否启用 Reranker 重排序")
+    threshold: float | None = Field(None, ge=0, le=1, description="最低相似度阈值")
+    filter_doc_type: str | None = Field(None, description="按文档类型过滤")
+    filter_source: str | None = Field(None, description="按来源文件过滤")
+
+
+class SearchResultItem(BaseModel):
+    """单条检索结果"""
+
+    chunk_id: str
+    text: str
+    score: float
+    doc_type: str = ""
+    source_file: str = ""
+    page_number: int = 0  # 页码（0表示未知）
+    heading_path: list[str] = []
+
+
+class QueryResponse(BaseModel):
+    """检索响应"""
+
+    query: str
+    results: list[SearchResultItem]
+    total_found: int
+    query_time_ms: float
+    threshold: float
+
+
+# ── 上传 ──
+
+
+class UploadRequest(BaseModel):
+    """文件上传请求（路径方式）"""
+
+    file_path: str = Field(..., description="文件绝对路径或 URL")
+    recreate_collection: bool = Field(
+        False, description="是否重建 collection（⚠️ 清空数据）"
+    )
+    # 政策时效元数据（改进4）——电商政策频繁变更，需要版本/生效窗口管理
+    version: str | None = Field(None, description="文档版本号，如 v2")
+    effective_from: str | None = Field(
+        None, description="生效日期 YYYY-MM-DD（留空=立即生效）"
+    )
+    effective_to: str | None = Field(
+        None, description="过期日期 YYYY-MM-DD（留空=永不过期）"
+    )
+    # 模块33 内容权限: 入库时给文档打权限标签（public/member/vip）
+    access_level: str = Field(
+        "public", description="内容等级 public/member/vip（普通用户默认只能看 public）"
+    )
+
+
+class UploadResponse(BaseModel):
+    """上传响应"""
+
+    status: str  # ok / partial / failed
+    source_file: str
+    total_chunks: int = 0
+    embedded: int = 0
+    inserted: int = 0
+    elapsed_seconds: float = 0
+    errors: list[str] = []
+
+
+# ── 统计 ──
+
+
+class StatsResponse(BaseModel):
+    """Collection 统计"""
+
+    exists: bool
+    collection_name: str = ""
+    total_vectors: int = 0
+    dimension: int = 0
+    model_name: str = ""
+
+
+class HealthResponse(BaseModel):
+    """健康检查"""
+
+    status: str  # ok / degraded / unhealthy
+    vector_store: str = "unknown"
+    embedder: str = "unknown"
+    reranker: str = "unknown"
+    collection: dict = {}
+
+
+# ── 对话 ──
+
+
+class ChatRequest(BaseModel):
+    """客服对话请求"""
+
+    query: str = Field(..., min_length=1, max_length=1000, description="用户问题")
+    top_k: int = Field(5, ge=1, le=20, description="检索结果数")
+    use_reranker: bool = Field(True, description="是否启用 Reranker")
+    session_id: str = Field(
+        "default", description="会话ID（多轮对话上下文，指代消解需要）"
+    )
+
+
+class ChatResponse(BaseModel):
+    """客服对话响应"""
+
+    query: str
+    intent: str
+    confidence: float
+    target: str
+    rewritten_query: str
+    reasoning: str
+    results: list[SearchResultItem]
+    reply: str
+    search_time_ms: float = 0
+    degradation_level: int = 1  # 1=直接命中, 2=改写命中, 3=联网搜索, 4=兜底
+    degradation_method: str = "dense"  # decomposed / dense / rewritten / expanded / web_search / fallback
+    faithfulness: float = 0.0  # 忠实度分数 (0~1)
+    correction_rounds: int = 0  # 自纠正轮数
+    was_corrected: bool = False  # 是否经过纠正
+    needs_human: bool = False  # 是否需要人工介入
+    human_reason: str = ""  # 人工介入原因
+    human_priority: str = ""  # 人工介入优先级 (low/medium/high)
+    emotion: str = "calm"  # 情绪等级 calm/dissatisfied/angry/extreme
+    handoff_payload: dict = {}  # 转人工交接包（摘要/实体/情绪/已尝试动作）
