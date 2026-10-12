@@ -90,7 +90,11 @@ ignore = [
 package-mode = false
 
 [tool.pytest.ini_options]
+# 只收集 tests/，避免把 scripts/ 下需要真实服务的手工脚本（如 scripts/test_api.py）当成用例
+testpaths = ["tests"]
+# 默认与 CI 一致：跳过需要真实模型/外部服务的用例；单独跑它们用 pytest -m "slow or integration"
+addopts = "-m 'not slow and not integration'"
 markers = [
     "slow: 需要下载模型或大文件",
-    "integration: 需要外部服务 (Milvus, API Key 等)",
+    "integration: 需要外部服务 (MySQL, API Key 等)",
 ]

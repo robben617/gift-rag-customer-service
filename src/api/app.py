@@ -10,6 +10,7 @@
     POST /api/chat/stream    流式对话（需登录）
     POST /api/upload         文件路径上传（管理员）
     POST /api/upload/file    文件流上传（管理员）
+    GET  /api/documents      文档清单（管理员）
     DELETE /api/documents/{source_file}  删除文档（管理员）
     GET  /api/stats          Collection 统计（管理员）
     GET  /api/health         健康检查（公开）

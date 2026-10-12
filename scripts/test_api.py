@@ -1,12 +1,17 @@
 """端到端 API 测试：登录 → 检索 → 对话（用 httpx 保证 UTF-8 编码）"""
+import os
 import sys
 from pathlib import Path
+
+from dotenv import load_dotenv
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import httpx
 
-BASE = "http://127.0.0.1:8001"
+load_dotenv()
+# 端口取自 .env 的 API_BASE_URL，默认 8000（与 README / .env.example 一致）
+BASE = os.getenv("API_BASE_URL", "http://127.0.0.1:8000")
 c = httpx.Client(timeout=180)
 
 # 1. 登录

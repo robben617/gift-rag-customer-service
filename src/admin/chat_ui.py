@@ -1,18 +1,24 @@
 """用户聊天界面 — Gradio ChatBot
 
 面向终端用户的客服聊天界面，支持：
-- 流式输出（逐字显示）
 - 多轮对话
-- 显示意图分类和人工介入状态
-- 显示检索来源
+- 会话级隔离（每浏览器独立，不串话）
+- 人工介入状态提示，客服处理结果与回复自动推送
 - 自动保存人工介入请求到数据库
+
+状态栏展示内容由「调试模式」决定：
+- 关闭（默认）：只显示对客户有意义的服务状态
+- 开启：额外显示意图、置信度、检索条数与来源，用于演示与排障
+初始值取自环境变量 UI_DEBUG_MODE，界面上可临时切换。
 
 启动: python -m src.admin.chat_ui
 """
 
 import json
 import logging
+import os
 import sqlite3
+import uuid
 from datetime import datetime
 from pathlib import Path
 
@@ -22,24 +28,41 @@ import requests
 logger = logging.getLogger(__name__)
 
 # API 地址 (Docker 容器内使用服务名)
-import os
-
 API_BASE_URL = os.getenv("API_BASE_URL", "http://rag-api:8000")
+
+# 调试模式：默认关闭。
+# 关闭时界面只显示对客户有意义的服务状态；开启后额外显示意图、置信度、命中条数与检索来源，
+# 用于演示与排障。面向真实客户应保持关闭——内部字段对客户是噪音，也会暴露实现细节。
+# 由环境变量 UI_DEBUG_MODE 提供初始值（见 .env.example），界面上可临时切换。
+DEBUG_MODE = os.getenv("UI_DEBUG_MODE", "false").strip().lower() in {"1", "true", "yes", "on"}
 
 # 人工介入数据库
 HITL_DB = Path(__file__).parent.parent.parent / "data" / "hitl_requests.db"
 
-# 修复(审查): 会话 ID 用随机 uuid 而非分钟级时间戳——同分钟内多用户会共享同一会话历史/人工状态。
-# 每次启动生成一个随机会话，避免不同演示间的串扰；管理员处理结果仍可通过数据库按会话回查。
-import uuid as _uuid
+# 每浏览器会话独立：会话 ID + 展示游标。
+# 修复(审查): 原实现把 SESSION_ID 作为模块级常量，同一 Gradio 进程的所有用户共享同一会话，
+# 会互相串话、共享人工介入状态。改为会话级隔离——session_id 由 gr.State 承载，
+# 展示游标按 session_id 分开存放。
+_MAX_TRACKED_SESSIONS = 1000
+_SESSION_TRACKER: dict[str, dict] = {}
 
-SESSION_ID = f"chat_{_uuid.uuid4().hex[:10]}"
 
-# 已展示给客户的处理结果（避免重复显示）
-_SHOWN_RESOLUTIONS: set[int] = set()
+def _new_session_id() -> str:
+    """生成一个新的会话 ID（页面加载时调用一次）"""
+    return f"chat_{uuid.uuid4().hex[:10]}"
 
-# 已推送给客户的人工消息最大 ID（避免重复）
-_last_admin_msg_id = 0
+
+def _tracker(session_id: str) -> dict:
+    """取得（或初始化）某会话的展示游标状态"""
+    if (
+        session_id not in _SESSION_TRACKER
+        and len(_SESSION_TRACKER) >= _MAX_TRACKED_SESSIONS
+    ):
+        _SESSION_TRACKER.clear()  # 上限保护：避免长期运行无限增长
+    return _SESSION_TRACKER.setdefault(
+        session_id,
+        {"shown_resolutions": set(), "last_admin_msg_id": 0},
+    )
 
 
 def is_human_mode(session_id: str) -> bool:
@@ -178,12 +201,62 @@ def get_resolution_for_session(session_id: str) -> tuple[int, str]:
 init_hitl_db()
 
 
-def chat_with_bot(message: str, history: list) -> tuple:
+def build_status_message(
+    *,
+    debug: bool,
+    intent: str = "",
+    confidence: float = 0.0,
+    needs_human: bool = False,
+    human_reason: str = "",
+    result_count: int = 0,
+    sources: list[str] | None = None,
+) -> str:
+    """构造状态栏文案。
+
+    调试模式（debug=True）：展示意图、置信度、命中条数与来源，便于演示与排障。
+    正常模式（debug=False）：只保留对客户有意义的服务状态，不暴露内部字段。
+    两种模式都保留"已转人工"这一对客户必要的信息——它决定用户接下来该不该继续等。
+    来源按文件名排序输出，保证同一批结果每次展示顺序一致。
+
+    Args:
+        debug: 是否调试模式
+        intent: 识别到的意图
+        confidence: 意图置信度
+        needs_human: 是否需要人工介入
+        human_reason: 转人工原因（内部字段，仅调试模式展示）
+        result_count: 检索命中条数
+        sources: 检索来源文件名列表
+
+    Returns:
+        状态栏展示文案
+    """
+    if not debug:
+        if needs_human:
+            return "📞 已转接人工客服，客服回复后会显示在这里"
+        return "✅ 已回复，可继续提问"
+
+    parts: list[str] = []
+    if intent:
+        parts.append(f"意图: {intent} ({confidence:.0%})")
+    if needs_human:
+        parts.append(f"⚠️ 需要人工介入: {human_reason}")
+    if result_count:
+        parts.append(f"检索到 {result_count} 条结果")
+        if sources:
+            parts.append(f"来源: {', '.join(sorted(sources))}")
+    return " | ".join(parts) if parts else "正常回复"
+
+
+def chat_with_bot(
+    message: str, history: list, session_id: str, debug: bool = False
+) -> tuple:
     """与客服机器人对话
 
     Args:
         message: 用户输入
         history: 对话历史 (Gradio 6.0 格式)
+        session_id: 当前浏览器会话 ID（每会话独立）
+        debug: 调试模式；关闭时状态栏不展示意图/置信度/检索来源等内部字段
 
     Returns:
         (更新后的历史, 状态信息)
@@ -191,16 +264,18 @@ def chat_with_bot(message: str, history: list) -> tuple:
     if not message.strip():
         return history, "请输入问题"
 
+    tracker = _tracker(session_id)
+
     # 修复: 先检查管理员是否已处理该会话的人工介入 → 回传给客户（形成闭环）
-    res_id, resolution = get_resolution_for_session(SESSION_ID)
+    res_id, resolution = get_resolution_for_session(session_id)
     admin_reply = ""
-    if res_id and res_id not in _SHOWN_RESOLUTIONS:
-        _SHOWN_RESOLUTIONS.add(res_id)
+    if res_id and res_id not in tracker["shown_resolutions"]:
+        tracker["shown_resolutions"].add(res_id)
         admin_reply = f"【客服处理结果】{resolution}\n\n"
 
     # 已转人工 → 客户消息直接进人工对话（同一窗口），不走 AI
-    if is_human_mode(SESSION_ID):
-        save_human_message(SESSION_ID, "user", message)
+    if is_human_mode(session_id):
+        save_human_message(session_id, "user", message)
         history.append({"role": "user", "content": message})
         history.append(
             {
@@ -220,7 +295,7 @@ def chat_with_bot(message: str, history: list) -> tuple:
                 "query": message,
                 "top_k": 5,
                 "use_reranker": True,
-                "session_id": SESSION_ID,
+                "session_id": session_id,
             },
             headers=auth_headers(),
             timeout=30,
@@ -236,27 +311,24 @@ def chat_with_bot(message: str, history: list) -> tuple:
         human_reason = data.get("human_reason", "")
         results = data.get("results", [])
 
-        # 构建状态信息
-        status_parts = []
-        if intent:
-            status_parts.append(f"意图: {intent} ({confidence:.0%})")
-        if needs_human:
-            status_parts.append(f"⚠️ 需要人工介入: {human_reason}")
-        if results:
-            status_parts.append(f"检索到 {len(results)} 条结果")
-            # 显示来源
-            sources = set(
-                r.get("source_file", "") for r in results if r.get("source_file")
-            )
-            if sources:
-                status_parts.append(f"来源: {', '.join(sources)}")
-
-        status = " | ".join(status_parts) if status_parts else "正常回复"
+        # 构建状态信息（按调试模式决定是否暴露内部字段）
+        sources = sorted(
+            {r.get("source_file", "") for r in results if r.get("source_file")}
+        )
+        status = build_status_message(
+            debug=debug,
+            intent=intent,
+            confidence=confidence,
+            needs_human=needs_human,
+            human_reason=human_reason,
+            result_count=len(results),
+            sources=sources,
+        )
 
         # 如果需要人工介入，保存到数据库（用稳定会话 ID 关联）
         if needs_human:
             save_hitl_request(
-                session_id=SESSION_ID,
+                session_id=session_id,
                 user_query=message,
                 intent=intent,
                 confidence=confidence,
@@ -274,42 +346,50 @@ def chat_with_bot(message: str, history: list) -> tuple:
 
         return history, status
 
-    except Exception as e:
+    except requests.exceptions.Timeout:
+        logger.warning("聊天请求超时: %s", message[:50])
+        history.append({"role": "user", "content": message})
+        history.append({"role": "assistant", "content": "响应超时，请稍后重试。"})
+        return history, "⚠️ 响应超时，请稍后重试"
+    except Exception:
         logger.exception("聊天请求失败")
         history.append({"role": "user", "content": message})
         history.append({"role": "assistant", "content": "系统暂时繁忙，请稍后重试。"})
         return history, "系统暂时繁忙，请稍后重试。"
 
 
-def clear_history():
-    """清空对话历史"""
+def clear_history(session_id: str):
+    """清空对话历史（同时重置本会话的展示游标）"""
+    _SESSION_TRACKER.pop(session_id, None)
     return [], "对话已清空"
 
 
-def poll_resolution(history: list):
+def poll_resolution(history: list, session_id: str):
     """主动推送客服处理结果 + 人工对话新回复（无需客户再发消息）
 
     由 gr.Timer 定时调用：管理员处理完/回复后 → 自动加进对话。
     """
+    tracker = _tracker(session_id)
     changed = False
 
     # 一次性处理结果
-    res_id, resolution = get_resolution_for_session(SESSION_ID)
-    if res_id and res_id not in _SHOWN_RESOLUTIONS:
-        _SHOWN_RESOLUTIONS.add(res_id)
+    res_id, resolution = get_resolution_for_session(session_id)
+    if res_id and res_id not in tracker["shown_resolutions"]:
+        tracker["shown_resolutions"].add(res_id)
         history = list(history) + [
             {"role": "assistant", "content": f"【客服处理结果】{resolution}"}
         ]
         changed = True
 
     # 人工对话多轮回复（客服在管理员界面回复 → 主动推给客户）
-    global _last_admin_msg_id
-    new_msgs = get_human_assistant_messages(SESSION_ID, _last_admin_msg_id)
+    new_msgs = get_human_assistant_messages(
+        session_id, tracker["last_admin_msg_id"]
+    )
     for mid, content in new_msgs:
         history = list(history) + [
             {"role": "assistant", "content": f"【人工客服】{content}"}
         ]
-        _last_admin_msg_id = mid
+        tracker["last_admin_msg_id"] = mid
         changed = True
 
     if changed:
@@ -326,12 +406,22 @@ def create_chat_ui() -> gr.Blocks:
 
             欢迎使用电商智能客服系统！请输入您的问题，我会尽力为您解答。
 
-            **支持的功能：**
+            **我可以帮您：**
             - 商品咨询、退货退款、物流查询
-            - 智能意图识别 + 多级检索降级
-            - 幻觉检测 + 自纠正
-            - 人工介入（退款/投诉/敏感话题）
+            - 订单状态查询
+            - 复杂或紧急问题转接人工客服
             """)
+
+        # 技术实现说明：仅调试模式可见。面向真实客户时这些是实现细节，属噪音。
+        tech_panel = gr.Markdown(
+            """
+            **技术实现（调试模式可见）：**
+            - 6 类意图自动识别 + 条件路由
+            - 双路召回 + CrossEncoder 精排，L0 至 L5 六级降级
+            - 幻觉检测与自纠正，敏感问题强制人工审批
+            """,
+            visible=DEBUG_MODE,
+        )
 
         with gr.Row():
             with gr.Column(scale=3):
@@ -363,6 +453,12 @@ def create_chat_ui() -> gr.Blocks:
                     lines=3,
                 )
 
+                debug_toggle = gr.Checkbox(
+                    label="调试模式",
+                    value=DEBUG_MODE,
+                    info="显示意图、置信度与检索来源，仅演示与排障使用",
+                )
+
                 gr.Markdown("""
                     ### 📋 快捷问题
 
@@ -373,22 +469,37 @@ def create_chat_ui() -> gr.Blocks:
                     - 我要投诉
                     """)
 
-                gr.Markdown("""
+                # 系统说明同属实现细节，跟随调试模式显隐
+                sys_panel = gr.Markdown(
+                    """
                     ### ℹ️ 系统说明
 
-                    - 意图分类：6类意图自动识别
+                    - 意图分类：6 类意图自动识别
                     - 检索策略：稠密向量召回 + CrossEncoder 精排
-                    - 降级策略：5级降级 + 联网搜索
+                    - 降级策略：L0 至 L5 六级降级
                     - 质量保证：幻觉检测 + 自纠正
-                    """)
+                    """,
+                    visible=DEBUG_MODE,
+                )
+
+        # 每浏览器会话独立的会话 ID（页面加载时生成，避免多用户串话）
+        session_state = gr.State("")
+        app.load(_new_session_id, outputs=session_state)
+
+        # 调试开关切换 → 同步技术说明与系统说明的显隐
+        debug_toggle.change(
+            lambda on: (gr.update(visible=bool(on)), gr.update(visible=bool(on))),
+            inputs=[debug_toggle],
+            outputs=[tech_panel, sys_panel],
+        )
 
         # 事件绑定
-        def respond(message, history):
-            return chat_with_bot(message, history)
+        def respond(message, history, session_id, debug):
+            return chat_with_bot(message, history, session_id, debug)
 
         msg_input.submit(
             respond,
-            inputs=[msg_input, chatbot],
+            inputs=[msg_input, chatbot, session_state, debug_toggle],
             outputs=[chatbot, status_display],
         ).then(
             lambda: "",
@@ -397,7 +508,7 @@ def create_chat_ui() -> gr.Blocks:
 
         submit_btn.click(
             respond,
-            inputs=[msg_input, chatbot],
+            inputs=[msg_input, chatbot, session_state, debug_toggle],
             outputs=[chatbot, status_display],
         ).then(
             lambda: "",
@@ -406,10 +517,11 @@ def create_chat_ui() -> gr.Blocks:
 
         clear_btn.click(
             clear_history,
+            inputs=[session_state],
             outputs=[chatbot, status_display],
         )
 
-        def retry_last(history):
+        def retry_last(history, session_id, debug):
             if history:
                 # 获取最后一条用户消息
                 last_message = None
@@ -420,12 +532,12 @@ def create_chat_ui() -> gr.Blocks:
                 if last_message:
                     # 移除最后一轮对话
                     history = history[:-2]
-                    return chat_with_bot(last_message, history)
+                    return chat_with_bot(last_message, history, session_id, debug)
             return history, "没有可重试的消息"
 
         retry_btn.click(
             retry_last,
-            inputs=[chatbot],
+            inputs=[chatbot, session_state, debug_toggle],
             outputs=[chatbot, status_display],
         )
 
@@ -433,7 +545,7 @@ def create_chat_ui() -> gr.Blocks:
         timer = gr.Timer(5)
         timer.tick(
             poll_resolution,
-            inputs=[chatbot],
+            inputs=[chatbot, session_state],
             outputs=[chatbot, status_display],
         )
 

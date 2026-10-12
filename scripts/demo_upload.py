@@ -1,13 +1,18 @@
 """第5课演示：API 上传入库 → 检索命中 → 删除，看向量库变化"""
+import os
 import sys
 from pathlib import Path
+
+from dotenv import load_dotenv
 from urllib.parse import quote
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import httpx
 
-BASE = "http://127.0.0.1:8001"
+load_dotenv()
+# 端口取自 .env 的 API_BASE_URL，默认 8000（与 README / .env.example 一致）
+BASE = os.getenv("API_BASE_URL", "http://127.0.0.1:8000")
 c = httpx.Client(timeout=120)
 
 r = c.post(f"{BASE}/api/auth/login", json={"username": "admin", "password": "admin123"})

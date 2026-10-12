@@ -8,3 +8,5 @@ import os
 
 os.environ.setdefault("JWT_SECRET", "test-secret-0123456789abcdef0123456789abcdef")
 os.environ.setdefault("ENABLE_DEMO_USERS", "true")
+# 聊天界面调试模式：测试环境强制关闭，保证状态栏文案断言确定（不受本地 .env 影响）
+os.environ.setdefault("UI_DEBUG_MODE", "false")

@@ -252,6 +252,47 @@ class ChromaStore:
             logger.warning("统计获取失败: %s", e)
             return {"exists": False, "total_vectors": 0, "error": str(e)}
 
+    def list_sources(self) -> list[dict]:
+        """列出库中所有来源文档（按 source_file 聚合）
+
+        Returns:
+            [{source_file, chunks, doc_type, access_level_label, pages}]，
+            按 chunk 数降序。供管理台「知识库管理」展示。
+        """
+        try:
+            if not self.collection_exists():
+                return []
+            col = self._get_collection()
+            raw = col.get(include=["metadatas"])
+        except Exception as e:
+            logger.warning("列出文档失败: %s", e)
+            return []
+
+        agg: dict[str, dict] = {}
+        for flat in raw.get("metadatas") or []:
+            flat = flat or {}
+            src = str(flat.get("source_file", "") or "")
+            if not src:
+                continue
+            item = agg.setdefault(
+                src,
+                {
+                    "source_file": src,
+                    "chunks": 0,
+                    "doc_type": str(flat.get("doc_type", "") or ""),
+                    "access_level_label": str(
+                        flat.get("access_level_label", "") or ""
+                    ),
+                    "pages": 0,
+                },
+            )
+            item["chunks"] += 1
+            item["pages"] = max(
+                item["pages"], int(flat.get("page_number", 0) or 0)
+            )
+
+        return sorted(agg.values(), key=lambda x: (-x["chunks"], x["source_file"]))
+
     def query_chunks_by_source(self, source_file: str) -> list[dict]:
         """查询某 source 的所有 chunk（按 chunk_index 排序，供父文档检索补全用）"""
         try:

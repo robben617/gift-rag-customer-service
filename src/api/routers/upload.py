@@ -162,6 +162,23 @@ async def upload_file(
     )
 
 
+@router.get("/documents")
+async def list_documents(
+    store: ChromaStore = Depends(get_store),
+    admin: CurrentUser = Depends(require_admin),
+) -> dict:
+    """列出知识库中已入库的文档（按来源聚合，仅管理员）
+
+    返回每个 source_file 的 chunk 数、文档类型与权限标签，供管理台展示与删除。
+    """
+    documents = store.list_sources()
+    return {
+        "total_documents": len(documents),
+        "total_vectors": store.stats().get("total_vectors", 0),
+        "documents": documents,
+    }
+
+
 @router.delete("/documents/{source_file:path}")
 async def delete_document(
     source_file: str,
