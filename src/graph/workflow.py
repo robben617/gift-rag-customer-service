@@ -18,8 +18,9 @@
 特性:
   - 级联检索: 向量检索 → 联网搜索 (两个独立图节点，可视化)
   - Agentic RAG: 生成 → 评估 → 纠正 闭环（最多 3 轮）
-  - Human-in-the-Loop: LangGraph interrupt_before 真正中断等待人工
-  - 多级降级: 5 级（原始→改写→扩展→联网→兜底）
+  - Human-in-the-Loop: LangGraph interrupt_before 在 human_approval 前中断，
+    配 checkpointer 落快照后可 update_state 注入决策并续接
+  - 多级降级: L0 至 L5 六级（分解→双路→改写→扩展→联网→兜底）
   - 幻觉检测自纠正: G-Eval LLM 自检
 """
 
@@ -160,9 +161,13 @@ def check_human_needed(state: RAGState) -> dict:
 def retrieve_docs(state: RAGState) -> dict:
     """节点3: 双路召回 + 多级降级检索
 
-    双路召回（行业实践两步检索，召回率+30%）:
+    双路召回（两步检索，防"改写错就全错"）:
       原始问题（保真度兜底） + 改写后问题（专业术语/指代消解）并行召回 → 合并去重。
-      改写偏离时原始问题仍能命中，避免"改写错就全错"。
+      改写偏离时原始问题仍能命中，避免单点失败。
+
+    实测口径: 在 49 题检索友好的干净 FAQ 评测集上，双路相对单路无显著增益
+      （Recall@5 +0.0%，详见 docs/ADR.md ADR-002）；双路的预期价值在口语化、
+      无主语与带指代的追问上，需另建贴近线上问法的评测集才能量化。
 
     辅助增强:
       - 指代消解: 结合会话历史补全追问（"那需要运费吗"→"退货需要运费吗"）
@@ -227,7 +232,7 @@ def retrieve_docs(state: RAGState) -> dict:
 
 
 def web_search(state: RAGState) -> dict:
-    """节点4: 联网搜索（级联检索第二级 — 独立图节点，面试可视化）
+    """节点4: 联网搜索（级联检索第二级 — 独立图节点，便于流程可视化）
 
     当向量检索返回空或降级到 Level≥4 时触发。
     优先使用智谱联网搜索，其次 Tavily Search API。
@@ -794,6 +799,50 @@ def build_rag_workflow() -> StateGraph:
 
 
 # ═══════════════════════════════════════
+# HITL 支撑：checkpointer + 中断检测
+# ═══════════════════════════════════════
+
+
+def build_checkpointer():
+    """构造 LangGraph checkpointer —— 静态中断（interrupt_before）的前置条件
+
+    为什么必须有:
+      - 无 checkpointer 时 get_state() 直接抛 ``ValueError: No checkpointer set``，
+        update_state() 也就无法注入 human_decision，中断等于"停在那里没人能叫醒"。
+      - 无 checkpointer 时 invoke 仍会停在断点，但不留快照，状态无法续接。
+
+    当前实现用内存版 MemorySaver: 零外部依赖，同进程内可中断/续接。
+    ⚠️ 生产注意:
+      1. 需要"进程重启后仍能续接"时，安装后端子包并替换为
+         ``langgraph-checkpoint-sqlite`` 的 SqliteSaver 或
+         ``langgraph-checkpoint-postgres`` 的 PostgresSaver；
+      2. MemorySaver 按 thread_id 累积快照且不回收，长驻服务需配会话清理或改用落盘后端。
+    """
+    from langgraph.checkpoint.memory import MemorySaver
+
+    return MemorySaver()
+
+
+def _is_paused(app, config: dict) -> bool:
+    """判断图是否停在静态断点上（HITL 是否正在等待人工）
+
+    关键坑: **静态中断（interrupt_before）不会在 invoke 的返回值里带
+    ``__interrupt__`` 键** —— 那个键只属于节点内 ``interrupt()`` 触发的动态中断。
+    因此中断判定只能查 ``get_state(config).next`` 是否非空。
+
+    不判定的后果: 评估不通过（高敏承诺且忠实度不足）时图停在 human_approval 前，
+    但 run() 检测不到中断，会把未经人工核验的答案直接返回给用户，绕过承诺护栏。
+    """
+    try:
+        snapshot = app.get_state(config)
+    except Exception as e:
+        # 未挂 checkpointer（或 thread 不存在）→ 无法判定，保守返回未中断
+        logger.warning("读取图状态失败，按未中断处理: %s", e)
+        return False
+    return bool(getattr(snapshot, "next", ()))
+
+
+# ═══════════════════════════════════════
 # 工作流封装
 # ═══════════════════════════════════════
 
@@ -820,13 +869,19 @@ class RAGWorkflow:
                 config,
                 {"human_decision": "approve"}  # 或 "rejected"
             )
+            # 续接必须复用同一个 config（thread_id 一致），否则找不到快照
             result = workflow.resume(config)
     """
 
     def __init__(self):
         self._graph = build_rag_workflow()
-        # 在 human_approval 节点前中断，等待外部注入 human_decision
-        self._app = self._graph.compile(interrupt_before=["human_approval"])
+        # 在 human_approval 节点前中断，等待外部注入 human_decision。
+        # checkpointer 不是可选项：没有它 get_state/update_state 全部不可用，
+        # 中断将无法被检测、也无法被续接。
+        self._app = self._graph.compile(
+            checkpointer=build_checkpointer(),
+            interrupt_before=["human_approval"],
+        )
 
     @property
     def app(self):
@@ -908,20 +963,33 @@ class RAGWorkflow:
         try:
             result = self._app.invoke(initial_state, config)
 
-            # 修复(审查): LangGraph 中断返回 dict 且 __interrupt__ 在键里(非属性)。
-            # 命中中断分支时用 **result 保留已累积状态(不要回退 initial_state 丢弃结果)。
-            if isinstance(result, dict) and "__interrupt__" in result:
-                return {
-                    **result,
-                    "answer": "等待人工审批中...",
-                }
-
+            # 修复(审查): 命中中断分支时用 **result 保留已累积状态(不要回退 initial_state 丢弃结果)。
             if result is None:
                 return {
                     **initial_state,
                     "__interrupt__": True,
                     "answer": "等待人工审批中...",
                     "error": "graph_interrupted",
+                }
+
+            # 动态中断（节点内 interrupt()）会在返回值里带 __interrupt__ 键
+            if isinstance(result, dict) and "__interrupt__" in result:
+                return {
+                    **result,
+                    "answer": "等待人工审批中...",
+                }
+
+            # 修复(审查): 静态中断（interrupt_before）**不带** __interrupt__ 键，
+            # 必须查 get_state().next。缺这一步时，评估不通过（高敏承诺且忠实度不足）
+            # 的答案会被直接返回给用户，绕过"须人工核验"的护栏。
+            if _is_paused(self._app, config):
+                logger.info("[HITL] 图停在 human_approval 前，等待人工注入决策")
+                base = result if isinstance(result, dict) else {}
+                return {
+                    **base,
+                    "__interrupt__": True,
+                    "answer": "等待人工审批中...",
+                    "needs_human": True,
                 }
 
             return result

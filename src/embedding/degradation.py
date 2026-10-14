@@ -6,7 +6,9 @@
   L2: 相似度不足 → LLM 改写 query → 重新检索（改善 > 0.05 才采纳）
   L3: 仍不足 → Multi-Query + HyDE 查询扩展 → 合并去重
   L4: 仍不足 → 联网搜索兜底（智谱 GLM-4-Flash 优先 / Tavily 备选）
-  兜底: 诚实回复 "根据已有信息无法确认"
+  L5: 兜底: 诚实回复 "根据已有信息无法确认"
+
+注: 返回值的 level 字段为 1~5（0 级分解命中后按 L1 记），method 才是区分具体策略的依据。
 
 使用:
     strategy = DegradationStrategy(retriever)
@@ -62,7 +64,7 @@ class DegradationResult:
     """降级检索结果"""
 
     response: SearchResponse
-    level: int  # 最终使用的降级级别 (1/2/3/4)
+    level: int  # 最终命中的降级级别，取值 1~5（0 级分解命中后按 1 记）
     method: str  # decomposed / dense / rewritten / expanded / web_search / fallback
     original_query: str = ""
     rewritten_query: str = ""
@@ -76,7 +78,9 @@ class DegradationStrategy:
     使用方式:
         strategy = DegradationStrategy(retriever)
         result = strategy.search_with_degradation("怎么退货？")
-        print(result.level)  # 1=直接命中, 2=改写后命中, 3=联网搜索, 4=兜底
+        print(result.level, result.method)
+        # level 1=dense 直接命中 / 2=改写后命中 / 3=扩展命中 / 4=联网搜索 / 5=兜底
+        # method 为 decomposed 时表示 L0 复杂查询分解命中
     """
 
     def __init__(self, retriever):
@@ -105,7 +109,7 @@ class DegradationStrategy:
         Returns:
             DegradationResult
         """
-        # ── Level 0: 复杂查询主动拆分子问题并行检索（面试加分项）──
+        # ── Level 0: 复杂查询主动拆分子问题并行检索 ──
         # 例: "A和B的性能参数对比" → 拆成 ["A性能", "A参数", "B性能", ...] 并行检索 → 合并
         # 行业实践（Question Decomposition for RAG）: 单查询对复合问题会"夹在概念之间"，
         # 拆分子查询并行检索 + 汇总，MRR@10 +36.7%。
@@ -285,7 +289,7 @@ class DegradationStrategy:
             method="fallback",
             original_query=query,
             rewritten_query=best_query,
-            degradation_reason="三级降级均未找到足够相关的结果",
+            degradation_reason="L0 至 L5 六级降级均未找到足够相关的结果",
         )
 
     def _is_sufficient(self, response: SearchResponse, threshold: float) -> bool:

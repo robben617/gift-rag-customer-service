@@ -78,7 +78,7 @@ class CircuitBreaker:
                   探测全部成功 → CLOSED（恢复）
                   探测失败 → OPEN（重新熔断）
 
-    面试要点:
+    设计要点:
         - CLOSED → OPEN 的触发条件是「连续失败」而非「累计失败」
         - HALF_OPEN 限制请求数，防止恢复阶段流量冲击
         - reset_timeout 设置要大于后端恢复时间（避免过早探测）

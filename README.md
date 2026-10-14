@@ -28,13 +28,17 @@
 
 | 指标 | 数值 | 说明 |
 |------|------|------|
-| **Recall@5** | **0.755** | 检索召回率（Top-5 命中相关文档的比例） |
-| **MRR** | **0.725** | 排序质量 |
-| **NDCG@5** | **0.728** | 整体排序 |
-| **Faithfulness** | **0.72** | 完整 RAG 生成忠实度 |
+| **Recall@5** | **0.735** | 检索召回率（Top-5 命中相关文档的比例） |
+| **MRR** | **0.709** | 排序质量 |
+| **NDCG@5** | **0.705** | 整体排序 |
+| **Faithfulness** | **0.66** | 完整 RAG 生成忠实度 |
 | 关键词覆盖率 | 0.976 | 命中关键词 |
 
 > 一键复现：`python scripts/run_benchmark.py --with-generation`（报告存 `reports/benchmark_*.json`）
+>
+> 上表为**最近一次实跑结果**（2026-10-13，本地 BGE + Chroma）。检索类指标确定性强、可复现；`Faithfulness` 依赖 LLM 生成与裁判，逐次波动较大，请以自己跑出的报告为准。
+>
+> **单路 vs 双路对照**：`python scripts/eval_ab_dual_path.py`（报告存 `reports/ab_dual_path_*.json`）。实测本 49 题集上双路相对单路 **Recall@5 +0.0% / MRR +0.0% / NDCG@5 +0.4% / Precision@5 −1.8%**，即**无显著增益**，原因见 `docs/ADR.md` 的 ADR-002 数据口径说明。
 >
 > **口径说明**：Recall@5 判定方式为「Top-5 中是否存在与标准答案 embedding 余弦相似度 ≥0.70 的文档」，属于**命中率（hit rate）口径**，不是标准 IR 中需要逐文档相关性标注的 recall。评测集为自建 49 条，定位是**回归验证**，不用于对外精度承诺。
 

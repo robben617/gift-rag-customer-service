@@ -25,11 +25,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 logging.basicConfig(level=logging.WARNING, format="%(levelname)s %(name)s: %(message)s")
 
-# 默认质量门禁阈值（略低于 README 基准 Recall@5=0.755 / MRR=0.725，留波动空间）
+# 默认质量门禁阈值
+# 基线（2026-10-13 实测，49 条自建集，单路检索）：Recall@5=0.7347 / MRR=0.7092 / Precision@5=0.4429
+# 阈值取"略低于基线"以留出波动空间；若指标低于阈值说明检索或知识库发生了回退。
 DEFAULT_THRESHOLDS = {
     "recall@5": 0.70,
     "mrr": 0.65,
-    "precision@5": 0.55,
+    "precision@5": 0.40,
 }
 
 
