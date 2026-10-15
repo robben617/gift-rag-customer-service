@@ -1,7 +1,6 @@
 """LangGraph 流程图生成脚本 — 在 Windows 上运行，生成 PNG 图片
 
-使用方式:
-    cd D:\Rag_project\E-commerce_Customer_Service_System
+使用方式（在项目根目录执行）:
     python scripts/generate_graph.py
 
 依赖:

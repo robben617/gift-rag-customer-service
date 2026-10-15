@@ -19,12 +19,12 @@ from pathlib import Path
 import gradio as gr
 import requests
 
+# API 地址与登录鉴权同源：src.admin.api_auth 会先把 .env 注入 os.environ，
+# 因此这里能取到本地 .env 的API_BASE_URL。若在本模块用 os.getenv 直接取，
+# 会早于 .env 加载而落到 Docker 服务名 http://rag-api:8000，本地运行时请求全部失败。
+from src.admin.api_auth import API_BASE_URL
+
 logger = logging.getLogger(__name__)
-
-# API 地址 (Docker 容器内使用服务名)
-import os
-
-API_BASE_URL = os.getenv("API_BASE_URL", "http://rag-api:8000")
 
 # 人工介入数据库
 HITL_DB = Path(__file__).parent.parent.parent / "data" / "hitl_requests.db"

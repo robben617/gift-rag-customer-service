@@ -1,4 +1,4 @@
-"""Benchmark 运行脚本 — 跑评估数据集，输出 RAG 指标报告（面试必问 Recall@5）
+"""Benchmark 运行脚本 — 跑评估数据集，输出 RAG 指标报告（Recall@5 / MRR / NDCG@5 等）
 
 用法:
     python scripts/run_benchmark.py                            # 仅检索 + Embedding 快速模式

@@ -4,11 +4,20 @@
 
 > 基于 LangGraph 13 节点编排的 Agentic RAG 系统 — 双路召回、L0 至 L5 六级降级、幻觉检测自纠正、Human-in-the-Loop、三层记忆、业务工具调用
 
+[![CI](https://github.com/robben617/gift-rag-customer-service/actions/workflows/ci.yml/badge.svg)](https://github.com/robben617/gift-rag-customer-service/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/badge/tests-410%20passed-brightgreen.svg)](#-工程质量)
 [![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-green.svg)](https://fastapi.tiangolo.com/)
 [![Chroma](https://img.shields.io/badge/Chroma-0.5+-orange.svg)](https://www.trychroma.com/)
 [![LangGraph](https://img.shields.io/badge/LangGraph-1.1+-purple.svg)](https://langchain-ai.github.io/langgraph/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+### TL;DR
+
+- **是什么**：私域礼赠场景的电商智能客服。目标不是把平均准确率抬高一点，而是**让高频重复咨询自助闭环，把高风险问答识别出来交给人工**。
+- **核心链路**：LangGraph 13 节点 StateGraph（8 条静态边 / 5 组条件边）→ 双路召回 + L0 至 L5 六级降级 → claims 级幻觉核验与自纠正 → 高敏承诺护栏 → Human-in-the-Loop 转人工（带交接包）。
+- **如何验证**：49 条自建评测集离线回归（Recall@5 **0.735**，口径见下）+ **410 条单测** + GitHub Actions 四段 CI（lint / test / typecheck / security）全绿。
+- **如何上手**：`python scripts/demo_offline.py` **不需要任何 API Key 与本地模型**即可打开问答界面（见 [零 Key 离线体验](#0-零-key-离线体验)）；完整体验需本地 BGE 模型与 DeepSeek Key。
 
 ---
 
@@ -28,19 +37,26 @@
 
 | 指标 | 数值 | 说明 |
 |------|------|------|
-| **Recall@5** | **0.735** | 检索召回率（Top-5 命中相关文档的比例） |
-| **MRR** | **0.709** | 排序质量 |
-| **NDCG@5** | **0.705** | 整体排序 |
-| **Faithfulness** | **0.66** | 完整 RAG 生成忠实度 |
-| 关键词覆盖率 | 0.976 | 命中关键词 |
+| **Recall@5** | **0.735** | 命中率口径：Top-5 中存在与标准答案余弦相似度 ≥0.70 的文档即算命中 |
+| **MRR** | **0.709** | 首个相关文档的排名倒数均值 |
+| **NDCG@5** | **0.705** | 考虑排序位置的检索质量 |
+| **Precision@5** | **0.443** | Top-5 中相关文档占比（质量门禁的约束项之一） |
+| **答案-文档一致性** | **0.657** | 检索模式下 faithfulness 的**代理值**，口径见下 |
+| 关键词覆盖率 | 0.976 | 标准答案命中 `must_contain_keywords` 的比例 |
+| 平均延迟 | 2.06 s | P50 1.58 s / P95 1.84 s（本机 CPU 推理，非线上 SLA） |
 
-> 一键复现：`python scripts/run_benchmark.py --with-generation`（报告存 `reports/benchmark_*.json`）
+> 一键复现：`python scripts/run_benchmark.py`（仅检索）/ `python scripts/run_benchmark.py --with-generation`（检索 + 生成）。报告存 `reports/benchmark_*.json`。
 >
-> 上表为**最近一次实跑结果**（2026-10-13，本地 BGE + Chroma）。检索类指标确定性强、可复现；`Faithfulness` 依赖 LLM 生成与裁判，逐次波动较大，请以自己跑出的报告为准。
+> 上表取自 `reports/benchmark_retrieval_20261013_230049.json`（**仅检索模式**，本地 BGE + Chroma，本机 CPU）。检索类指标确定性强、可复现；生成类指标受 LLM 波动影响大，请以自己跑出的报告为准。
 >
 > **单路 vs 双路对照**：`python scripts/eval_ab_dual_path.py`（报告存 `reports/ab_dual_path_*.json`）。实测本 49 题集上双路相对单路 **Recall@5 +0.0% / MRR +0.0% / NDCG@5 +0.4% / Precision@5 −1.8%**，即**无显著增益**，原因见 `docs/ADR.md` 的 ADR-002 数据口径说明。
 >
-> **口径说明**：Recall@5 判定方式为「Top-5 中是否存在与标准答案 embedding 余弦相似度 ≥0.70 的文档」，属于**命中率（hit rate）口径**，不是标准 IR 中需要逐文档相关性标注的 recall。评测集为自建 49 条，定位是**回归验证**，不用于对外精度承诺。
+> ⚠️ **三个「忠实度」不是同一个量，别混用**（代码里是三套不同实现）：
+> 1. **上表的 0.657** —— 评测脚本在**仅检索 + Embedding 快速模式**下算出的 `faithfulness`，实现是「标准答案 ↔ 检索文档合并文本」的 bge 余弦相似度（`src/evaluation/metrics.py` → `calculate_faithfulness_fast`）。它是**检索侧的近似代理，不等价于生成忠实度**。
+> 2. **生成忠实度** —— 需要 `--with-generation --use-llm-eval`，由 LLM 按 G-Eval 风格对**实际生成的回答**逐条核验。本项目**尚未在启用 LLM 裁判的模式下留完整跑分**，因此此表不给数字。`[待补: python scripts/run_benchmark.py --with-generation --use-llm-eval]`
+> 3. **运行时护栏阈值 0.8 / 0.85**（`FAITHFULNESS_THRESHOLD` / `HIGH_STAKE_FAITHFULNESS`）—— 作用于生成阶段的 **claims 级聚合分** `(supported + 0.5 × partial) / 总 claims`（`src/generation/hallucination_detector.py`）。与上述两个数**量纲不同，不可直接比较**。
+>
+> **Recall@5 口径**：判定方式为「Top-5 中是否存在与标准答案 embedding 余弦相似度 ≥0.70 的文档」，属于**命中率（hit rate）口径**，不是标准 IR 中需要逐文档相关性标注的 recall。评测集为自建 49 条，定位是**回归验证**，不用于对外精度承诺。
 
 ---
 
@@ -55,7 +71,7 @@
   <img src="docs/screenshots/api-docs.png" width="45%" alt="API 文档">
 </p>
 
-> 访问地址：聊天 `:7861` · 入库 `:7860` · 管理员 `:7862` · API 文档 `:8000/docs`
+> 访问地址：聊天 `:7861` · 入库 `:7860` · 管理员 `:7862` · API 文档 `:8000/docs` · 零 Key 离线演示 `:7863`
 
 ---
 
@@ -217,7 +233,7 @@
 |------|------|------|
 | Docker Compose | 5 服务编排 (api/gradio/chat-ui/admin-ui/redis) | ✅ |
 | **时区** | Asia/Shanghai，管理员界面时间对齐北京时间 | ✅ |
-| CI/CD | GitHub Actions lint+test+typecheck+security | ✅ |
+| CI/CD | GitHub Actions 四段（lint / test / typecheck / security）— 详见 [🧪 工程质量](#-工程质量) | ✅ |
 | 健康检查 | 所有服务健康探针 + /api/health 端点 | ✅ |
 | 配置中心 | pydantic-settings，.env 文件注入 | ✅ |
 
@@ -253,9 +269,41 @@ Level 5: 诚实兜底
 
 ---
 
+## 🧪 工程质量
+
+| 项 | 现状 | 怎么自己验证 |
+|------|------|------|
+| **单元 / 集成测试** | **410 条通过**（另 9 条标 `slow` / `integration`，默认按 marker 排除） | `pytest tests/ -q` |
+| **CI** | GitHub Actions 四段：`ruff` 静态检查 → `pytest`（含覆盖率上传） → `mypy` 类型检查 → 硬编码密钥扫描 | [Actions 页面](https://github.com/robben617/gift-rag-customer-service/actions/workflows/ci.yml) |
+| **质量门禁** | `scripts/eval_gate.py` 对 `recall@5 / mrr / precision@5` 三项卡阈值，不达标 `exit 1`（发布前手动跑，未接入 CI：依赖真实知识库与 API Key） | `python scripts/eval_gate.py` |
+| **评测回归** | 49 条自建评测集 + 单路/双路 A/B 对照脚本，可随时重跑 | `python scripts/run_benchmark.py` |
+| **AI 行为回归** | workflow 静态中断与断点续接（HITL）有独立测试，断言「中断未被误判为正常完成」 | `pytest tests/graph/test_workflow_hitl.py -v` |
+
+> 顶部 `tests-410 passed` 是静态徽章，会随用例增减漂移；**实时结论以 CI 徽章为准**。
+
+---
+
 ## 🚀 快速开始
 
-### 环境要求
+### 0. 零 Key 离线体验
+
+先看它长什么样 —— **不下载 BGE 模型、不填任何 API Key、不起 Docker**：
+
+```bash
+git clone https://github.com/robben617/gift-rag-customer-service.git
+cd gift-rag-customer-service
+python scripts/demo_offline.py     # 装了 gradio 则开 http://127.0.0.1:7863；没装则自动进终端问答
+```
+
+- 这条链路只做 **离线 FAQ 关键词检索 + 原文直出**（60 条 FAQ，字符二元组 IDF 加权，**纯标准库实现**，见 `src/demo/offline_retrieval.py`）。
+- 它**不经过** LLM 生成、claims 级幻觉核验与高敏护栏，所以**输出不代表系统真实回答质量**；命中退款 / 价格 / 承诺 / 食品安全类话题时会明确提示「真实系统会强制转人工审批」。
+- 单问单答（便于脚本化验证）：`python scripts/demo_offline.py --ask "怎么申请退货？"`
+
+<p align="center">
+  <img src="docs/screenshots/demo-offline.png" width="70%" alt="零 Key 离线演示：命中 FAQ 原文，并提示高风险话题在完整链路会转人工">
+</p>
+
+### 环境要求（完整链路）
 
 - Python 3.12+
 - Docker & Docker Compose
@@ -343,11 +391,25 @@ src/
 ├── business/        # 退货结构化政策工具
 ├── api/             # FastAPI + 路由 (auth/query/chat/stream/upload/evaluate/stats)
 ├── admin/           # Gradio UI ×3 (入库/聊天/管理员)
+├── demo/            # 零依赖离线演示（纯标准库 FAQ 关键词检索，与生产链路隔离）
 └── config.py        # pydantic-settings 配置中心
 
+scripts/demo_offline.py  # 离线演示入口（无需模型与 Key）
 local_models/        # 本地 BGE 模型权重（Embedding + Reranker）
 data/chroma/         # Chroma 持久化目录
 ```
+
+---
+
+## 📚 文档导航
+
+| 文档 | 内容 | 适合谁看 |
+|------|------|----------|
+| [docs/使用教程.md](docs/使用教程.md) | 从零跑通全流程：环境准备、启动、知识库入库、问答、转人工、常见问题排查 | 想动手跑一遍的人 |
+| [docs/ADR.md](docs/ADR.md) | 10 篇架构决策记录（背景 / 备选方案 / 取舍 / 后果） | 想看设计取舍的人 |
+| [docs/optimization-report.md](docs/optimization-report.md) | 迭代过程中的问题定位与优化记录 | 想看调优过程与踩坑的人 |
+| [docs/architecture.mmd](docs/architecture.mmd) | 系统架构图 Mermaid 源文件（可编辑复用） | 想改架构图的人 |
+| [docs/screenshots/](docs/screenshots/) | 界面截图 + 重新生成截图的步骤 | 想了解界面形态的人 |
 
 ---
 
@@ -436,6 +498,16 @@ JWT_SECRET=<≥32 字节随机串>
 - [x] JWT 鉴权 + 内容级权限隔离（RBAC + 检索过滤 + 缓存/会话隔离）
 - [x] 向量库从 Milvus 迁移到 Chroma（去掉外部依赖，Embedding/Reranker 全本地）
 - [x] Docker Compose + CI/CD + 时区修复
+- [x] 零 Key 离线体验路径（`scripts/demo_offline.py`：纯标准库 FAQ 关键词检索 + 原文直出，不加载模型、不需要 Key，与生产链路物理隔离）
+
+**进行中 / 已知缺口**（诚实列出，不藏）：
+
+- [ ] **贴近线上问法的评测集** — 现有 49 题偏「标准问法」，体现不出双路召回在口语化、无主语、带指代问法上的价值。需补一套该类评测集并重跑 A/B 对照。
+- [ ] **生成忠实度的 LLM 裁判跑分** — 目前只有仅检索模式下的代理值 0.657，缺 `--with-generation --use-llm-eval` 的完整跑分（报告出来前不写数字）。
+- [ ] **完整链路的零配置体验** — 现为离线 FAQ 演示（关键词检索，不含 LLM 与护栏）；若要连生成与护栏一起免 Key 跑通，需要可切换的降级式 Embedding 与 Mock LLM。
+
+**规划中**：
+
 - [ ] RAGAS 评估集成
 - [ ] Graph RAG (知识图谱)
 - [ ] 多模态检索（当前 bge 是纯文本模型，图片需先经 VLM 转描述）

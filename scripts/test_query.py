@@ -1,11 +1,15 @@
 """测试脚本 - 查询检索"""
 
 import json
+import os
 import sys
 
 import requests
+from dotenv import load_dotenv
 
-API_BASE = "http://192.168.191.128:8000"
+load_dotenv()
+# 端口取自 .env 的 API_BASE_URL，默认 8000（与 README / .env.example 一致）
+API_BASE = os.getenv("API_BASE_URL", "http://127.0.0.1:8000")
 
 
 def test_query(query: str, top_k: int = 3):

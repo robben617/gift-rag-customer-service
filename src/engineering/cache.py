@@ -141,7 +141,7 @@ class RedisCache(CacheBackend):
     """Redis 缓存 — 生产用
 
     使用方式:
-        cache = RedisCache(host="192.168.191.128", port=6379)
+        cache = RedisCache(host="127.0.0.1", port=6379)
         cache.set("key", "value", ttl=3600)
         value = cache.get("key")
     """

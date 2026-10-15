@@ -228,37 +228,39 @@ filter_parts.append(f'doc_type == "{safe_doc_type}"')
 
 ---
 
-## 四、面试话术
+## 四、设计问答：开发中踩过的工程坑
 
-### 讲项目时可以这样说：
+### 逐条说明
 
-> "我在开发过程中发现并修复了几个关键的工程问题：
+> "开发过程中发现并修复了几个关键的工程问题：
 > 1. MilvusClient 连接管理——原来是每次请求新建连接，改为实例级单例复用
 > 2. SSE 流式响应——检索阶段阻塞事件循环，用 asyncio.to_thread 解决
-> 3. Human-in-the-Loop——LangGraph 中断状态处理不完整，加了 __interrupt__ 检查
+> 3. Human-in-the-Loop——LangGraph 中断状态处理不完整，改为查 `get_state().next` 判断静态中断
 > 4. 评估体系——原来只评估标准答案，现在支持完整 RAG 流程评估
 > 5. 自纠正循环——加了 LLM 调用预算，防止延迟爆炸"
 
-### 这展示了你：
-- 能发现深层工程问题
-- 有性能优化意识
-- 理解异步编程
-- 有生产级思维
+### 这几条对应的工程能力
+
+- 深层工程问题的定位能力（连接复用、事件循环阻塞）
+- 性能与成本意识（LLM 调用预算、缓存 TTL）
+- 对异步编程与状态机的理解
+- 生产级思维（失败路径与兜底优先于 happy path）
 
 ---
 
 ## 五、部署信息
 
-- 虚拟机: 192.168.191.128
-- 项目路径: /root/rag-system/
-- Docker 容器: rag-api, rag-chat-ui, rag-gradio, rag-admin-ui
+- 部署方式: Docker Compose（`docker-compose-rag.yml`，本地 `rag-net` 桥接网络）
+- 服务: api(8000) / gradio(7860) / chat-ui(7861) / admin-ui(7862) / redis(6379)
+- 项目路径: 容器内 `/app`；宿主机路径以 compose 的 volume 挂载为准
+- 数据持久化: `./data/chroma`（向量库）、`./data/*.db`（会话 / 工单）
 - 更新时间: 2026-07-23
 
 ---
 
 ## 六、下一步优化（可选）
 
-### P2 级问题（面试加分项，非必须）
+### P2 级问题（可选增强，非必须）
 
 1. **RRF 融合** — 多路召回结果融合，提升检索质量
 2. **本地 Cross-Encoder** — bge-reranker-v2 备选，减少 API 依赖
