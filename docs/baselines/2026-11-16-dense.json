@@ -1,0 +1,2559 @@
+{
+  "schema_version": "id-retrieval-v1",
+  "metric_basis": "binary_faq_id_labels",
+  "total_cases": 49,
+  "scored_cases": 34,
+  "status_counts": {
+    "answerable": 34,
+    "partial_evidence": 6,
+    "out_of_scope": 9
+  },
+  "hit@5": 1.0,
+  "recall@5": 0.985294,
+  "precision@5": 0.276471,
+  "mrr@5": 0.965686,
+  "ndcg@5": 0.958493,
+  "miss_case_ids": [
+    "eval-031"
+  ],
+  "zero_hit_case_ids": [],
+  "latency": {
+    "scope": "query embedding + dense search + optional reranking; excludes index/model warmup",
+    "avg_ms": 16.873,
+    "p50_ms": 16.291,
+    "p95_ms": 21.525,
+    "p99_ms": 24.385
+  },
+  "details": [
+    {
+      "case_id": "eval-001",
+      "question": "怎么申请退货？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-001",
+        "faq-002"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "return_refund",
+      "difficulty": "easy",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.4,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 25.788,
+      "retrieved_doc_ids": [
+        "faq-001",
+        "faq-002",
+        "faq-010",
+        "faq-009",
+        "faq-004"
+      ],
+      "matched_doc_ids": [
+        "faq-001",
+        "faq-002"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-001",
+          "chunk_id": "faq-001",
+          "score": 0.6838,
+          "rerank_score": null,
+          "text": "## Q1: 我买了东西不想要了，怎么退掉？\n\n登录账户进入我的订单找到对应商品点击申请退货，填写退货原因后提交。审核通过后按系统给出的地址寄回，仓库签收后1-3个工作日退款原路返回。\n\n*关键词: 退货, 订单, 退款*"
+        },
+        {
+          "faq_id": "faq-002",
+          "chunk_id": "faq-002",
+          "score": 0.6427,
+          "rerank_score": null,
+          "text": "## Q2: 退货的步骤是啥？\n\n退货流程：提交退货申请→商家审核→审核通过后寄回商品→仓库签收→1-3个工作日退款到原支付账户。全程在订单内操作。\n\n*关键词: 退货, 审核, 退款*"
+        },
+        {
+          "faq_id": "faq-010",
+          "chunk_id": "faq-010",
+          "score": 0.6333,
+          "rerank_score": null,
+          "text": "## Q10: 退货地址怎么填？\n\n提交退货申请后系统会自动显示退货地址，按该地址寄回即可。无需自行填写，直接使用系统提供的地址和收件人信息。\n\n*关键词: 退货, 地址, 系统*"
+        },
+        {
+          "faq_id": "faq-009",
+          "chunk_id": "faq-009",
+          "score": 0.6215,
+          "rerank_score": null,
+          "text": "## Q9: 我退回去的货你们收到了吗？什么时候退钱？\n\n您可在订单中查看退货物流签收状态。仓库签收后1-3个工作日发起退款，退款金额原路返回。超过3个工作日未到账请联系在线客服。\n\n*关键词: 退货, 签收, 退款*"
+        },
+        {
+          "faq_id": "faq-004",
+          "chunk_id": "faq-004",
+          "score": 0.6192,
+          "rerank_score": null,
+          "text": "## Q4: 买了好几天了还能退吗？\n\n自签收之日起7天内可无理由退货，超过7天但未满15天且属于质量问题的可申请退换货。超过15天不能再线上申请，需转人工处理。\n\n*关键词: 退货, 7天, 15天*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-002",
+      "question": "退货的流程是什么？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-001",
+        "faq-002"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "return_refund",
+      "difficulty": "easy",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.4,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 17.842,
+      "retrieved_doc_ids": [
+        "faq-002",
+        "faq-001",
+        "faq-009",
+        "faq-010",
+        "faq-006"
+      ],
+      "matched_doc_ids": [
+        "faq-001",
+        "faq-002"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-002",
+          "chunk_id": "faq-002",
+          "score": 0.7002,
+          "rerank_score": null,
+          "text": "## Q2: 退货的步骤是啥？\n\n退货流程：提交退货申请→商家审核→审核通过后寄回商品→仓库签收→1-3个工作日退款到原支付账户。全程在订单内操作。\n\n*关键词: 退货, 审核, 退款*"
+        },
+        {
+          "faq_id": "faq-001",
+          "chunk_id": "faq-001",
+          "score": 0.6591,
+          "rerank_score": null,
+          "text": "## Q1: 我买了东西不想要了，怎么退掉？\n\n登录账户进入我的订单找到对应商品点击申请退货，填写退货原因后提交。审核通过后按系统给出的地址寄回，仓库签收后1-3个工作日退款原路返回。\n\n*关键词: 退货, 订单, 退款*"
+        },
+        {
+          "faq_id": "faq-009",
+          "chunk_id": "faq-009",
+          "score": 0.6522,
+          "rerank_score": null,
+          "text": "## Q9: 我退回去的货你们收到了吗？什么时候退钱？\n\n您可在订单中查看退货物流签收状态。仓库签收后1-3个工作日发起退款，退款金额原路返回。超过3个工作日未到账请联系在线客服。\n\n*关键词: 退货, 签收, 退款*"
+        },
+        {
+          "faq_id": "faq-010",
+          "chunk_id": "faq-010",
+          "score": 0.6079,
+          "rerank_score": null,
+          "text": "## Q10: 退货地址怎么填？\n\n提交退货申请后系统会自动显示退货地址，按该地址寄回即可。无需自行填写，直接使用系统提供的地址和收件人信息。\n\n*关键词: 退货, 地址, 系统*"
+        },
+        {
+          "faq_id": "faq-006",
+          "chunk_id": "faq-006",
+          "score": 0.601,
+          "rerank_score": null,
+          "text": "## Q6: 换货和退货有啥不一样？\n\n退货是退回商品后原路退款给您，换货是退回商品后商家重新发一件新品给您。两者均支持签收后7天内申请。\n\n*关键词: 退货, 换货, 退款*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-003",
+      "question": "退货包运费吗？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-003"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "return_refund",
+      "difficulty": "medium",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 18.472,
+      "retrieved_doc_ids": [
+        "faq-003",
+        "faq-009",
+        "faq-001",
+        "faq-002",
+        "faq-047"
+      ],
+      "matched_doc_ids": [
+        "faq-003"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-003",
+          "chunk_id": "faq-003",
+          "score": 0.641,
+          "rerank_score": null,
+          "text": "## Q3: 退货的话运费谁出？\n\n质量问题退货商家承担全部运费，非质量问题七天无理由退货由买家承担退货运费。运费金额以实际寄出费用为准。\n\n*关键词: 运费, 退货, 质量问题*"
+        },
+        {
+          "faq_id": "faq-009",
+          "chunk_id": "faq-009",
+          "score": 0.5848,
+          "rerank_score": null,
+          "text": "## Q9: 我退回去的货你们收到了吗？什么时候退钱？\n\n您可在订单中查看退货物流签收状态。仓库签收后1-3个工作日发起退款，退款金额原路返回。超过3个工作日未到账请联系在线客服。\n\n*关键词: 退货, 签收, 退款*"
+        },
+        {
+          "faq_id": "faq-001",
+          "chunk_id": "faq-001",
+          "score": 0.5272,
+          "rerank_score": null,
+          "text": "## Q1: 我买了东西不想要了，怎么退掉？\n\n登录账户进入我的订单找到对应商品点击申请退货，填写退货原因后提交。审核通过后按系统给出的地址寄回，仓库签收后1-3个工作日退款原路返回。\n\n*关键词: 退货, 订单, 退款*"
+        },
+        {
+          "faq_id": "faq-002",
+          "chunk_id": "faq-002",
+          "score": 0.5249,
+          "rerank_score": null,
+          "text": "## Q2: 退货的步骤是啥？\n\n退货流程：提交退货申请→商家审核→审核通过后寄回商品→仓库签收→1-3个工作日退款到原支付账户。全程在订单内操作。\n\n*关键词: 退货, 审核, 退款*"
+        },
+        {
+          "faq_id": "faq-047",
+          "chunk_id": "faq-047",
+          "score": 0.5246,
+          "rerank_score": null,
+          "text": "## Q47: 发错货了\n\n在订单中申请售后并上传收到的商品照片，我们将免费换发正确商品，运费全部由我们承担。\n\n*关键词: 发错, 售后, 换发*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-004",
+      "question": "退货时限是几天？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-004",
+        "faq-008"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "return_refund",
+      "difficulty": "medium",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.4,
+        "mrr@5": 1.0,
+        "ndcg@5": 0.8772153153380493
+      },
+      "latency_ms": 18.641,
+      "retrieved_doc_ids": [
+        "faq-008",
+        "faq-005",
+        "faq-009",
+        "faq-004",
+        "faq-019"
+      ],
+      "matched_doc_ids": [
+        "faq-004",
+        "faq-008"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-008",
+          "chunk_id": "faq-008",
+          "score": 0.7122,
+          "rerank_score": null,
+          "text": "## Q8: 退货的期限是多久？\n\n无理由退货期限为签收后7天内，质量问题退换货期限为15天内。以快递签收记录为准。\n\n*关键词: 退货, 期限, 签收*"
+        },
+        {
+          "faq_id": "faq-005",
+          "chunk_id": "faq-005",
+          "score": 0.6632,
+          "rerank_score": null,
+          "text": "## Q5: 退款要等多久才能到账？\n\n仓库签收退货后1-3个工作日退款到原支付账户。银行处理速度会影响具体到账时间，但不会超过3个工作日。\n\n*关键词: 退款, 到账, 工作日*"
+        },
+        {
+          "faq_id": "faq-009",
+          "chunk_id": "faq-009",
+          "score": 0.6518,
+          "rerank_score": null,
+          "text": "## Q9: 我退回去的货你们收到了吗？什么时候退钱？\n\n您可在订单中查看退货物流签收状态。仓库签收后1-3个工作日发起退款，退款金额原路返回。超过3个工作日未到账请联系在线客服。\n\n*关键词: 退货, 签收, 退款*"
+        },
+        {
+          "faq_id": "faq-004",
+          "chunk_id": "faq-004",
+          "score": 0.6517,
+          "rerank_score": null,
+          "text": "## Q4: 买了好几天了还能退吗？\n\n自签收之日起7天内可无理由退货，超过7天但未满15天且属于质量问题的可申请退换货。超过15天不能再线上申请，需转人工处理。\n\n*关键词: 退货, 7天, 15天*"
+        },
+        {
+          "faq_id": "faq-019",
+          "chunk_id": "faq-019",
+          "score": 0.6395,
+          "rerank_score": null,
+          "text": "## Q19: 为什么迟迟不发货？\n\n付款后1-3个工作日内发货，预售商品除外。若超时未发，订单会显示延迟原因，可催发货或申请退款。\n\n*关键词: 发货, 延迟, 工作日*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-005",
+      "question": "买了半个月了还能退货吗？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-004"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "return_refund",
+      "difficulty": "hard",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 21.537,
+      "retrieved_doc_ids": [
+        "faq-004",
+        "faq-001",
+        "faq-048",
+        "faq-009",
+        "faq-023"
+      ],
+      "matched_doc_ids": [
+        "faq-004"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-004",
+          "chunk_id": "faq-004",
+          "score": 0.7017,
+          "rerank_score": null,
+          "text": "## Q4: 买了好几天了还能退吗？\n\n自签收之日起7天内可无理由退货，超过7天但未满15天且属于质量问题的可申请退换货。超过15天不能再线上申请，需转人工处理。\n\n*关键词: 退货, 7天, 15天*"
+        },
+        {
+          "faq_id": "faq-001",
+          "chunk_id": "faq-001",
+          "score": 0.6566,
+          "rerank_score": null,
+          "text": "## Q1: 我买了东西不想要了，怎么退掉？\n\n登录账户进入我的订单找到对应商品点击申请退货，填写退货原因后提交。审核通过后按系统给出的地址寄回，仓库签收后1-3个工作日退款原路返回。\n\n*关键词: 退货, 订单, 退款*"
+        },
+        {
+          "faq_id": "faq-048",
+          "chunk_id": "faq-048",
+          "score": 0.6298,
+          "rerank_score": null,
+          "text": "## Q48: 质量太差想投诉\n\n请在订单中发起投诉并描述质量问题，平台会在24小时内处理。可申请退货退款。\n\n*关键词: 投诉, 质量, 退款*"
+        },
+        {
+          "faq_id": "faq-009",
+          "chunk_id": "faq-009",
+          "score": 0.6213,
+          "rerank_score": null,
+          "text": "## Q9: 我退回去的货你们收到了吗？什么时候退钱？\n\n您可在订单中查看退货物流签收状态。仓库签收后1-3个工作日发起退款，退款金额原路返回。超过3个工作日未到账请联系在线客服。\n\n*关键词: 退货, 签收, 退款*"
+        },
+        {
+          "faq_id": "faq-023",
+          "chunk_id": "faq-023",
+          "score": 0.602,
+          "rerank_score": null,
+          "text": "## Q23: 下错单了能换商品吗？\n\n已付款未发货的订单不支持修改商品，建议取消后重新下单。已发货的只能收货后退换。\n\n*关键词: 订单, 取消, 修改*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-006",
+      "question": "退货后多久能收到退款？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-005",
+        "faq-009"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "return_refund",
+      "difficulty": "medium",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.4,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 17.166,
+      "retrieved_doc_ids": [
+        "faq-009",
+        "faq-005",
+        "faq-004",
+        "faq-008",
+        "faq-001"
+      ],
+      "matched_doc_ids": [
+        "faq-005",
+        "faq-009"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-009",
+          "chunk_id": "faq-009",
+          "score": 0.7322,
+          "rerank_score": null,
+          "text": "## Q9: 我退回去的货你们收到了吗？什么时候退钱？\n\n您可在订单中查看退货物流签收状态。仓库签收后1-3个工作日发起退款，退款金额原路返回。超过3个工作日未到账请联系在线客服。\n\n*关键词: 退货, 签收, 退款*"
+        },
+        {
+          "faq_id": "faq-005",
+          "chunk_id": "faq-005",
+          "score": 0.73,
+          "rerank_score": null,
+          "text": "## Q5: 退款要等多久才能到账？\n\n仓库签收退货后1-3个工作日退款到原支付账户。银行处理速度会影响具体到账时间，但不会超过3个工作日。\n\n*关键词: 退款, 到账, 工作日*"
+        },
+        {
+          "faq_id": "faq-004",
+          "chunk_id": "faq-004",
+          "score": 0.6673,
+          "rerank_score": null,
+          "text": "## Q4: 买了好几天了还能退吗？\n\n自签收之日起7天内可无理由退货，超过7天但未满15天且属于质量问题的可申请退换货。超过15天不能再线上申请，需转人工处理。\n\n*关键词: 退货, 7天, 15天*"
+        },
+        {
+          "faq_id": "faq-008",
+          "chunk_id": "faq-008",
+          "score": 0.6626,
+          "rerank_score": null,
+          "text": "## Q8: 退货的期限是多久？\n\n无理由退货期限为签收后7天内，质量问题退换货期限为15天内。以快递签收记录为准。\n\n*关键词: 退货, 期限, 签收*"
+        },
+        {
+          "faq_id": "faq-001",
+          "chunk_id": "faq-001",
+          "score": 0.6573,
+          "rerank_score": null,
+          "text": "## Q1: 我买了东西不想要了，怎么退掉？\n\n登录账户进入我的订单找到对应商品点击申请退货，填写退货原因后提交。审核通过后按系统给出的地址寄回，仓库签收后1-3个工作日退款原路返回。\n\n*关键词: 退货, 订单, 退款*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-007",
+      "question": "退款退到哪里？",
+      "retrieval_status": "partial_evidence",
+      "relevant_doc_ids": [
+        "faq-001",
+        "faq-002",
+        "faq-005",
+        "faq-009"
+      ],
+      "annotation_note": "FAQ 仅说明原支付账户，未列出微信/支付宝/银行卡的逐渠道说明。",
+      "intent": "return_refund",
+      "difficulty": "easy",
+      "scored": false
+    },
+    {
+      "case_id": "eval-008",
+      "question": "我的退款为什么还没到账？",
+      "retrieval_status": "partial_evidence",
+      "relevant_doc_ids": [
+        "faq-009"
+      ],
+      "annotation_note": "FAQ 支持超时联系人工，但未定义已退款/退款中的状态语义。",
+      "intent": "return_refund",
+      "difficulty": "medium",
+      "scored": false
+    },
+    {
+      "case_id": "eval-009",
+      "question": "我退货了但是商家拒绝退款怎么办？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-007"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "return_refund",
+      "difficulty": "hard",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 21.518,
+      "retrieved_doc_ids": [
+        "faq-007",
+        "faq-001",
+        "faq-048",
+        "faq-004",
+        "faq-022"
+      ],
+      "matched_doc_ids": [
+        "faq-007"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-007",
+          "chunk_id": "faq-007",
+          "score": 0.7654,
+          "rerank_score": null,
+          "text": "## Q7: 商家不给退款怎么办？\n\n若商家无理由拒绝退款，可在订单详情页面申请平台介入。平台客服会在24小时内处理您的纠纷并给出裁决。\n\n*关键词: 退款, 拒绝, 平台*"
+        },
+        {
+          "faq_id": "faq-001",
+          "chunk_id": "faq-001",
+          "score": 0.6852,
+          "rerank_score": null,
+          "text": "## Q1: 我买了东西不想要了，怎么退掉？\n\n登录账户进入我的订单找到对应商品点击申请退货，填写退货原因后提交。审核通过后按系统给出的地址寄回，仓库签收后1-3个工作日退款原路返回。\n\n*关键词: 退货, 订单, 退款*"
+        },
+        {
+          "faq_id": "faq-048",
+          "chunk_id": "faq-048",
+          "score": 0.6651,
+          "rerank_score": null,
+          "text": "## Q48: 质量太差想投诉\n\n请在订单中发起投诉并描述质量问题，平台会在24小时内处理。可申请退货退款。\n\n*关键词: 投诉, 质量, 退款*"
+        },
+        {
+          "faq_id": "faq-004",
+          "chunk_id": "faq-004",
+          "score": 0.6385,
+          "rerank_score": null,
+          "text": "## Q4: 买了好几天了还能退吗？\n\n自签收之日起7天内可无理由退货，超过7天但未满15天且属于质量问题的可申请退换货。超过15天不能再线上申请，需转人工处理。\n\n*关键词: 退货, 7天, 15天*"
+        },
+        {
+          "faq_id": "faq-022",
+          "chunk_id": "faq-022",
+          "score": 0.6326,
+          "rerank_score": null,
+          "text": "## Q22: 怎么取消已付款的订单？\n\n未发货的订单可直接在详情页取消，退款1-3个工作日到账。已发货的订单只能拒收或收到后申请退货。\n\n*关键词: 取消, 订单, 退款*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-010",
+      "question": "换货和退货有什么区别？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-006"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "return_refund",
+      "difficulty": "medium",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 17.035,
+      "retrieved_doc_ids": [
+        "faq-006",
+        "faq-047",
+        "faq-042",
+        "faq-023",
+        "faq-009"
+      ],
+      "matched_doc_ids": [
+        "faq-006"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-006",
+          "chunk_id": "faq-006",
+          "score": 0.6989,
+          "rerank_score": null,
+          "text": "## Q6: 换货和退货有啥不一样？\n\n退货是退回商品后原路退款给您，换货是退回商品后商家重新发一件新品给您。两者均支持签收后7天内申请。\n\n*关键词: 退货, 换货, 退款*"
+        },
+        {
+          "faq_id": "faq-047",
+          "chunk_id": "faq-047",
+          "score": 0.5705,
+          "rerank_score": null,
+          "text": "## Q47: 发错货了\n\n在订单中申请售后并上传收到的商品照片，我们将免费换发正确商品，运费全部由我们承担。\n\n*关键词: 发错, 售后, 换发*"
+        },
+        {
+          "faq_id": "faq-042",
+          "chunk_id": "faq-042",
+          "score": 0.5563,
+          "rerank_score": null,
+          "text": "## Q42: 颜色和图片差太多\n\n拍摄光线和屏幕差异导致轻微色差正常。若色差严重影响使用，可申请退货退款，运费商家承担。\n\n*关键词: 色差, 退货, 退款*"
+        },
+        {
+          "faq_id": "faq-023",
+          "chunk_id": "faq-023",
+          "score": 0.552,
+          "rerank_score": null,
+          "text": "## Q23: 下错单了能换商品吗？\n\n已付款未发货的订单不支持修改商品，建议取消后重新下单。已发货的只能收货后退换。\n\n*关键词: 订单, 取消, 修改*"
+        },
+        {
+          "faq_id": "faq-009",
+          "chunk_id": "faq-009",
+          "score": 0.5399,
+          "rerank_score": null,
+          "text": "## Q9: 我退回去的货你们收到了吗？什么时候退钱？\n\n您可在订单中查看退货物流签收状态。仓库签收后1-3个工作日发起退款，退款金额原路返回。超过3个工作日未到账请联系在线客服。\n\n*关键词: 退货, 签收, 退款*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-011",
+      "question": "这个手机壳是什么材质的？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-032"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "product_consult",
+      "difficulty": "easy",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 17.514,
+      "retrieved_doc_ids": [
+        "faq-032",
+        "faq-037",
+        "faq-049"
+      ],
+      "matched_doc_ids": [
+        "faq-032"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-032",
+          "chunk_id": "faq-032",
+          "score": 0.7475,
+          "rerank_score": null,
+          "text": "## Q32: 这个手机壳是啥材质？\n\n手机壳采用TPU软胶加PC硬背板双材质，防摔抗震。具体材质见商品参数。\n\n*关键词: 手机壳, 材质, TPU*"
+        },
+        {
+          "faq_id": "faq-037",
+          "chunk_id": "faq-037",
+          "score": 0.4158,
+          "rerank_score": null,
+          "text": "## Q37: 商品安全吗？有甲醛吗？\n\n所有商品通过国家质检认证，符合安全标准。检测报告可在详情页底部查看。\n\n*关键词: 安全, 质检, 认证*"
+        },
+        {
+          "faq_id": "faq-049",
+          "chunk_id": "faq-049",
+          "score": 0.4047,
+          "rerank_score": null,
+          "text": "## Q49: 包装破损\n\n如外包装破损导致内部商品受损，请拍照上传并申请退换。若商品完好则不影响使用。\n\n*关键词: 包装, 破损, 退换*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-012",
+      "question": "这款衣服有XXL号吗？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-033"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "product_consult",
+      "difficulty": "medium",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 12.49,
+      "retrieved_doc_ids": [
+        "faq-033",
+        "faq-031",
+        "faq-037",
+        "faq-026",
+        "faq-045"
+      ],
+      "matched_doc_ids": [
+        "faq-033"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-033",
+          "chunk_id": "faq-033",
+          "score": 0.5182,
+          "rerank_score": null,
+          "text": "## Q33: 有超大码吗？\n\n尺码选项中有XXL及以上即为有货，若无则不支持。请查看详情页尺码表确认。\n\n*关键词: 尺码, XXL, 详情*"
+        },
+        {
+          "faq_id": "faq-031",
+          "chunk_id": "faq-031",
+          "score": 0.5149,
+          "rerank_score": null,
+          "text": "## Q31: 这件衣服什么面料？\n\n详情页面标注面料成分，如棉、涤纶等。未标注可联系店铺客服索取质检报告。\n\n*关键词: 面料, 成分, 详情*"
+        },
+        {
+          "faq_id": "faq-037",
+          "chunk_id": "faq-037",
+          "score": 0.4134,
+          "rerank_score": null,
+          "text": "## Q37: 商品安全吗？有甲醛吗？\n\n所有商品通过国家质检认证，符合安全标准。检测报告可在详情页底部查看。\n\n*关键词: 安全, 质检, 认证*"
+        },
+        {
+          "faq_id": "faq-026",
+          "chunk_id": "faq-026",
+          "score": 0.4128,
+          "rerank_score": null,
+          "text": "## Q26: 找不到以前的订单了\n\n在全部订单中按时间筛选或输入商品关键词搜索。若找不到可能登录错账号，请检查账号。\n\n*关键词: 订单, 搜索, 账号*"
+        },
+        {
+          "faq_id": "faq-045",
+          "chunk_id": "faq-045",
+          "score": 0.4074,
+          "rerank_score": null,
+          "text": "## Q45: 怀疑是假货\n\n请在订单中申请平台鉴定或提供证据。平台核实后支持假一赔三，并处罚商家。\n\n*关键词: 假货, 鉴定, 赔偿*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-013",
+      "question": "这件衣服的含棉量是多少？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-031"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "product_consult",
+      "difficulty": "medium",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 15.43,
+      "retrieved_doc_ids": [
+        "faq-031"
+      ],
+      "matched_doc_ids": [
+        "faq-031"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-031",
+          "chunk_id": "faq-031",
+          "score": 0.5485,
+          "rerank_score": null,
+          "text": "## Q31: 这件衣服什么面料？\n\n详情页面标注面料成分，如棉、涤纶等。未标注可联系店铺客服索取质检报告。\n\n*关键词: 面料, 成分, 详情*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-014",
+      "question": "这个耳机和那个有什么区别？",
+      "retrieval_status": "partial_evidence",
+      "relevant_doc_ids": [
+        "faq-034"
+      ],
+      "annotation_note": "FAQ 有一般参数对比方法，未提供耳机型号与音频编码参数。",
+      "intent": "product_consult",
+      "difficulty": "medium",
+      "scored": false
+    },
+    {
+      "case_id": "eval-015",
+      "question": "有没有防水的手表推荐？",
+      "retrieval_status": "partial_evidence",
+      "relevant_doc_ids": [
+        "faq-035"
+      ],
+      "annotation_note": "FAQ 仅解释防水标注，没有可供推荐的具体商品清单。",
+      "intent": "product_consult",
+      "difficulty": "medium",
+      "scored": false
+    },
+    {
+      "case_id": "eval-016",
+      "question": "这个能和其他优惠券一起用吗？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-038",
+        "faq-052"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "product_consult",
+      "difficulty": "medium",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.4,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 16.176,
+      "retrieved_doc_ids": [
+        "faq-038",
+        "faq-052",
+        "faq-051",
+        "faq-046",
+        "faq-055"
+      ],
+      "matched_doc_ids": [
+        "faq-038",
+        "faq-052"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-038",
+          "chunk_id": "faq-038",
+          "score": 0.6806,
+          "rerank_score": null,
+          "text": "## Q38: 能和其他折扣一起用吗？\n\n店铺券和平台券一般可叠加，以结算页为准。秒杀商品不参与优惠券活动。\n\n*关键词: 优惠券, 叠加, 结算*"
+        },
+        {
+          "faq_id": "faq-052",
+          "chunk_id": "faq-052",
+          "score": 0.6339,
+          "rerank_score": null,
+          "text": "## Q52: 优惠券能叠加吗？\n\n店铺优惠券和平台优惠券通常可叠加，但同一订单内同类型券不可叠加。以结算页为准。\n\n*关键词: 优惠券, 叠加, 结算*"
+        },
+        {
+          "faq_id": "faq-051",
+          "chunk_id": "faq-051",
+          "score": 0.6033,
+          "rerank_score": null,
+          "text": "## Q51: 怎么用优惠券？\n\n下单时在结算页面选择可用优惠券，系统自动抵扣。需满足券面满减条件。\n\n*关键词: 优惠券, 使用, 结算*"
+        },
+        {
+          "faq_id": "faq-046",
+          "chunk_id": "faq-046",
+          "score": 0.4955,
+          "rerank_score": null,
+          "text": "## Q46: 赠品没收到\n\n请提供订单号，我们核实后将补发赠品或提供等值优惠券补偿。赠品遗漏不影响主商品售后。\n\n*关键词: 赠品, 补发, 订单号*"
+        },
+        {
+          "faq_id": "faq-055",
+          "chunk_id": "faq-055",
+          "score": 0.4775,
+          "rerank_score": null,
+          "text": "## Q55: 可以用信用卡吗？\n\n支持各大银行信用卡支付，在支付页面选择信用卡方式输入卡号即可。\n\n*关键词: 信用卡, 支付, 银行*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-017",
+      "question": "这个商品有没有毒有害物质？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-037"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "product_consult",
+      "difficulty": "hard",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 18.336,
+      "retrieved_doc_ids": [
+        "faq-037",
+        "faq-049",
+        "faq-040"
+      ],
+      "matched_doc_ids": [
+        "faq-037"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-037",
+          "chunk_id": "faq-037",
+          "score": 0.5311,
+          "rerank_score": null,
+          "text": "## Q37: 商品安全吗？有甲醛吗？\n\n所有商品通过国家质检认证，符合安全标准。检测报告可在详情页底部查看。\n\n*关键词: 安全, 质检, 认证*"
+        },
+        {
+          "faq_id": "faq-049",
+          "chunk_id": "faq-049",
+          "score": 0.4413,
+          "rerank_score": null,
+          "text": "## Q49: 包装破损\n\n如外包装破损导致内部商品受损，请拍照上传并申请退换。若商品完好则不影响使用。\n\n*关键词: 包装, 破损, 退换*"
+        },
+        {
+          "faq_id": "faq-040",
+          "chunk_id": "faq-040",
+          "score": 0.4288,
+          "rerank_score": null,
+          "text": "## Q40: 产品有证书吗？\n\n国家强制认证商品均有合格证书，在详情页底部可查看检测报告或认证标识。\n\n*关键词: 证书, 认证, 合格*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-018",
+      "question": "适合送60岁老人吗？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-036"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "product_consult",
+      "difficulty": "hard",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 15.25,
+      "retrieved_doc_ids": [
+        "faq-036"
+      ],
+      "matched_doc_ids": [
+        "faq-036"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-036",
+          "chunk_id": "faq-036",
+          "score": 0.6188,
+          "rerank_score": null,
+          "text": "## Q36: 适合老年人用吗？\n\n查看商品适用人群说明，或参考评价中类似使用场景的反馈。功能是否简单易用是关键。\n\n*关键词: 老人, 适用, 评价*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-019",
+      "question": "快递到哪了？",
+      "retrieval_status": "out_of_scope",
+      "relevant_doc_ids": [],
+      "annotation_note": "实时物流状态应由订单/物流工具查询，FAQ 无对应轨迹或定位记录。",
+      "intent": "logistics",
+      "difficulty": "easy",
+      "scored": false
+    },
+    {
+      "case_id": "eval-020",
+      "question": "一般几天能到货？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-011",
+        "faq-012"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "logistics",
+      "difficulty": "easy",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.4,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 15.555,
+      "retrieved_doc_ids": [
+        "faq-012",
+        "faq-011",
+        "faq-005",
+        "faq-019",
+        "faq-020"
+      ],
+      "matched_doc_ids": [
+        "faq-011",
+        "faq-012"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-012",
+          "chunk_id": "faq-012",
+          "score": 0.7157,
+          "rerank_score": null,
+          "text": "## Q12: 发货后几天能到？\n\n发货后省内1-2天送达，省外3-5天送达。具体时效以物流页面预计时间为准。\n\n*关键词: 发货, 送达, 省内*"
+        },
+        {
+          "faq_id": "faq-011",
+          "chunk_id": "faq-011",
+          "score": 0.6769,
+          "rerank_score": null,
+          "text": "## Q11: 下单后多久发货？\n\n付款后1-3个工作日内发货，预售商品以页面标注时间为准。超时未发货可点击催发货。\n\n*关键词: 发货, 工作日, 预售*"
+        },
+        {
+          "faq_id": "faq-005",
+          "chunk_id": "faq-005",
+          "score": 0.6542,
+          "rerank_score": null,
+          "text": "## Q5: 退款要等多久才能到账？\n\n仓库签收退货后1-3个工作日退款到原支付账户。银行处理速度会影响具体到账时间，但不会超过3个工作日。\n\n*关键词: 退款, 到账, 工作日*"
+        },
+        {
+          "faq_id": "faq-019",
+          "chunk_id": "faq-019",
+          "score": 0.616,
+          "rerank_score": null,
+          "text": "## Q19: 为什么迟迟不发货？\n\n付款后1-3个工作日内发货，预售商品除外。若超时未发，订单会显示延迟原因，可催发货或申请退款。\n\n*关键词: 发货, 延迟, 工作日*"
+        },
+        {
+          "faq_id": "faq-020",
+          "chunk_id": "faq-020",
+          "score": 0.5897,
+          "rerank_score": null,
+          "text": "## Q20: 可以加急发货吗？\n\n不支持加急发货服务，所有订单按付款顺序在1-3个工作日内发出。请耐心等待。\n\n*关键词: 加急, 发货, 不支持*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-021",
+      "question": "能指定快递公司吗？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-013"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "logistics",
+      "difficulty": "medium",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 16.106,
+      "retrieved_doc_ids": [
+        "faq-013",
+        "faq-015",
+        "faq-045",
+        "faq-020",
+        "faq-018"
+      ],
+      "matched_doc_ids": [
+        "faq-013"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-013",
+          "chunk_id": "faq-013",
+          "score": 0.6466,
+          "rerank_score": null,
+          "text": "## Q13: 能不能选快递公司？\n\n本店不支持指定快递公司，系统根据收货地址自动匹配最合适的快递服务商。\n\n*关键词: 快递, 指定, 不支持*"
+        },
+        {
+          "faq_id": "faq-015",
+          "chunk_id": "faq-015",
+          "score": 0.5201,
+          "rerank_score": null,
+          "text": "## Q15: 快递显示签收但我没收到包裹\n\n先确认家人、同事或物业是否代收。确认未收到请在订单中点击“未收到货”申请处理，平台24小时内核实。\n\n*关键词: 签收, 未收到, 核实*"
+        },
+        {
+          "faq_id": "faq-045",
+          "chunk_id": "faq-045",
+          "score": 0.5043,
+          "rerank_score": null,
+          "text": "## Q45: 怀疑是假货\n\n请在订单中申请平台鉴定或提供证据。平台核实后支持假一赔三，并处罚商家。\n\n*关键词: 假货, 鉴定, 赔偿*"
+        },
+        {
+          "faq_id": "faq-020",
+          "chunk_id": "faq-020",
+          "score": 0.4818,
+          "rerank_score": null,
+          "text": "## Q20: 可以加急发货吗？\n\n不支持加急发货服务，所有订单按付款顺序在1-3个工作日内发出。请耐心等待。\n\n*关键词: 加急, 发货, 不支持*"
+        },
+        {
+          "faq_id": "faq-018",
+          "chunk_id": "faq-018",
+          "score": 0.4718,
+          "rerank_score": null,
+          "text": "## Q18: 发货了能改地址吗？\n\n已发货的订单无法在线修改地址。只能联系客服尝试联系快递公司拦截转寄，不保证成功。\n\n*关键词: 地址, 发货, 转寄*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-022",
+      "question": "快递显示已签收但我没收到货怎么办？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-015"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "logistics",
+      "difficulty": "hard",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 21.299,
+      "retrieved_doc_ids": [
+        "faq-015",
+        "faq-009",
+        "faq-022",
+        "faq-041",
+        "faq-047"
+      ],
+      "matched_doc_ids": [
+        "faq-015"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-015",
+          "chunk_id": "faq-015",
+          "score": 0.8017,
+          "rerank_score": null,
+          "text": "## Q15: 快递显示签收但我没收到包裹\n\n先确认家人、同事或物业是否代收。确认未收到请在订单中点击“未收到货”申请处理，平台24小时内核实。\n\n*关键词: 签收, 未收到, 核实*"
+        },
+        {
+          "faq_id": "faq-009",
+          "chunk_id": "faq-009",
+          "score": 0.6205,
+          "rerank_score": null,
+          "text": "## Q9: 我退回去的货你们收到了吗？什么时候退钱？\n\n您可在订单中查看退货物流签收状态。仓库签收后1-3个工作日发起退款，退款金额原路返回。超过3个工作日未到账请联系在线客服。\n\n*关键词: 退货, 签收, 退款*"
+        },
+        {
+          "faq_id": "faq-022",
+          "chunk_id": "faq-022",
+          "score": 0.5862,
+          "rerank_score": null,
+          "text": "## Q22: 怎么取消已付款的订单？\n\n未发货的订单可直接在详情页取消，退款1-3个工作日到账。已发货的订单只能拒收或收到后申请退货。\n\n*关键词: 取消, 订单, 退款*"
+        },
+        {
+          "faq_id": "faq-041",
+          "chunk_id": "faq-041",
+          "score": 0.5845,
+          "rerank_score": null,
+          "text": "## Q41: 收到的东西是坏的\n\n签收后24小时内拍照保留证据，在订单中申请退换货并上传照片。核实后免费换新或全额退款。\n\n*关键词: 破损, 退换, 照片*"
+        },
+        {
+          "faq_id": "faq-047",
+          "chunk_id": "faq-047",
+          "score": 0.5813,
+          "rerank_score": null,
+          "text": "## Q47: 发错货了\n\n在订单中申请售后并上传收到的商品照片，我们将免费换发正确商品，运费全部由我们承担。\n\n*关键词: 发错, 售后, 换发*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-023",
+      "question": "可以修改收货地址吗？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-014",
+        "faq-018"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "logistics",
+      "difficulty": "medium",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.4,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 17.601,
+      "retrieved_doc_ids": [
+        "faq-014",
+        "faq-018",
+        "faq-023",
+        "faq-010",
+        "faq-028"
+      ],
+      "matched_doc_ids": [
+        "faq-014",
+        "faq-018"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-014",
+          "chunk_id": "faq-014",
+          "score": 0.6914,
+          "rerank_score": null,
+          "text": "## Q14: 地址写错了能改吗？\n\n未发货的订单可在详情中修改收货地址。已发货的订单无法在线修改，只能尝试联系客服转寄。\n\n*关键词: 地址, 修改, 发货*"
+        },
+        {
+          "faq_id": "faq-018",
+          "chunk_id": "faq-018",
+          "score": 0.6548,
+          "rerank_score": null,
+          "text": "## Q18: 发货了能改地址吗？\n\n已发货的订单无法在线修改地址。只能联系客服尝试联系快递公司拦截转寄，不保证成功。\n\n*关键词: 地址, 发货, 转寄*"
+        },
+        {
+          "faq_id": "faq-023",
+          "chunk_id": "faq-023",
+          "score": 0.5821,
+          "rerank_score": null,
+          "text": "## Q23: 下错单了能换商品吗？\n\n已付款未发货的订单不支持修改商品，建议取消后重新下单。已发货的只能收货后退换。\n\n*关键词: 订单, 取消, 修改*"
+        },
+        {
+          "faq_id": "faq-010",
+          "chunk_id": "faq-010",
+          "score": 0.559,
+          "rerank_score": null,
+          "text": "## Q10: 退货地址怎么填？\n\n提交退货申请后系统会自动显示退货地址，按该地址寄回即可。无需自行填写，直接使用系统提供的地址和收件人信息。\n\n*关键词: 退货, 地址, 系统*"
+        },
+        {
+          "faq_id": "faq-028",
+          "chunk_id": "faq-028",
+          "score": 0.559,
+          "rerank_score": null,
+          "text": "## Q28: 订单里的商品数量能改吗？\n\n未付款的订单可取消重下，已付款未发货的订单不支持修改数量，只能取消重下。\n\n*关键词: 订单, 数量, 取消*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-024",
+      "question": "疫情期间能正常发货吗？",
+      "retrieval_status": "partial_evidence",
+      "relevant_doc_ids": [
+        "faq-016"
+      ],
+      "annotation_note": "FAQ 是一般天气/管控说明，不能证实当前疫情期间的配送政策。",
+      "intent": "logistics",
+      "difficulty": "medium",
+      "scored": false
+    },
+    {
+      "case_id": "eval-025",
+      "question": "为什么我的订单还没发货？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-011",
+        "faq-017",
+        "faq-019"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "logistics",
+      "difficulty": "medium",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.6,
+        "mrr@5": 1.0,
+        "ndcg@5": 0.9674679834891693
+      },
+      "latency_ms": 15.353,
+      "retrieved_doc_ids": [
+        "faq-019",
+        "faq-011",
+        "faq-047",
+        "faq-017",
+        "faq-026"
+      ],
+      "matched_doc_ids": [
+        "faq-011",
+        "faq-017",
+        "faq-019"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-019",
+          "chunk_id": "faq-019",
+          "score": 0.6836,
+          "rerank_score": null,
+          "text": "## Q19: 为什么迟迟不发货？\n\n付款后1-3个工作日内发货，预售商品除外。若超时未发，订单会显示延迟原因，可催发货或申请退款。\n\n*关键词: 发货, 延迟, 工作日*"
+        },
+        {
+          "faq_id": "faq-011",
+          "chunk_id": "faq-011",
+          "score": 0.6173,
+          "rerank_score": null,
+          "text": "## Q11: 下单后多久发货？\n\n付款后1-3个工作日内发货，预售商品以页面标注时间为准。超时未发货可点击催发货。\n\n*关键词: 发货, 工作日, 预售*"
+        },
+        {
+          "faq_id": "faq-047",
+          "chunk_id": "faq-047",
+          "score": 0.6118,
+          "rerank_score": null,
+          "text": "## Q47: 发错货了\n\n在订单中申请售后并上传收到的商品照片，我们将免费换发正确商品，运费全部由我们承担。\n\n*关键词: 发错, 售后, 换发*"
+        },
+        {
+          "faq_id": "faq-017",
+          "chunk_id": "faq-017",
+          "score": 0.604,
+          "rerank_score": null,
+          "text": "## Q17: 怎么催发货？\n\n在订单详情页点击“催发货”按钮，系统会通知商家尽快处理。若超过承诺发货时间仍未发，可申请退款。\n\n*关键词: 催发货, 订单, 承诺*"
+        },
+        {
+          "faq_id": "faq-026",
+          "chunk_id": "faq-026",
+          "score": 0.6018,
+          "rerank_score": null,
+          "text": "## Q26: 找不到以前的订单了\n\n在全部订单中按时间筛选或输入商品关键词搜索。若找不到可能登录错账号，请检查账号。\n\n*关键词: 订单, 搜索, 账号*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-026",
+      "question": "怎么查我的订单？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-021",
+        "faq-030"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "order_query",
+      "difficulty": "easy",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.4,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 15.326,
+      "retrieved_doc_ids": [
+        "faq-021",
+        "faq-030",
+        "faq-026",
+        "faq-045",
+        "faq-022"
+      ],
+      "matched_doc_ids": [
+        "faq-021",
+        "faq-030"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-021",
+          "chunk_id": "faq-021",
+          "score": 0.706,
+          "rerank_score": null,
+          "text": "## Q21: 怎么看我的订单状态？\n\n登录后点击“我的”进入“我的订单”，可按待付款、待发货、待收货等筛选查看具体状态。\n\n*关键词: 订单, 查看, 状态*"
+        },
+        {
+          "faq_id": "faq-030",
+          "chunk_id": "faq-030",
+          "score": 0.6894,
+          "rerank_score": null,
+          "text": "## Q30: 怎么查看历史订单？\n\n在“我的订单”页面选择“全部订单”并按时间范围查找，可查看所有历史记录。\n\n*关键词: 订单, 历史, 查看*"
+        },
+        {
+          "faq_id": "faq-026",
+          "chunk_id": "faq-026",
+          "score": 0.6639,
+          "rerank_score": null,
+          "text": "## Q26: 找不到以前的订单了\n\n在全部订单中按时间筛选或输入商品关键词搜索。若找不到可能登录错账号，请检查账号。\n\n*关键词: 订单, 搜索, 账号*"
+        },
+        {
+          "faq_id": "faq-045",
+          "chunk_id": "faq-045",
+          "score": 0.5145,
+          "rerank_score": null,
+          "text": "## Q45: 怀疑是假货\n\n请在订单中申请平台鉴定或提供证据。平台核实后支持假一赔三，并处罚商家。\n\n*关键词: 假货, 鉴定, 赔偿*"
+        },
+        {
+          "faq_id": "faq-022",
+          "chunk_id": "faq-022",
+          "score": 0.5002,
+          "rerank_score": null,
+          "text": "## Q22: 怎么取消已付款的订单？\n\n未发货的订单可直接在详情页取消，退款1-3个工作日到账。已发货的订单只能拒收或收到后申请退货。\n\n*关键词: 取消, 订单, 退款*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-027",
+      "question": "如何取消订单？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-022"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "order_query",
+      "difficulty": "easy",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 14.409,
+      "retrieved_doc_ids": [
+        "faq-022",
+        "faq-024",
+        "faq-028",
+        "faq-023",
+        "faq-026"
+      ],
+      "matched_doc_ids": [
+        "faq-022"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-022",
+          "chunk_id": "faq-022",
+          "score": 0.6831,
+          "rerank_score": null,
+          "text": "## Q22: 怎么取消已付款的订单？\n\n未发货的订单可直接在详情页取消，退款1-3个工作日到账。已发货的订单只能拒收或收到后申请退货。\n\n*关键词: 取消, 订单, 退款*"
+        },
+        {
+          "faq_id": "faq-024",
+          "chunk_id": "faq-024",
+          "score": 0.6169,
+          "rerank_score": null,
+          "text": "## Q24: 订单为什么自动取消了？\n\n超24小时未付款自动关闭，或库存不足、系统检测异常交易。具体原因见订单关闭说明。\n\n*关键词: 订单, 取消, 关闭*"
+        },
+        {
+          "faq_id": "faq-028",
+          "chunk_id": "faq-028",
+          "score": 0.6022,
+          "rerank_score": null,
+          "text": "## Q28: 订单里的商品数量能改吗？\n\n未付款的订单可取消重下，已付款未发货的订单不支持修改数量，只能取消重下。\n\n*关键词: 订单, 数量, 取消*"
+        },
+        {
+          "faq_id": "faq-023",
+          "chunk_id": "faq-023",
+          "score": 0.5433,
+          "rerank_score": null,
+          "text": "## Q23: 下错单了能换商品吗？\n\n已付款未发货的订单不支持修改商品，建议取消后重新下单。已发货的只能收货后退换。\n\n*关键词: 订单, 取消, 修改*"
+        },
+        {
+          "faq_id": "faq-026",
+          "chunk_id": "faq-026",
+          "score": 0.543,
+          "rerank_score": null,
+          "text": "## Q26: 找不到以前的订单了\n\n在全部订单中按时间筛选或输入商品关键词搜索。若找不到可能登录错账号，请检查账号。\n\n*关键词: 订单, 搜索, 账号*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-028",
+      "question": "我下错单了能不能改？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-023"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "order_query",
+      "difficulty": "medium",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 14.535,
+      "retrieved_doc_ids": [
+        "faq-023",
+        "faq-028",
+        "faq-014",
+        "faq-047",
+        "faq-056"
+      ],
+      "matched_doc_ids": [
+        "faq-023"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-023",
+          "chunk_id": "faq-023",
+          "score": 0.6484,
+          "rerank_score": null,
+          "text": "## Q23: 下错单了能换商品吗？\n\n已付款未发货的订单不支持修改商品，建议取消后重新下单。已发货的只能收货后退换。\n\n*关键词: 订单, 取消, 修改*"
+        },
+        {
+          "faq_id": "faq-028",
+          "chunk_id": "faq-028",
+          "score": 0.5638,
+          "rerank_score": null,
+          "text": "## Q28: 订单里的商品数量能改吗？\n\n未付款的订单可取消重下，已付款未发货的订单不支持修改数量，只能取消重下。\n\n*关键词: 订单, 数量, 取消*"
+        },
+        {
+          "faq_id": "faq-014",
+          "chunk_id": "faq-014",
+          "score": 0.5409,
+          "rerank_score": null,
+          "text": "## Q14: 地址写错了能改吗？\n\n未发货的订单可在详情中修改收货地址。已发货的订单无法在线修改，只能尝试联系客服转寄。\n\n*关键词: 地址, 修改, 发货*"
+        },
+        {
+          "faq_id": "faq-047",
+          "chunk_id": "faq-047",
+          "score": 0.5164,
+          "rerank_score": null,
+          "text": "## Q47: 发错货了\n\n在订单中申请售后并上传收到的商品照片，我们将免费换发正确商品，运费全部由我们承担。\n\n*关键词: 发错, 售后, 换发*"
+        },
+        {
+          "faq_id": "faq-056",
+          "chunk_id": "faq-056",
+          "score": 0.4993,
+          "rerank_score": null,
+          "text": "## Q56: 怎么改支付方式？\n\n未付款订单在支付页可重新选择支付方式，已付款订单无法更改。\n\n*关键词: 支付, 修改, 订单*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-029",
+      "question": "为什么我的订单被关闭了？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-024",
+        "faq-029"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "order_query",
+      "difficulty": "medium",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.4,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 15.69,
+      "retrieved_doc_ids": [
+        "faq-024",
+        "faq-029",
+        "faq-026",
+        "faq-022",
+        "faq-023"
+      ],
+      "matched_doc_ids": [
+        "faq-024",
+        "faq-029"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-024",
+          "chunk_id": "faq-024",
+          "score": 0.6916,
+          "rerank_score": null,
+          "text": "## Q24: 订单为什么自动取消了？\n\n超24小时未付款自动关闭，或库存不足、系统检测异常交易。具体原因见订单关闭说明。\n\n*关键词: 订单, 取消, 关闭*"
+        },
+        {
+          "faq_id": "faq-029",
+          "chunk_id": "faq-029",
+          "score": 0.6701,
+          "rerank_score": null,
+          "text": "## Q29: 订单被系统关闭了啥原因？\n\n常见原因有超24小时未付款、库存不足、风控拦截。查看订单详情中的关闭原因说明。\n\n*关键词: 订单, 关闭, 原因*"
+        },
+        {
+          "faq_id": "faq-026",
+          "chunk_id": "faq-026",
+          "score": 0.5911,
+          "rerank_score": null,
+          "text": "## Q26: 找不到以前的订单了\n\n在全部订单中按时间筛选或输入商品关键词搜索。若找不到可能登录错账号，请检查账号。\n\n*关键词: 订单, 搜索, 账号*"
+        },
+        {
+          "faq_id": "faq-022",
+          "chunk_id": "faq-022",
+          "score": 0.5782,
+          "rerank_score": null,
+          "text": "## Q22: 怎么取消已付款的订单？\n\n未发货的订单可直接在详情页取消，退款1-3个工作日到账。已发货的订单只能拒收或收到后申请退货。\n\n*关键词: 取消, 订单, 退款*"
+        },
+        {
+          "faq_id": "faq-023",
+          "chunk_id": "faq-023",
+          "score": 0.5604,
+          "rerank_score": null,
+          "text": "## Q23: 下错单了能换商品吗？\n\n已付款未发货的订单不支持修改商品，建议取消后重新下单。已发货的只能收货后退换。\n\n*关键词: 订单, 取消, 修改*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-030",
+      "question": "怎么申请发票？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-025",
+        "faq-054"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "order_query",
+      "difficulty": "medium",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.4,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 15.121,
+      "retrieved_doc_ids": [
+        "faq-025",
+        "faq-054",
+        "faq-053",
+        "faq-047",
+        "faq-017"
+      ],
+      "matched_doc_ids": [
+        "faq-025",
+        "faq-054"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-025",
+          "chunk_id": "faq-025",
+          "score": 0.7276,
+          "rerank_score": null,
+          "text": "## Q25: 怎么申请开发票？\n\n订单完成后在详情页申请电子发票，支持个人或企业抬头。发票在申请后1-3个工作日发送到邮箱。\n\n*关键词: 发票, 申请, 订单*"
+        },
+        {
+          "faq_id": "faq-054",
+          "chunk_id": "faq-054",
+          "score": 0.6596,
+          "rerank_score": null,
+          "text": "## Q54: 电子发票什么时候发？\n\n订单完成后申请，1-3个工作日发送到邮箱。可下载打印。\n\n*关键词: 发票, 工作日, 邮箱*"
+        },
+        {
+          "faq_id": "faq-053",
+          "chunk_id": "faq-053",
+          "score": 0.6213,
+          "rerank_score": null,
+          "text": "## Q53: 发票抬头怎么填？\n\n申请电子发票时选择个人或企业，填写名称和税号（企业需）。抬头一经提交不可修改。\n\n*关键词: 发票, 抬头, 税号*"
+        },
+        {
+          "faq_id": "faq-047",
+          "chunk_id": "faq-047",
+          "score": 0.4683,
+          "rerank_score": null,
+          "text": "## Q47: 发错货了\n\n在订单中申请售后并上传收到的商品照片，我们将免费换发正确商品，运费全部由我们承担。\n\n*关键词: 发错, 售后, 换发*"
+        },
+        {
+          "faq_id": "faq-017",
+          "chunk_id": "faq-017",
+          "score": 0.4534,
+          "rerank_score": null,
+          "text": "## Q17: 怎么催发货？\n\n在订单详情页点击“催发货”按钮，系统会通知商家尽快处理。若超过承诺发货时间仍未发，可申请退款。\n\n*关键词: 催发货, 订单, 承诺*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-031",
+      "question": "我之前买的那个订单找不到了？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-026",
+        "faq-030"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "order_query",
+      "difficulty": "medium",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 0.5,
+        "precision@5": 0.2,
+        "mrr@5": 1.0,
+        "ndcg@5": 0.6131471927654584
+      },
+      "latency_ms": 16.407,
+      "retrieved_doc_ids": [
+        "faq-026",
+        "faq-021",
+        "faq-023",
+        "faq-001",
+        "faq-047"
+      ],
+      "matched_doc_ids": [
+        "faq-026"
+      ],
+      "missed_doc_ids": [
+        "faq-030"
+      ],
+      "retrieved": [
+        {
+          "faq_id": "faq-026",
+          "chunk_id": "faq-026",
+          "score": 0.6816,
+          "rerank_score": null,
+          "text": "## Q26: 找不到以前的订单了\n\n在全部订单中按时间筛选或输入商品关键词搜索。若找不到可能登录错账号，请检查账号。\n\n*关键词: 订单, 搜索, 账号*"
+        },
+        {
+          "faq_id": "faq-021",
+          "chunk_id": "faq-021",
+          "score": 0.5524,
+          "rerank_score": null,
+          "text": "## Q21: 怎么看我的订单状态？\n\n登录后点击“我的”进入“我的订单”，可按待付款、待发货、待收货等筛选查看具体状态。\n\n*关键词: 订单, 查看, 状态*"
+        },
+        {
+          "faq_id": "faq-023",
+          "chunk_id": "faq-023",
+          "score": 0.5211,
+          "rerank_score": null,
+          "text": "## Q23: 下错单了能换商品吗？\n\n已付款未发货的订单不支持修改商品，建议取消后重新下单。已发货的只能收货后退换。\n\n*关键词: 订单, 取消, 修改*"
+        },
+        {
+          "faq_id": "faq-001",
+          "chunk_id": "faq-001",
+          "score": 0.5123,
+          "rerank_score": null,
+          "text": "## Q1: 我买了东西不想要了，怎么退掉？\n\n登录账户进入我的订单找到对应商品点击申请退货，填写退货原因后提交。审核通过后按系统给出的地址寄回，仓库签收后1-3个工作日退款原路返回。\n\n*关键词: 退货, 订单, 退款*"
+        },
+        {
+          "faq_id": "faq-047",
+          "chunk_id": "faq-047",
+          "score": 0.504,
+          "rerank_score": null,
+          "text": "## Q47: 发错货了\n\n在订单中申请售后并上传收到的商品照片，我们将免费换发正确商品，运费全部由我们承担。\n\n*关键词: 发错, 售后, 换发*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-032",
+      "question": "能改订单的支付方式吗？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-027",
+        "faq-056"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "order_query",
+      "difficulty": "easy",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.4,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 13.245,
+      "retrieved_doc_ids": [
+        "faq-056",
+        "faq-027",
+        "faq-028",
+        "faq-023",
+        "faq-022"
+      ],
+      "matched_doc_ids": [
+        "faq-027",
+        "faq-056"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-056",
+          "chunk_id": "faq-056",
+          "score": 0.6808,
+          "rerank_score": null,
+          "text": "## Q56: 怎么改支付方式？\n\n未付款订单在支付页可重新选择支付方式，已付款订单无法更改。\n\n*关键词: 支付, 修改, 订单*"
+        },
+        {
+          "faq_id": "faq-027",
+          "chunk_id": "faq-027",
+          "score": 0.6284,
+          "rerank_score": null,
+          "text": "## Q27: 支付方式能换吗？\n\n未付款的订单可在支付页面重新选择支付方式。已付款的订单不支持更改支付方式。\n\n*关键词: 支付, 订单, 方式*"
+        },
+        {
+          "faq_id": "faq-028",
+          "chunk_id": "faq-028",
+          "score": 0.6272,
+          "rerank_score": null,
+          "text": "## Q28: 订单里的商品数量能改吗？\n\n未付款的订单可取消重下，已付款未发货的订单不支持修改数量，只能取消重下。\n\n*关键词: 订单, 数量, 取消*"
+        },
+        {
+          "faq_id": "faq-023",
+          "chunk_id": "faq-023",
+          "score": 0.5726,
+          "rerank_score": null,
+          "text": "## Q23: 下错单了能换商品吗？\n\n已付款未发货的订单不支持修改商品，建议取消后重新下单。已发货的只能收货后退换。\n\n*关键词: 订单, 取消, 修改*"
+        },
+        {
+          "faq_id": "faq-022",
+          "chunk_id": "faq-022",
+          "score": 0.5301,
+          "rerank_score": null,
+          "text": "## Q22: 怎么取消已付款的订单？\n\n未发货的订单可直接在详情页取消，退款1-3个工作日到账。已发货的订单只能拒收或收到后申请退货。\n\n*关键词: 取消, 订单, 退款*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-033",
+      "question": "收到的商品和图片颜色不一样！",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-042"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "complaint",
+      "difficulty": "medium",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 16.939,
+      "retrieved_doc_ids": [
+        "faq-042",
+        "faq-047",
+        "faq-049",
+        "faq-041",
+        "faq-006"
+      ],
+      "matched_doc_ids": [
+        "faq-042"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-042",
+          "chunk_id": "faq-042",
+          "score": 0.6477,
+          "rerank_score": null,
+          "text": "## Q42: 颜色和图片差太多\n\n拍摄光线和屏幕差异导致轻微色差正常。若色差严重影响使用，可申请退货退款，运费商家承担。\n\n*关键词: 色差, 退货, 退款*"
+        },
+        {
+          "faq_id": "faq-047",
+          "chunk_id": "faq-047",
+          "score": 0.5235,
+          "rerank_score": null,
+          "text": "## Q47: 发错货了\n\n在订单中申请售后并上传收到的商品照片，我们将免费换发正确商品，运费全部由我们承担。\n\n*关键词: 发错, 售后, 换发*"
+        },
+        {
+          "faq_id": "faq-049",
+          "chunk_id": "faq-049",
+          "score": 0.5193,
+          "rerank_score": null,
+          "text": "## Q49: 包装破损\n\n如外包装破损导致内部商品受损，请拍照上传并申请退换。若商品完好则不影响使用。\n\n*关键词: 包装, 破损, 退换*"
+        },
+        {
+          "faq_id": "faq-041",
+          "chunk_id": "faq-041",
+          "score": 0.5161,
+          "rerank_score": null,
+          "text": "## Q41: 收到的东西是坏的\n\n签收后24小时内拍照保留证据，在订单中申请退换货并上传照片。核实后免费换新或全额退款。\n\n*关键词: 破损, 退换, 照片*"
+        },
+        {
+          "faq_id": "faq-006",
+          "chunk_id": "faq-006",
+          "score": 0.4669,
+          "rerank_score": null,
+          "text": "## Q6: 换货和退货有啥不一样？\n\n退货是退回商品后原路退款给您，换货是退回商品后商家重新发一件新品给您。两者均支持签收后7天内申请。\n\n*关键词: 退货, 换货, 退款*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-034",
+      "question": "商品是坏的怎么处理？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-041"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "complaint",
+      "difficulty": "medium",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "mrr@5": 0.3333333333333333,
+        "ndcg@5": 0.5
+      },
+      "latency_ms": 14.855,
+      "retrieved_doc_ids": [
+        "faq-043",
+        "faq-049",
+        "faq-041",
+        "faq-047",
+        "faq-048"
+      ],
+      "matched_doc_ids": [
+        "faq-041"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-043",
+          "chunk_id": "faq-043",
+          "score": 0.5666,
+          "rerank_score": null,
+          "text": "## Q43: 用两天就坏了\n\n立即停止使用，在订单中申请售后并上传损坏照片。我们24小时内处理，安排换新或退款。\n\n*关键词: 售后, 损坏, 退款*"
+        },
+        {
+          "faq_id": "faq-049",
+          "chunk_id": "faq-049",
+          "score": 0.5574,
+          "rerank_score": null,
+          "text": "## Q49: 包装破损\n\n如外包装破损导致内部商品受损，请拍照上传并申请退换。若商品完好则不影响使用。\n\n*关键词: 包装, 破损, 退换*"
+        },
+        {
+          "faq_id": "faq-041",
+          "chunk_id": "faq-041",
+          "score": 0.5285,
+          "rerank_score": null,
+          "text": "## Q41: 收到的东西是坏的\n\n签收后24小时内拍照保留证据，在订单中申请退换货并上传照片。核实后免费换新或全额退款。\n\n*关键词: 破损, 退换, 照片*"
+        },
+        {
+          "faq_id": "faq-047",
+          "chunk_id": "faq-047",
+          "score": 0.525,
+          "rerank_score": null,
+          "text": "## Q47: 发错货了\n\n在订单中申请售后并上传收到的商品照片，我们将免费换发正确商品，运费全部由我们承担。\n\n*关键词: 发错, 售后, 换发*"
+        },
+        {
+          "faq_id": "faq-048",
+          "chunk_id": "faq-048",
+          "score": 0.4977,
+          "rerank_score": null,
+          "text": "## Q48: 质量太差想投诉\n\n请在订单中发起投诉并描述质量问题，平台会在24小时内处理。可申请退货退款。\n\n*关键词: 投诉, 质量, 退款*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-035",
+      "question": "你们这什么破质量！用了两天就坏了！",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-043"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "complaint",
+      "difficulty": "hard",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "mrr@5": 0.5,
+        "ndcg@5": 0.6309297535714575
+      },
+      "latency_ms": 16.779,
+      "retrieved_doc_ids": [
+        "faq-049",
+        "faq-043",
+        "faq-041",
+        "faq-048",
+        "faq-004"
+      ],
+      "matched_doc_ids": [
+        "faq-043"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-049",
+          "chunk_id": "faq-049",
+          "score": 0.6051,
+          "rerank_score": null,
+          "text": "## Q49: 包装破损\n\n如外包装破损导致内部商品受损，请拍照上传并申请退换。若商品完好则不影响使用。\n\n*关键词: 包装, 破损, 退换*"
+        },
+        {
+          "faq_id": "faq-043",
+          "chunk_id": "faq-043",
+          "score": 0.5859,
+          "rerank_score": null,
+          "text": "## Q43: 用两天就坏了\n\n立即停止使用，在订单中申请售后并上传损坏照片。我们24小时内处理，安排换新或退款。\n\n*关键词: 售后, 损坏, 退款*"
+        },
+        {
+          "faq_id": "faq-041",
+          "chunk_id": "faq-041",
+          "score": 0.5699,
+          "rerank_score": null,
+          "text": "## Q41: 收到的东西是坏的\n\n签收后24小时内拍照保留证据，在订单中申请退换货并上传照片。核实后免费换新或全额退款。\n\n*关键词: 破损, 退换, 照片*"
+        },
+        {
+          "faq_id": "faq-048",
+          "chunk_id": "faq-048",
+          "score": 0.5355,
+          "rerank_score": null,
+          "text": "## Q48: 质量太差想投诉\n\n请在订单中发起投诉并描述质量问题，平台会在24小时内处理。可申请退货退款。\n\n*关键词: 投诉, 质量, 退款*"
+        },
+        {
+          "faq_id": "faq-004",
+          "chunk_id": "faq-004",
+          "score": 0.472,
+          "rerank_score": null,
+          "text": "## Q4: 买了好几天了还能退吗？\n\n自签收之日起7天内可无理由退货，超过7天但未满15天且属于质量问题的可申请退换货。超过15天不能再线上申请，需转人工处理。\n\n*关键词: 退货, 7天, 15天*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-036",
+      "question": "客服态度太差了我要求换人！",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-044"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "complaint",
+      "difficulty": "medium",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 15.396,
+      "retrieved_doc_ids": [
+        "faq-044",
+        "faq-048",
+        "faq-023",
+        "faq-047",
+        "faq-014"
+      ],
+      "matched_doc_ids": [
+        "faq-044"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-044",
+          "chunk_id": "faq-044",
+          "score": 0.6636,
+          "rerank_score": null,
+          "text": "## Q44: 客服态度恶劣\n\n非常抱歉，我们会记录反馈并改进。现在由我继续为您服务，请告知具体问题。\n\n*关键词: 抱歉, 反馈, 服务*"
+        },
+        {
+          "faq_id": "faq-048",
+          "chunk_id": "faq-048",
+          "score": 0.5348,
+          "rerank_score": null,
+          "text": "## Q48: 质量太差想投诉\n\n请在订单中发起投诉并描述质量问题，平台会在24小时内处理。可申请退货退款。\n\n*关键词: 投诉, 质量, 退款*"
+        },
+        {
+          "faq_id": "faq-023",
+          "chunk_id": "faq-023",
+          "score": 0.5334,
+          "rerank_score": null,
+          "text": "## Q23: 下错单了能换商品吗？\n\n已付款未发货的订单不支持修改商品，建议取消后重新下单。已发货的只能收货后退换。\n\n*关键词: 订单, 取消, 修改*"
+        },
+        {
+          "faq_id": "faq-047",
+          "chunk_id": "faq-047",
+          "score": 0.5266,
+          "rerank_score": null,
+          "text": "## Q47: 发错货了\n\n在订单中申请售后并上传收到的商品照片，我们将免费换发正确商品，运费全部由我们承担。\n\n*关键词: 发错, 售后, 换发*"
+        },
+        {
+          "faq_id": "faq-014",
+          "chunk_id": "faq-014",
+          "score": 0.5201,
+          "rerank_score": null,
+          "text": "## Q14: 地址写错了能改吗？\n\n未发货的订单可在详情中修改收货地址。已发货的订单无法在线修改，只能尝试联系客服转寄。\n\n*关键词: 地址, 修改, 发货*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-037",
+      "question": "我要投诉！卖假货你们管不管？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-045"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "complaint",
+      "difficulty": "hard",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 17.392,
+      "retrieved_doc_ids": [
+        "faq-045",
+        "faq-048",
+        "faq-047",
+        "faq-023",
+        "faq-003"
+      ],
+      "matched_doc_ids": [
+        "faq-045"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-045",
+          "chunk_id": "faq-045",
+          "score": 0.5771,
+          "rerank_score": null,
+          "text": "## Q45: 怀疑是假货\n\n请在订单中申请平台鉴定或提供证据。平台核实后支持假一赔三，并处罚商家。\n\n*关键词: 假货, 鉴定, 赔偿*"
+        },
+        {
+          "faq_id": "faq-048",
+          "chunk_id": "faq-048",
+          "score": 0.5338,
+          "rerank_score": null,
+          "text": "## Q48: 质量太差想投诉\n\n请在订单中发起投诉并描述质量问题，平台会在24小时内处理。可申请退货退款。\n\n*关键词: 投诉, 质量, 退款*"
+        },
+        {
+          "faq_id": "faq-047",
+          "chunk_id": "faq-047",
+          "score": 0.5058,
+          "rerank_score": null,
+          "text": "## Q47: 发错货了\n\n在订单中申请售后并上传收到的商品照片，我们将免费换发正确商品，运费全部由我们承担。\n\n*关键词: 发错, 售后, 换发*"
+        },
+        {
+          "faq_id": "faq-023",
+          "chunk_id": "faq-023",
+          "score": 0.461,
+          "rerank_score": null,
+          "text": "## Q23: 下错单了能换商品吗？\n\n已付款未发货的订单不支持修改商品，建议取消后重新下单。已发货的只能收货后退换。\n\n*关键词: 订单, 取消, 修改*"
+        },
+        {
+          "faq_id": "faq-003",
+          "chunk_id": "faq-003",
+          "score": 0.4564,
+          "rerank_score": null,
+          "text": "## Q3: 退货的话运费谁出？\n\n质量问题退货商家承担全部运费，非质量问题七天无理由退货由买家承担退货运费。运费金额以实际寄出费用为准。\n\n*关键词: 运费, 退货, 质量问题*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-038",
+      "question": "你们承诺的赠品没有发给我！",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-046"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "complaint",
+      "difficulty": "medium",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 14.225,
+      "retrieved_doc_ids": [
+        "faq-046",
+        "faq-047",
+        "faq-019",
+        "faq-017",
+        "faq-015"
+      ],
+      "matched_doc_ids": [
+        "faq-046"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-046",
+          "chunk_id": "faq-046",
+          "score": 0.6609,
+          "rerank_score": null,
+          "text": "## Q46: 赠品没收到\n\n请提供订单号，我们核实后将补发赠品或提供等值优惠券补偿。赠品遗漏不影响主商品售后。\n\n*关键词: 赠品, 补发, 订单号*"
+        },
+        {
+          "faq_id": "faq-047",
+          "chunk_id": "faq-047",
+          "score": 0.5275,
+          "rerank_score": null,
+          "text": "## Q47: 发错货了\n\n在订单中申请售后并上传收到的商品照片，我们将免费换发正确商品，运费全部由我们承担。\n\n*关键词: 发错, 售后, 换发*"
+        },
+        {
+          "faq_id": "faq-019",
+          "chunk_id": "faq-019",
+          "score": 0.5049,
+          "rerank_score": null,
+          "text": "## Q19: 为什么迟迟不发货？\n\n付款后1-3个工作日内发货，预售商品除外。若超时未发，订单会显示延迟原因，可催发货或申请退款。\n\n*关键词: 发货, 延迟, 工作日*"
+        },
+        {
+          "faq_id": "faq-017",
+          "chunk_id": "faq-017",
+          "score": 0.4918,
+          "rerank_score": null,
+          "text": "## Q17: 怎么催发货？\n\n在订单详情页点击“催发货”按钮，系统会通知商家尽快处理。若超过承诺发货时间仍未发，可申请退款。\n\n*关键词: 催发货, 订单, 承诺*"
+        },
+        {
+          "faq_id": "faq-015",
+          "chunk_id": "faq-015",
+          "score": 0.4795,
+          "rerank_score": null,
+          "text": "## Q15: 快递显示签收但我没收到包裹\n\n先确认家人、同事或物业是否代收。确认未收到请在订单中点击“未收到货”申请处理，平台24小时内核实。\n\n*关键词: 签收, 未收到, 核实*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-039",
+      "question": "这个商品好评是刷的吗？看着不太真实",
+      "retrieval_status": "out_of_scope",
+      "relevant_doc_ids": [],
+      "annotation_note": "知识库没有评价真实性或刷单举报政策。",
+      "intent": "complaint",
+      "difficulty": "hard",
+      "scored": false
+    },
+    {
+      "case_id": "eval-040",
+      "question": "你好",
+      "retrieval_status": "out_of_scope",
+      "relevant_doc_ids": [],
+      "annotation_note": "问候应走直接回复，不属于 FAQ 检索。",
+      "intent": "chitchat",
+      "difficulty": "easy",
+      "scored": false
+    },
+    {
+      "case_id": "eval-041",
+      "question": "谢谢你的帮助",
+      "retrieval_status": "out_of_scope",
+      "relevant_doc_ids": [],
+      "annotation_note": "致谢应走直接回复，不属于 FAQ 检索。",
+      "intent": "chitchat",
+      "difficulty": "easy",
+      "scored": false
+    },
+    {
+      "case_id": "eval-042",
+      "question": "你能做什么？",
+      "retrieval_status": "out_of_scope",
+      "relevant_doc_ids": [],
+      "annotation_note": "助手能力介绍应走直接回复，知识库没有能力说明。",
+      "intent": "chitchat",
+      "difficulty": "easy",
+      "scored": false
+    },
+    {
+      "case_id": "eval-043",
+      "question": "现在几点了？",
+      "retrieval_status": "out_of_scope",
+      "relevant_doc_ids": [],
+      "annotation_note": "实时时间不属于本 FAQ 知识范围。",
+      "intent": "chitchat",
+      "difficulty": "easy",
+      "scored": false
+    },
+    {
+      "case_id": "eval-044",
+      "question": "你们公司在哪里？",
+      "retrieval_status": "out_of_scope",
+      "relevant_doc_ids": [],
+      "annotation_note": "知识库没有公司地址或官方联系方式证据。",
+      "intent": "chitchat",
+      "difficulty": "easy",
+      "scored": false
+    },
+    {
+      "case_id": "eval-045",
+      "question": "怎么联系人工客服？",
+      "retrieval_status": "partial_evidence",
+      "relevant_doc_ids": [
+        "faq-059"
+      ],
+      "annotation_note": "FAQ 提供人工联系方法，没有24小时热线承诺。",
+      "intent": "chitchat",
+      "difficulty": "easy",
+      "scored": false
+    },
+    {
+      "case_id": "eval-046",
+      "question": "手机壳支持无线充电吗？",
+      "retrieval_status": "out_of_scope",
+      "relevant_doc_ids": [],
+      "annotation_note": "知识库没有手机壳无线充电兼容性证据。",
+      "intent": "product_consult",
+      "difficulty": "medium",
+      "scored": false
+    },
+    {
+      "case_id": "eval-047",
+      "question": "快递能送到村里面吗？",
+      "retrieval_status": "out_of_scope",
+      "relevant_doc_ids": [],
+      "annotation_note": "知识库没有乡镇/村庄配送覆盖政策。",
+      "intent": "logistics",
+      "difficulty": "medium",
+      "scored": false
+    },
+    {
+      "case_id": "eval-048",
+      "question": "我想修改订单的数量可以吗？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-028"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "order_query",
+      "difficulty": "medium",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 15.4,
+      "retrieved_doc_ids": [
+        "faq-028",
+        "faq-023",
+        "faq-014",
+        "faq-056",
+        "faq-026"
+      ],
+      "matched_doc_ids": [
+        "faq-028"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-028",
+          "chunk_id": "faq-028",
+          "score": 0.7182,
+          "rerank_score": null,
+          "text": "## Q28: 订单里的商品数量能改吗？\n\n未付款的订单可取消重下，已付款未发货的订单不支持修改数量，只能取消重下。\n\n*关键词: 订单, 数量, 取消*"
+        },
+        {
+          "faq_id": "faq-023",
+          "chunk_id": "faq-023",
+          "score": 0.6175,
+          "rerank_score": null,
+          "text": "## Q23: 下错单了能换商品吗？\n\n已付款未发货的订单不支持修改商品，建议取消后重新下单。已发货的只能收货后退换。\n\n*关键词: 订单, 取消, 修改*"
+        },
+        {
+          "faq_id": "faq-014",
+          "chunk_id": "faq-014",
+          "score": 0.5576,
+          "rerank_score": null,
+          "text": "## Q14: 地址写错了能改吗？\n\n未发货的订单可在详情中修改收货地址。已发货的订单无法在线修改，只能尝试联系客服转寄。\n\n*关键词: 地址, 修改, 发货*"
+        },
+        {
+          "faq_id": "faq-056",
+          "chunk_id": "faq-056",
+          "score": 0.5485,
+          "rerank_score": null,
+          "text": "## Q56: 怎么改支付方式？\n\n未付款订单在支付页可重新选择支付方式，已付款订单无法更改。\n\n*关键词: 支付, 修改, 订单*"
+        },
+        {
+          "faq_id": "faq-026",
+          "chunk_id": "faq-026",
+          "score": 0.5254,
+          "rerank_score": null,
+          "text": "## Q26: 找不到以前的订单了\n\n在全部订单中按时间筛选或输入商品关键词搜索。若找不到可能登录错账号，请检查账号。\n\n*关键词: 订单, 搜索, 账号*"
+        }
+      ]
+    },
+    {
+      "case_id": "eval-049",
+      "question": "发错货了你们怎么处理？",
+      "retrieval_status": "answerable",
+      "relevant_doc_ids": [
+        "faq-047"
+      ],
+      "annotation_note": "按当前 FAQ 原文标注能直接支持该问题的条目；这是检索相关性标注，不代表对标准答案每项承诺的核准。",
+      "intent": "complaint",
+      "difficulty": "medium",
+      "scored": true,
+      "metrics": {
+        "hit@5": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "mrr@5": 1.0,
+        "ndcg@5": 1.0
+      },
+      "latency_ms": 18.856,
+      "retrieved_doc_ids": [
+        "faq-047",
+        "faq-023",
+        "faq-014",
+        "faq-019",
+        "faq-045"
+      ],
+      "matched_doc_ids": [
+        "faq-047"
+      ],
+      "missed_doc_ids": [],
+      "retrieved": [
+        {
+          "faq_id": "faq-047",
+          "chunk_id": "faq-047",
+          "score": 0.7012,
+          "rerank_score": null,
+          "text": "## Q47: 发错货了\n\n在订单中申请售后并上传收到的商品照片，我们将免费换发正确商品，运费全部由我们承担。\n\n*关键词: 发错, 售后, 换发*"
+        },
+        {
+          "faq_id": "faq-023",
+          "chunk_id": "faq-023",
+          "score": 0.5901,
+          "rerank_score": null,
+          "text": "## Q23: 下错单了能换商品吗？\n\n已付款未发货的订单不支持修改商品，建议取消后重新下单。已发货的只能收货后退换。\n\n*关键词: 订单, 取消, 修改*"
+        },
+        {
+          "faq_id": "faq-014",
+          "chunk_id": "faq-014",
+          "score": 0.5454,
+          "rerank_score": null,
+          "text": "## Q14: 地址写错了能改吗？\n\n未发货的订单可在详情中修改收货地址。已发货的订单无法在线修改，只能尝试联系客服转寄。\n\n*关键词: 地址, 修改, 发货*"
+        },
+        {
+          "faq_id": "faq-019",
+          "chunk_id": "faq-019",
+          "score": 0.5237,
+          "rerank_score": null,
+          "text": "## Q19: 为什么迟迟不发货？\n\n付款后1-3个工作日内发货，预售商品除外。若超时未发，订单会显示延迟原因，可催发货或申请退款。\n\n*关键词: 发货, 延迟, 工作日*"
+        },
+        {
+          "faq_id": "faq-045",
+          "chunk_id": "faq-045",
+          "score": 0.5221,
+          "rerank_score": null,
+          "text": "## Q45: 怀疑是假货\n\n请在订单中申请平台鉴定或提供证据。平台核实后支持假一赔三，并处罚商家。\n\n*关键词: 假货, 鉴定, 赔偿*"
+        }
+      ]
+    }
+  ],
+  "reproducibility": {
+    "created_at": "2026-11-16T08:04:21.992418+00:00",
+    "git": {
+      "commit": "4a59fad88af286d4b96fbd9fd3c2ac417ed01847",
+      "dirty": true
+    },
+    "dataset": {
+      "sha256": "15ad748c5865c11dd5a6e594792f4f40c5c5757e07463e9bfba2967c4472ea12",
+      "filename": "eval_dataset.json"
+    },
+    "corpus": {
+      "sha256": "c089d0b3fa41de501055ecbaa60ec39d735e1bfcb8cbbce83d3d27eede776ed1",
+      "filename": "ecommerce_kb.json",
+      "faq_count": 60
+    },
+    "source_sha256": {
+      "src/evaluation/metrics.py": "e24304e878b05b90e6ffedca0853251a1ba776b173814adf3bae934dcbf88093",
+      "src/evaluation/id_baseline.py": "47e9090dc11e1c8823702dcea8939ffb3c6cb607381a1a8642e04ef4213251cc",
+      "src/evaluation/evaluator.py": "73e4e022b20b5c9b8140a1678045e772b49085061497597c0e3cdc4de5207578",
+      "scripts/run_benchmark.py": "b8fc31e4378e8d62995074331982a1750cbb2dfa7b3e72e88792d20d56ba0899",
+      "src/embedding/embedder.py": "ebd033b133d9cedd501dd0d5563fdce6e2971a7ed8d923861608cb9ba4adf6f5",
+      "src/embedding/chroma_store.py": "a8e5c7634464e81616e03409e7752722a7590fb7f62d6c7c0f338a040b458cfa",
+      "src/retrieval/reranker.py": "a685ea2aea0de6f8a3ae3d676731c0acfb8b2a6b222909631e239123c6150a23",
+      "src/config.py": "b769e97f291d4ec1f6242a0bccb2e12c843df3bdf90c43f2a9d80e89daa2a0ba"
+    },
+    "models": {
+      "embedding": {
+        "sha256": "a7e6c0579782e27eb500fd12d93d247897f99914300c09286526f7d04ede7a29",
+        "files": [
+          {
+            "file": ".gitattributes",
+            "sha256": "11ad7efa24975ee4b0c3c3a38ed18737f0658a5f75a0a96787b576a78a023361"
+          },
+          {
+            "file": "1_Pooling/config.json",
+            "sha256": "aaa8861589f80c961a03cc86c7eeaef7605c1676b9ab55329d33a304738769c6"
+          },
+          {
+            "file": "config.json",
+            "sha256": "3853a7979202c348751b753e36f579c41d8da7d36af617d3d907e1fc9b441f2a"
+          },
+          {
+            "file": "config_sentence_transformers.json",
+            "sha256": "940d5f50db195fa6e5e6a4f122c095f77880de259d74b14a65779ed48bdd7c56"
+          },
+          {
+            "file": "configuration.json",
+            "sha256": "6bc26d64eb5024b4d1dab5a52371958b429256d6c9d59787f1f5294a54e0cebd"
+          },
+          {
+            "file": "model.safetensors",
+            "sha256": "354763b9b1357bc9c44f62c6be2276321081ed2567773608c0d0785b61d5a026"
+          },
+          {
+            "file": "modules.json",
+            "sha256": "84e40c8e006c9b1d6c122e02cba9b02458120b5fb0c87b746c41e0207cf642cf"
+          },
+          {
+            "file": "pytorch_model.bin",
+            "sha256": "7c5fe667bbed05dc10e246e229b701ad266fe4d95ab946e9e5aa402056611b88"
+          },
+          {
+            "file": "README.md",
+            "sha256": "c48a4eeea77f6b1d38b48ec1c5b8d4f86d5550cc43fa345a0db1b2ca1d082369"
+          },
+          {
+            "file": "sentence_bert_config.json",
+            "sha256": "84e39fda68ccbff05bfa723ae9c0e70e23e2ec373b76e0f8c6e71af72a693cbf"
+          },
+          {
+            "file": "special_tokens_map.json",
+            "sha256": "b6d346be366a7d1d48332dbc9fdf3bf8960b5d879522b7799ddba59e76237ee3"
+          },
+          {
+            "file": "tokenizer.json",
+            "sha256": "48cea5d44424912a6fd1ea647bf4fe50b55ab8b1e5879c3275f80e339e8fae26"
+          },
+          {
+            "file": "tokenizer_config.json",
+            "sha256": "e6f3b96db926a37d4039995fbf5ad17de158dfb8f6343d607e4dbaad18d75f5a"
+          },
+          {
+            "file": "vocab.txt",
+            "sha256": "45bbac6b341c319adc98a532532882e91a9cefc0329aa57bac9ae761c27b291c"
+          }
+        ]
+      }
+    },
+    "python": "3.12.9",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "packages": {
+      "numpy": "2.2.6",
+      "chromadb": "1.5.9",
+      "sentence-transformers": "3.4.1",
+      "torch": "2.5.1",
+      "transformers": "4.48.3",
+      "tokenizers": "0.21.4",
+      "safetensors": "0.8.0",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1"
+    },
+    "parameters": {
+      "top_k": 5,
+      "candidate_k": 5,
+      "use_rerank": false,
+      "threshold": 0.4,
+      "limit": 0,
+      "query_instruction": "为这个句子生成表示以用于检索相关文章：",
+      "cache": "disabled",
+      "chunking": "one_faq_per_chunk",
+      "access_level": "public",
+      "embedding_model": "bge-small-zh-v1.5",
+      "embedding_dimension": 512,
+      "reranker_model": null,
+      "device": "cpu",
+      "torch_seed": 0,
+      "torch_threads": 4
+    },
+    "scope": "isolated FAQ retrieval only; no intent routing, LLM generation or handoff"
+  }
+}

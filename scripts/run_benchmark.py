@@ -1,19 +1,23 @@
-"""Benchmark 运行脚本 — 跑评估数据集，输出 RAG 指标报告（Recall@5 / MRR / NDCG@5 等）
+"""FAQ ID 基线默认入口；--legacy-similarity 保留历史相似度评测。
+
+默认仅使用本地模型，在独立目录索引固定 FAQ，按文档 ID 计算指标。
+--validate-only 无需加载模型，检查标注；--no-rerank 运行 Dense 对照。
 
 用法:
-    python scripts/run_benchmark.py                            # 仅检索 + Embedding 快速模式
-    python scripts/run_benchmark.py --with-generation          # 完整 RAG（检索+生成）
-    python scripts/run_benchmark.py --use-llm-eval             # LLM 精确评估忠实度
+    python scripts/run_benchmark.py                            # ID 检索基线
+    python scripts/run_benchmark.py --validate-only            # 标注校验
+    python scripts/run_benchmark.py --no-rerank                 # Dense 对照
+    python scripts/run_benchmark.py --legacy-similarity --with-generation
     python scripts/run_benchmark.py --limit 10                 # 只跑前10条（冒烟）
     python scripts/run_benchmark.py --save-dir reports         # 报告保存目录
 
-前置条件（在部署环境 VM 上跑）:
-    - 知识库已入库（scripts/rebuild_kb.py / scripts/ingest_faq.py 或 Gradio 入库平台）
-    - .env 配置了 DEEPSEEK_API_KEY（LLM）；本地 BGE 模型在 EMBEDDING_MODEL_PATH
+前置条件:
+    - 本地 BGE 模型路径：EMBEDDING_MODEL_PATH / RERANKER_MODEL_PATH
+    - ID 基线不需要 API Key 或已有知识库；历史模式仍需已入库知识库
 
 输出:
-    - 控制台指标报告（Recall@5 / MRR / Faithfulness / Latency P50/P95/P99）
-    - JSON 报告保存到 <save-dir>/benchmark_<mode>_<时间戳>.json
+    - ID 基线输出 Hit@5 / Recall@5 / MRR@5 / Precision@5 / NDCG@5
+    - JSON 报告保存到 <save-dir>/id_baseline_<时间戳>/report.json
 """
 
 import argparse
@@ -43,7 +47,72 @@ def main() -> None:
     )
     parser.add_argument("--limit", type=int, default=0, help="只跑前 N 条（0=全部）")
     parser.add_argument("--save-dir", default="reports", help="报告保存目录")
+    parser.add_argument("--dataset", type=Path, help="ID 基线评测集 JSON")
+    parser.add_argument("--corpus", type=Path, help="ID 基线 FAQ JSON")
+    parser.add_argument(
+        "--validate-only", action="store_true", help="仅校验 ID 标注，不加载模型"
+    )
+    parser.add_argument(
+        "--no-rerank", action="store_true", help="ID 基线只运行 Dense 检索"
+    )
+    parser.add_argument(
+        "--legacy-similarity",
+        action="store_true",
+        help="历史相似度代理指标（不能与 ID 指标直接比较）",
+    )
     args = parser.parse_args()
+
+    if args.limit < 0:
+        parser.error("--limit 必须 >= 0")
+    if not args.legacy_similarity:
+        if args.with_generation or args.use_llm_eval:
+            parser.error("生成/LLM 评估请显式加 --legacy-similarity；ID 基线仅评估检索")
+        from collections import Counter
+
+        from src.evaluation.id_baseline import (
+            CORPUS_PATH,
+            DATASET_PATH,
+            load_labels,
+            run_baseline,
+        )
+
+        dataset = args.dataset or DATASET_PATH
+        corpus = args.corpus or CORPUS_PATH
+        try:
+            cases, documents = load_labels(dataset, corpus)
+            print(f"标注校验通过：{len(cases)} 题 / {len(documents)} FAQ")
+            print(dict(Counter(case["retrieval_status"] for case in cases)))
+            if args.validate_only:
+                return
+            run_dir = Path(args.save_dir) / datetime.now().strftime(
+                "id_baseline_%Y%m%d_%H%M%S_%f"
+            )
+            report = run_baseline(
+                dataset,
+                corpus,
+                run_dir,
+                use_rerank=not args.no_rerank,
+                limit=args.limit,
+            )
+        except Exception as exc:
+            print(f"ID 基线失败（未输出有效跑分）：{exc}")
+            raise SystemExit(1) from exc
+        for key in (
+            "total_cases",
+            "scored_cases",
+            "hit@5",
+            "recall@5",
+            "precision@5",
+            "mrr@5",
+            "ndcg@5",
+        ):
+            print(f"{key}: {report[key]}")
+        print(f"漏检题目: {report['miss_case_ids']}")
+        print(f"报告: {run_dir / 'report.json'}")
+        return
+
+    if args.dataset or args.corpus or args.validate_only or args.no_rerank:
+        parser.error("自定义数据/标注校验/关闭重排选项仅适用于 ID 基线")
 
     from src.evaluation import get_evaluator
 
@@ -68,6 +137,10 @@ def main() -> None:
             test_cases,
             use_llm_eval=args.use_llm_eval,
             with_generation=args.with_generation,
+        )
+        results["metric_basis"] = "legacy_embedding_similarity_proxy"
+        results["warning"] = (
+            "历史相似度代理值；recall@5 实为 Hit@5。检索模式下 faithfulness/keyword_coverage 使用标准答案，不代表生成质量。"
         )
     except Exception as e:
         print(f"\n❌ 评测失败: {e}")

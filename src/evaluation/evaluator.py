@@ -71,6 +71,10 @@ class TestCase:
     must_contain_keywords: list[str] = field(default_factory=list)
     intent: str = ""
     difficulty: str = "medium"  # easy / medium / hard
+    case_id: str = ""
+    relevant_doc_ids: list[str] = field(default_factory=list)
+    retrieval_status: str = ""
+    annotation_note: str = ""
 
 
 @dataclass
@@ -316,6 +320,7 @@ class RetrievalEvaluator:
         avg_correction_rounds = sum(r.correction_rounds for r in results) / total
 
         return {
+            "metric_basis": "legacy_embedding_similarity_proxy",
             "total_cases": total,
             "recall@5": round(avg_recall, 4),
             "precision@5": round(avg_precision, 4),
@@ -363,6 +368,10 @@ class RetrievalEvaluator:
                 must_contain_keywords=tc.get("must_contain_keywords", []),
                 intent=tc.get("intent", ""),
                 difficulty=tc.get("difficulty", "medium"),
+                case_id=tc.get("case_id", ""),
+                relevant_doc_ids=tc.get("relevant_doc_ids", []),
+                retrieval_status=tc.get("retrieval_status", ""),
+                annotation_note=tc.get("annotation_note", ""),
             )
             for tc in data
         ]
@@ -421,6 +430,10 @@ class RetrievalEvaluator:
                 "must_contain_keywords": tc.must_contain_keywords,
                 "intent": tc.intent,
                 "difficulty": tc.difficulty,
+                "case_id": tc.case_id,
+                "relevant_doc_ids": tc.relevant_doc_ids,
+                "retrieval_status": tc.retrieval_status,
+                "annotation_note": tc.annotation_note,
             }
             for tc in test_cases
         ]

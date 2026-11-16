@@ -18,6 +18,38 @@ logger = logging.getLogger(__name__)
 # Embedding 相关性阈值
 RELEVANCE_THRESHOLD = 0.70
 
+
+def calculate_id_metrics(
+    retrieved_ids: list[str], relevant_ids: list[str], k: int = 5
+) -> dict[str, float]:
+    """Binary relevance from frozen document labels; no model-based judging.
+
+    Duplicate chunks of one FAQ occupy ranks but contribute relevance only once.
+    Precision divides by K, recall by all labeled relevant documents, and IDCG
+    uses the full gold set rather than the documents retrieved by this run.
+    Empty gold sets must be excluded by the caller, not counted as misses.
+    """
+    if k <= 0:
+        raise ValueError("k must be positive")
+    gold = set(relevant_ids)
+    if not gold or "" in gold:
+        raise ValueError("relevant_ids must contain non-empty document IDs")
+    seen: set[str] = set()
+    ranks = []
+    for rank, doc_id in enumerate(retrieved_ids[:k], 1):
+        if doc_id in gold and doc_id not in seen:
+            ranks.append(rank)
+            seen.add(doc_id)
+    dcg = sum(1 / np.log2(rank + 1) for rank in ranks)
+    idcg = sum(1 / np.log2(rank + 1) for rank in range(1, min(k, len(gold)) + 1))
+    return {
+        f"hit@{k}": float(bool(ranks)),
+        f"recall@{k}": len(ranks) / len(gold),
+        f"precision@{k}": len(ranks) / k,
+        f"mrr@{k}": 1 / ranks[0] if ranks else 0.0,
+        f"ndcg@{k}": float(dcg / idcg),
+    }
+
 # LLM Faithfulness 评估 Prompt
 FAITHFULNESS_PROMPT = """你是一个严格的评估专家。请判断以下回答是否忠实于参考文档。
 

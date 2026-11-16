@@ -16,7 +16,7 @@
 
 - **是什么**：私域礼赠场景的电商智能客服。目标不是把平均准确率抬高一点，而是**让高频重复咨询自助闭环，把高风险问答识别出来交给人工**。
 - **核心链路**：LangGraph 13 节点 StateGraph（8 条静态边 / 5 组条件边）→ 双路召回 + L0 至 L5 六级降级 → claims 级幻觉核验与自纠正 → 高敏承诺护栏 → Human-in-the-Loop 转人工（带交接包）。
-- **如何验证**：49 条自建评测集离线回归（Recall@5 **0.735**，口径见下）+ **410 条单测** + GitHub Actions 四段 CI（lint / test / typecheck / security）全绿。
+- **如何验证**：49 条原始题目保留，新增固定 FAQ ID 检索基线（34 题可评分，15 题明确排除；历史相似度结果见下）+ **410 条单测** + GitHub Actions 四段 CI（lint / test / typecheck / security）全绿。
 - **如何上手**：`python scripts/demo_offline.py` **不需要任何 API Key 与本地模型**即可打开问答界面（见 [零 Key 离线体验](#0-零-key-离线体验)）；完整体验需本地 BGE 模型与 DeepSeek Key。
 
 ---
@@ -35,6 +35,8 @@
 
 ## 📊 评测指标（49 条客服问答 · 6 意图 × 3 难度）
 
+> **评测入口已更新**：`python scripts/run_benchmark.py` 默认运行固定 FAQ ID 检索基线，输出 Hit@5、标准 Recall@5、MRR@5 等，并记录数据/模型/代码版本和逐题漏检。49 题中 34 题有足够 FAQ 证据，6 题证据不完整、9 题不属于本轮检索范围，均明确列出。详见 [基线说明](docs/retrieval-baseline.md)。下表为**历史相似度代理指标**，复现须加 `--legacy-similarity`；不能与新 ID 基线直接比较。
+
 | 指标 | 数值 | 说明 |
 |------|------|------|
 | **Recall@5** | **0.735** | 命中率口径：Top-5 中存在与标准答案余弦相似度 ≥0.70 的文档即算命中 |
@@ -45,7 +47,7 @@
 | 关键词覆盖率 | 0.976 | 标准答案命中 `must_contain_keywords` 的比例 |
 | 平均延迟 | 2.06 s | P50 1.58 s / P95 1.84 s（本机 CPU 推理，非线上 SLA） |
 
-> 一键复现：`python scripts/run_benchmark.py`（仅检索）/ `python scripts/run_benchmark.py --with-generation`（检索 + 生成）。报告存 `reports/benchmark_*.json`。
+> 历史指标复现：`python scripts/run_benchmark.py --legacy-similarity`（仅检索）/ `python scripts/run_benchmark.py --legacy-similarity --with-generation`（检索 + 生成）。报告存 `reports/benchmark_*.json`。
 >
 > 上表取自 `reports/benchmark_retrieval_20261013_230049.json`（**仅检索模式**，本地 BGE + Chroma，本机 CPU）。检索类指标确定性强、可复现；生成类指标受 LLM 波动影响大，请以自己跑出的报告为准。
 >
@@ -53,7 +55,7 @@
 >
 > ⚠️ **三个「忠实度」不是同一个量，别混用**（代码里是三套不同实现）：
 > 1. **上表的 0.657** —— 评测脚本在**仅检索 + Embedding 快速模式**下算出的 `faithfulness`，实现是「标准答案 ↔ 检索文档合并文本」的 bge 余弦相似度（`src/evaluation/metrics.py` → `calculate_faithfulness_fast`）。它是**检索侧的近似代理，不等价于生成忠实度**。
-> 2. **生成忠实度** —— 需要 `--with-generation --use-llm-eval`，由 LLM 按 G-Eval 风格对**实际生成的回答**逐条核验。本项目**尚未在启用 LLM 裁判的模式下留完整跑分**，因此此表不给数字。`[待补: python scripts/run_benchmark.py --with-generation --use-llm-eval]`
+> 2. **生成忠实度** —— 需要 `--legacy-similarity --with-generation --use-llm-eval`，由 LLM 按 G-Eval 风格对**实际生成的回答**逐条核验。本项目**尚未在启用 LLM 裁判的模式下留完整跑分**，因此此表不给数字。`[待补: python scripts/run_benchmark.py --legacy-similarity --with-generation --use-llm-eval]`
 > 3. **运行时护栏阈值 0.8 / 0.85**（`FAITHFULNESS_THRESHOLD` / `HIGH_STAKE_FAITHFULNESS`）—— 作用于生成阶段的 **claims 级聚合分** `(supported + 0.5 × partial) / 总 claims`（`src/generation/hallucination_detector.py`）。与上述两个数**量纲不同，不可直接比较**。
 >
 > **Recall@5 口径**：判定方式为「Top-5 中是否存在与标准答案 embedding 余弦相似度 ≥0.70 的文档」，属于**命中率（hit rate）口径**，不是标准 IR 中需要逐文档相关性标注的 recall。评测集为自建 49 条，定位是**回归验证**，不用于对外精度承诺。
@@ -366,7 +368,7 @@ TOKEN=$(curl -s -X POST http://localhost:8000/api/auth/login \
 # 检索指标
 python scripts/run_benchmark.py
 # 完整 RAG（检索+生成）
-python scripts/run_benchmark.py --with-generation
+python scripts/run_benchmark.py --legacy-similarity --with-generation
 # 质量门禁（不达标 exit 1）
 python scripts/eval_gate.py
 ```
