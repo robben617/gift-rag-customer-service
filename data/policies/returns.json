@@ -1,0 +1,13 @@
+{
+  "policy_id": "demo-general-returns",
+  "version": "2026-11-16-v1",
+  "effective_from": "2026-01-01",
+  "effective_to": null,
+  "notice": "沿用项目原有示例商家规则，未经真实商家核准，不作为法律说明或生产承诺。",
+  "return_days": 7,
+  "quality_days": 15,
+  "refund_workdays_min": 1,
+  "refund_workdays_max": 3,
+  "excluded_categories": ["fresh", "custom", "intimate"],
+  "sealed_categories": ["electronics", "cosmetics"]
+}

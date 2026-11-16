@@ -25,6 +25,7 @@
 """
 
 import logging
+import re
 import sqlite3
 import threading
 from pathlib import Path
@@ -60,6 +61,10 @@ class RAGState(TypedDict):
     use_reranker: bool
     history: list  # 会话历史（多轮指代消解用）
     memory_context: str  # 会话记忆（实体ledger/滚动摘要/历史片段）
+    policy_context: dict
+    policy_status: str
+    policy_missing_fields: list[str]
+    policy_version: str
     access_level: str = "public"  # 模块33 内容权限等级（检索过滤用，fail-safe 最低）
     user_id: int | None = (
         None  # 订单归属隔离: copilot 库 orders.user_id（admin=None 可查任意）
@@ -119,6 +124,32 @@ def classify_intent(state: RAGState) -> dict:
     """节点1: 意图分类（LLM Function Calling）"""
     logger.info("[节点] classify_intent, query=%s", state["query"][:50])
 
+    from src.business.after_sales import after_sales_kind
+    from src.business.return_policy import is_policy_followup
+
+    contextual_kind = after_sales_kind(state["query"], state.get("policy_context", {}))
+    if state.get("policy_context") and contextual_kind in (
+        "refund_action",
+        "refund_status",
+    ):
+        return {
+            "intent": "return_refund",
+            "confidence": 0.95,
+            "target": "rag",
+            "rewritten_query": state["query"],
+            "reasoning": "承接售后办理或进度核验",
+            "entities": {},
+        }
+
+    if is_policy_followup(state["query"], state.get("policy_context", {})):
+        return {
+            "intent": "return_refund",
+            "confidence": 0.95,
+            "target": "rag",
+            "rewritten_query": state["query"],
+            "reasoning": "承接同一售后条件澄清",
+            "entities": {},
+        }
     router = get_router()
     route_result = router.route(state["query"])
 
@@ -152,6 +183,7 @@ def check_human_needed(state: RAGState) -> dict:
         intent=state["intent"],
         confidence=state["confidence"],
         emotion=emotion,
+        policy_context=state.get("policy_context", {}),
     )
 
     return {
@@ -515,6 +547,7 @@ def _build_handoff_payload(state: RAGState) -> dict:
             f"correction_rounds={state.get('correction_rounds', 0)}"
         ),
         "unresolved_reason": state.get("human_reason", ""),
+        "policy_context": state.get("policy_context", {}),
     }
 
 
@@ -535,7 +568,14 @@ def handle_human(state: RAGState) -> dict:
     if emotion in ("angry", "extreme"):
         template = handler.get_human_response_template("high_emotion")
     else:
-        if "退款" in query:
+        from src.business.after_sales import after_sales_kind, food_safety_incident
+
+        kind = after_sales_kind(query, state.get("policy_context", {}))
+        if food_safety_incident(query):
+            scenario = "food_safety"
+        elif kind == "refund_status":
+            scenario = "refund_status"
+        elif kind == "refund_action":
             scenario = "refund_request"
         elif "投诉" in query:
             scenario = "complaint"
@@ -598,21 +638,33 @@ def handle_policy(state: RAGState) -> dict:
     """节点10: 退货/换货结构化政策（RAG + 工具 混合架构的"政策工具"）
 
     退货窗口/运费规则/退款时效/质量争议等定义清晰的政策问题，
-    从结构化政策数据直接答——准确、不产生幻觉（退货是 AI 客服持续薄弱点，
-    通用 FAQ 答不准；政策变更只改数据）。
+    读取版本化示例规则并检查适用条件；缺失事实先澄清，未知专属规则交人工。
+    条件提示不等于退货获批，更不执行资金操作。
     """
     logger.info("[节点] handle_policy, query=%s", state.get("query", "")[:40])
 
     from src.business.return_policy import get_return_policy
 
     service = get_return_policy()
-    reply, found = service.answer(state.get("query", ""))
-
-    if found:
-        return {"answer": reply, "needs_human": False}
-
-    # 未命中（应不会走到，防御）→ 走 RAG 兜底
-    return {"answer": "", "needs_human": False}
+    decision = service.evaluate_for_user(
+        state.get("query", ""),
+        state.get("policy_context", {}),
+        user_id=state.get("user_id"),
+        is_admin=state.get("is_admin", False),
+    )
+    result = {
+        "answer": decision.reply or "需要补充具体的售后问题，才能确认适用规则。",
+        "target": "policy",
+        "needs_human": decision.needs_human,
+        "policy_context": decision.context,
+        "policy_status": decision.status,
+        "policy_missing_fields": decision.missing_fields,
+        "policy_version": decision.version,
+    }
+    if decision.needs_human:
+        result.update(human_reason=decision.reply, human_priority="medium")
+        result["handoff_payload"] = _build_handoff_payload({**state, **result})
+    return result
 
 
 def handle_direct(state: RAGState) -> dict:
@@ -652,9 +704,17 @@ def route_decision(state: RAGState) -> str:
     if target in ("rag", "hybrid"):
         # 退货结构化政策优先（定义清晰的政策问题不用 RAG 猜）
         if state.get("intent") == "return_refund":
+            from src.business.after_sales import after_sales_kind
             from src.business.return_policy import get_return_policy
 
-            if get_return_policy().detect_sub_scenario(state.get("query", "")):
+            if (
+                get_return_policy().detect_sub_scenario(state.get("query", ""))
+                or after_sales_kind(
+                    state.get("query", ""), state.get("policy_context", {})
+                )
+                != "none"
+                or state.get("policy_context")
+            ):
                 return "policy"
         return "rag"
     elif target == "sql":
@@ -961,6 +1021,10 @@ class RAGWorkflow:
             "use_reranker": use_reranker,
             "history": history or [],
             "memory_context": memory_context or "",
+            "policy_context": {},
+            "policy_status": "",
+            "policy_missing_fields": [],
+            "policy_version": "",
             "access_level": access_level,
             "user_id": user_id,
             "is_admin": is_admin,
@@ -1000,6 +1064,23 @@ class RAGWorkflow:
         existing = self._app.get_state(config)
         if existing.next:
             return {**existing.values, "__interrupt__": True, "needs_human": True}
+        from src.business.return_policy import is_policy_followup
+
+        previous_context = existing.values.get("policy_context", {})
+        from src.business.after_sales import after_sales_kind, order_ids
+
+        same_order = not order_ids(query) or order_ids(query) == [
+            previous_context.get("order_id")
+        ]
+        preserve_handoff = (
+            previous_context
+            and same_order
+            and not re.search(r"另一单|另一件|另一个|换个话题|不是这单", query)
+            and after_sales_kind(query, previous_context)
+            in ("refund_action", "refund_status")
+        )
+        if is_policy_followup(query, previous_context) or preserve_handoff:
+            initial_state["policy_context"] = previous_context
 
         try:
             result = self._app.invoke(initial_state, config)

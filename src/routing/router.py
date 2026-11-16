@@ -10,6 +10,7 @@
 import logging
 from typing import Optional
 
+from src.business.after_sales import after_sales_kind, order_ids
 from src.engineering.llm_client import get_llm_client
 
 from .classifier import IntentClassifier, get_classifier
@@ -87,6 +88,21 @@ class IntentRouter:
         """完整路由流程: 意图分类 → 路由决策 → 查询改写（RAG 路由时）"""
 
         # ── 步骤1: 意图分类 ──
+        after_sales = after_sales_kind(query)
+        if after_sales != "none":
+            ids = order_ids(query)
+            return RouteResult(
+                intent_result=IntentResult(
+                    intent=Intent.RETURN_REFUND,
+                    confidence=0.95,
+                    reasoning=f"售后规则分流: {after_sales}",
+                    entities={"order_id": ids[0]} if len(ids) == 1 else {},
+                ),
+                target=RouteTarget.RAG,
+                query=query,
+                rewritten_query=query,
+                handler="rag",
+            )
         intent_result = self.classifier.classify(query)
         logger.info(
             "意图分类: %s (%.2f) — %s",

@@ -16,15 +16,12 @@
 import logging
 from typing import Optional
 
+from src.business.after_sales import after_sales_kind, food_safety_incident
+
 logger = logging.getLogger(__name__)
 
 # 需要人工介入的场景
 HUMAN_REQUIRED_SCENARIOS = {
-    "refund_request": {
-        "description": "退款请求",
-        "keywords": ["退款", "退钱", "退款到账", "退款失败"],
-        "reason": "涉及资金操作，需要人工确认",
-    },
     "complaint": {
         "description": "投诉",
         "keywords": ["投诉", "举报", "不满", "差评", "曝光"],
@@ -66,6 +63,7 @@ class HumanInLoopHandler:
         answer: str = "",
         confidence: Optional[float] = None,
         emotion: str = "calm",
+        policy_context: dict | None = None,
     ) -> dict:
         """检查是否需要人工介入
 
@@ -105,6 +103,27 @@ class HumanInLoopHandler:
                 "needs_human": True,
                 "reason": "用户情绪愤怒且涉及退款/投诉/订单，建议人工跟进",
                 "scenario": "high_emotion",
+                "priority": "high",
+            }
+
+        if food_safety_incident(query):
+            return {
+                "needs_human": True,
+                "reason": "涉及实际食品安全或食用后不适，需人工优先跟进",
+                "scenario": "food_safety",
+                "priority": "high",
+            }
+
+        kind = after_sales_kind(query, policy_context)
+        if kind in ("refund_action", "refund_status"):
+            return {
+                "needs_human": True,
+                "reason": "实际退款/退货办理需人工确认"
+                if kind == "refund_action"
+                else "真实退款进度需核对支付记录，不能用通用政策代答",
+                "scenario": "refund_request"
+                if kind == "refund_action"
+                else "refund_status",
                 "priority": "high",
             }
 
@@ -153,6 +172,8 @@ class HumanInLoopHandler:
         """获取优先级"""
         high_priority = [
             "refund_request",
+            "refund_status",
+            "food_safety",
             "complaint",
             "sensitive_topic",
             "high_emotion",
@@ -169,10 +190,11 @@ class HumanInLoopHandler:
         """获取人工介入的回复模板"""
         templates = {
             "refund_request": (
-                "您的退款请求已收到。为了确保资金安全，"
-                "我们将为您转接人工客服处理退款事宜。"
-                "请稍候，客服人员将尽快与您联系。"
+                "这需要人工核对订单和退款条件，正在为您转接客服。"
+                "目前尚未办理退款或变更资金，请等待人工确认。"
             ),
+            "refund_status": "这需要核对真实退款与支付记录，正在为您转接人工客服；通用到账规则不能说明这笔款项的实际状态。",
+            "food_safety": "您反馈的食用后不适或食品安全问题需要优先人工跟进。请保留商品包装、批次和订单信息，客服会进一步核实。",
             "complaint": (
                 "非常抱歉给您带来不好的体验。"
                 "您的投诉我们非常重视，将为您转接专属客服处理。"
@@ -189,9 +211,7 @@ class HumanInLoopHandler:
                 "请稍候，客服将尽快与您联系。"
             ),
             "low_confidence": (
-                "您的问题我需要进一步确认，"
-                "将为您转接人工客服获取更准确的信息。"
-                "请稍候。"
+                "您的问题我需要进一步确认，将为您转接人工客服获取更准确的信息。请稍候。"
             ),
             "high_emotion": (
                 "非常抱歉给您带来不好的体验，让您着急了。"

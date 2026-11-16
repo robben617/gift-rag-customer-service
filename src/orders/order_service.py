@@ -56,6 +56,7 @@ class OrderInfo:
     carrier: str = ""
     tracking_number: str = ""
     estimated_delivery: str = ""
+    signed_at: str = ""  # 实际 complete_time；不得用预计送达时间代替
 
 
 @dataclass
@@ -142,6 +143,20 @@ class OrderService:
       - query_tracking(tracking)   → TrackingInfo | None
       - reply_for(order_id, tracking) → (格式化回答, 是否命中)
     """
+
+    def lookup_policy_order(
+        self, order_id: str, user_id: Optional[int] = None, is_admin: bool = False
+    ):
+        """Ownership-scoped policy facts, without demo/mock fallback."""
+        if not order_id or (user_id is None and not is_admin):
+            return None, "not_found"
+        info, db_ok = self._query_order_db(
+            order_id.strip().upper(), user_id=user_id, is_admin=is_admin
+        )
+        return (
+            info,
+            "found" if info is not None else "not_found" if db_ok else "unavailable",
+        )
 
     def query_order(
         self, order_id: str, user_id: Optional[int] = None, is_admin: bool = False
@@ -312,6 +327,9 @@ class OrderService:
                         carrier=carrier,
                         tracking_number=tracking_no,
                         estimated_delivery=est,
+                        signed_at=complete_time.date().isoformat()
+                        if complete_time
+                        else "",
                     ),
                     True,
                 )

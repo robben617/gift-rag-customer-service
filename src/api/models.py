@@ -144,6 +144,9 @@ class ChatResponse(BaseModel):
     emotion: str = "calm"  # 情绪等级 calm/dissatisfied/angry/extreme
     handoff_payload: dict = {}  # 转人工交接包（摘要/实体/情绪/已尝试动作）
     review_task_id: str = ""  # 待审批任务；草稿仅管理员可见
+    policy_status: str = ""
+    policy_missing_fields: list[str] = Field(default_factory=list)
+    policy_version: str = ""
 
 
 class ReviewDecisionRequest(BaseModel):
