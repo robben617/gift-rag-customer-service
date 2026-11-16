@@ -173,6 +173,9 @@ class Settings(BaseSettings):
 
     # ========== 路径 ==========
     data_dir: Path = PROJECT_ROOT / "data"
+    workflow_checkpoint_path: Path = PROJECT_ROOT / "data" / "workflow_checkpoints.db"
+    workflow_review_path: Path = PROJECT_ROOT / "data" / "workflow_reviews.db"
+    workflow_lock_dir: Path = PROJECT_ROOT / "data" / "workflow_locks"
     raw_data_dir: Path = PROJECT_ROOT / "data" / "raw"
     processed_data_dir: Path = PROJECT_ROOT / "data" / "processed"
     faq_dir: Path = PROJECT_ROOT / "data" / "faq"

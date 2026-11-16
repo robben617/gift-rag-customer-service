@@ -72,6 +72,39 @@ class SessionManager:
                 logger.info("conversations 表已迁移: 新增 user_id 列")
             except sqlite3.OperationalError:
                 pass  # 列已存在
+            try:
+                conn.execute("ALTER TABLE messages ADD COLUMN event_id TEXT")
+            except sqlite3.OperationalError as exc:
+                if "duplicate column" not in str(exc):
+                    raise
+            conn.execute(
+                "CREATE UNIQUE INDEX IF NOT EXISTS messages_event_id ON messages(event_id)"
+            )
+
+    def add_message_once(
+        self, session_id: str, message: Message, event_id: str
+    ) -> bool:
+        """Durable delivery deduplication, including retries from another process."""
+        if not self.get_session(session_id):
+            self.create_session(session_id)
+        with sqlite3.connect(self._db_path) as conn:
+            cursor = conn.execute(
+                """INSERT OR IGNORE INTO messages
+                (session_id,role,content,timestamp,sources,faithfulness,intent,event_id)
+                VALUES (?,?,?,?,?,?,?,?)""",
+                (
+                    session_id,
+                    message.role,
+                    message.content,
+                    message.timestamp.isoformat(),
+                    json.dumps(message.sources, ensure_ascii=False),
+                    message.faithfulness,
+                    message.intent,
+                    event_id,
+                ),
+            )
+        self._sessions.pop(session_id, None)
+        return cursor.rowcount == 1
 
     def create_session(
         self, session_id: Optional[str] = None, user_id: str = ""
@@ -96,6 +129,11 @@ class SessionManager:
 
         logger.info("创建会话: %s (user=%s)", sid, user_id or "unknown")
         return session
+
+    def refresh_session(self, session_id: str) -> Optional[ConversationSession]:
+        """Reload canonical history after another worker may have delivered a reply."""
+        self._sessions.pop(session_id, None)
+        return self._load_session(session_id)
 
     def get_session(self, session_id: str) -> Optional[ConversationSession]:
         """获取会话（优先内存，其次 SQLite）"""

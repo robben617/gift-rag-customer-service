@@ -36,6 +36,8 @@ local_models/
 # ═══════════════════════════════════════════════════════════════
 data/chroma/
 data/*.db
+data/*.db-*
+data/workflow_locks/
 data/*.sqlite3
 logs/
 *.log

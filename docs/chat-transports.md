@@ -19,7 +19,7 @@ SSE 先发送状态，完整工作流结束后再分段传输最终回复。
 等待期间每 10 秒发送 `: keep-alive` 注释，保持连接活跃。
 
 若图中断等待人工，或 `evaluation_passed=false`，共享服务统一返回人工核验提示和 `needs_human=true`，不将待审核草稿存入用户会话或记忆。
-原草稿仍留在 LangGraph checkpoint，便于后续人工审批；本次没有新增审批接口。
+原草稿留在持久化的 LangGraph checkpoint；管理员通过审批接口核验并恢复图执行，详见 [回答审批](workflow-reviews.md)。
 工作流错误返回通用繁忙提示，SSE 编码侧的意外错误也不返回原始异常信息。
 
 ## 接口兼容性
@@ -49,7 +49,7 @@ SSE 编码侧异常时，发送 `error` 和 `done`，不再继续输出 token/re
 
 同步模型、图和 SQLite 操作通过 `asyncio.to_thread` 执行，避免阻塞 FastAPI 事件循环。
 同一进程内，同一用户和 session 的请求串行处理，防止两个入口同时修改同一历史或图状态；不同会话可并发处理。
-会话锁使用弱引用，闲置后可回收。多进程部署仍需共享会话存储和跨进程协调，不能依靠此进程内锁。
+会话线程锁使用弱引用，闲置后可回收；同机多进程另通过共享数据目录中的 OS 文件锁协调聊天与审批。详情见 [回答审批](workflow-reviews.md)。
 
 LLM usage 改为请求上下文中的独立累加器；LangGraph 复制到子执行上下文时共享该请求的累加器，并用锁保护计数。不同请求 reset 不会清空其他请求的 token 数。
 监控的 `total_time_ms` 改为共享服务实际处理耗时，包含会话/记忆处理，不再用检索耗时代替。
@@ -67,4 +67,4 @@ LLM usage 改为请求上下文中的独立累加器；LangGraph 复制到子执
 python -m pytest tests/api tests/graph tests/conversation tests/engineering tests/business tests/orders tests/evaluation -q
 ```
 
-下一步应打通“待审批任务 → 管理员批准/拒绝 → 更新同一图状态 → 恢复执行”的后端闭环，并将 checkpoint 持久化。
+“待审批任务 → 管理员批准/拒绝 → 更新同一图状态 → 恢复执行”的持久化闭环已接入；直接转人工的普通工单仍沿用原处理流程。

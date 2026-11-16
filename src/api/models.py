@@ -143,3 +143,9 @@ class ChatResponse(BaseModel):
     human_priority: str = ""  # 人工介入优先级 (low/medium/high)
     emotion: str = "calm"  # 情绪等级 calm/dissatisfied/angry/extreme
     handoff_payload: dict = {}  # 转人工交接包（摘要/实体/情绪/已尝试动作）
+    review_task_id: str = ""  # 待审批任务；草稿仅管理员可见
+
+
+class ReviewDecisionRequest(BaseModel):
+    decision: str = Field(..., pattern="^(approve|reject)$")
+    note: str = Field("", max_length=2000)

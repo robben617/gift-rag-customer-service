@@ -37,7 +37,12 @@ logger = logging.getLogger(__name__)
 # 关闭时界面只显示对客户有意义的服务状态；开启后额外显示意图、置信度、命中条数与检索来源，
 # 用于演示与排障。面向真实客户应保持关闭——内部字段对客户是噪音，也会暴露实现细节。
 # 由环境变量 UI_DEBUG_MODE 提供初始值（见 .env.example），界面上可临时切换。
-DEBUG_MODE = os.getenv("UI_DEBUG_MODE", "false").strip().lower() in {"1", "true", "yes", "on"}
+DEBUG_MODE = os.getenv("UI_DEBUG_MODE", "false").strip().lower() in {
+    "1",
+    "true",
+    "yes",
+    "on",
+}
 
 # 人工介入数据库
 HITL_DB = Path(__file__).parent.parent.parent / "data" / "hitl_requests.db"
@@ -149,6 +154,7 @@ def save_hitl_request(
     confidence: float,
     human_reason: str,
     priority: str,
+    review_task_id: str = "",
 ):
     """保存人工介入请求到数据库"""
     try:
@@ -156,11 +162,17 @@ def save_hitl_request(
         from src.engineering.pii_redactor import redact_text
 
         safe_query, _ = redact_text(user_query or "")
+        metadata = (
+            json.dumps({"review_task_id": review_task_id}, sort_keys=True)
+            if review_task_id
+            else "{}"
+        )
         with sqlite3.connect(HITL_DB) as conn:
             conn.execute(
                 """INSERT INTO hitl_requests
-                   (session_id, user_query, intent, confidence, human_reason, priority, created_at)
-                   VALUES (?, ?, ?, ?, ?, ?, ?)""",
+                   (session_id, user_query, intent, confidence, human_reason, priority, created_at, metadata)
+                   SELECT ?, ?, ?, ?, ?, ?, ?, ?
+                   WHERE ? = '' OR NOT EXISTS (SELECT 1 FROM hitl_requests WHERE metadata=?)""",
                 (
                     session_id,
                     safe_query,
@@ -169,6 +181,9 @@ def save_hitl_request(
                     human_reason,
                     priority,
                     datetime.now().isoformat(),
+                    metadata,
+                    review_task_id,
+                    metadata,
                 ),
             )
             conn.commit()
@@ -268,6 +283,7 @@ def chat_with_bot(
         return history, "请输入问题"
 
     tracker = _tracker(session_id)
+    history, _ = _append_review_updates(history, session_id)
 
     # 修复: 先检查管理员是否已处理该会话的人工介入 → 回传给客户（形成闭环）
     res_id, resolution = get_resolution_for_session(session_id)
@@ -327,7 +343,7 @@ def chat_with_bot(
         )
 
         # 如果需要人工介入，保存到数据库（用稳定会话 ID 关联）
-        if needs_human:
+        if needs_human and not data.get("review_task_id"):
             save_hitl_request(
                 session_id=session_id,
                 user_query=message,
@@ -337,6 +353,8 @@ def chat_with_bot(
                 priority=data.get("human_priority", "medium"),
             )
             status += "\n✅ 已通知管理员，客服处理后将回复您"
+        elif data.get("review_task_id"):
+            status += "\n回答已提交人工核验，处理完成后会自动回复。"
 
         # 管理员处理结果前置（如已处理）
         final_reply = admin_reply + reply
@@ -365,13 +383,43 @@ def clear_history(session_id: str):
     return [], "对话已清空"
 
 
+def _append_review_updates(history: list, session_id: str):
+    from src.admin.review_api import session_reviews
+
+    shown = _tracker(session_id).setdefault("shown_review_results", set())
+    changed = False
+    for task in reversed(session_reviews(session_id)):
+        if task["status"] != "resolved" or task["task_id"] in shown:
+            continue
+        result = task.get("result")
+        if not result:
+            continue
+        shown.add(task["task_id"])
+        if result.get("review_task_id"):
+            continue  # rejected draft is undergoing another review
+        if result.get("needs_human"):
+            # Terminal retries can fall back to the existing manual conversation.
+            save_hitl_request(
+                session_id=session_id,
+                user_query=result.get("query", ""),
+                intent=result.get("intent", ""),
+                confidence=result.get("confidence", 0),
+                human_reason=result.get("human_reason", "人工跟进"),
+                priority=result.get("human_priority") or "medium",
+                review_task_id=task["task_id"],
+            )
+        history = list(history) + [{"role": "assistant", "content": result["reply"]}]
+        changed = True
+    return history, changed
+
+
 def poll_resolution(history: list, session_id: str):
     """主动推送客服处理结果 + 人工对话新回复（无需客户再发消息）
 
     由 gr.Timer 定时调用：管理员处理完/回复后 → 自动加进对话。
     """
     tracker = _tracker(session_id)
-    changed = False
+    history, changed = _append_review_updates(history, session_id)
 
     # 一次性处理结果
     res_id, resolution = get_resolution_for_session(session_id)
@@ -383,9 +431,7 @@ def poll_resolution(history: list, session_id: str):
         changed = True
 
     # 人工对话多轮回复（客服在管理员界面回复 → 主动推给客户）
-    new_msgs = get_human_assistant_messages(
-        session_id, tracker["last_admin_msg_id"]
-    )
+    new_msgs = get_human_assistant_messages(session_id, tracker["last_admin_msg_id"])
     for mid, content in new_msgs:
         history = list(history) + [
             {"role": "assistant", "content": f"【人工客服】{content}"}

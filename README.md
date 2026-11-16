@@ -135,7 +135,7 @@
 |------|------|------|
 | 13 节点 StateGraph | **13 节点 / 8 条静态边 / 5 组条件边**（13 个分支目标） | ✅ |
 | Agentic 回路 | evaluate → human_approval → rewrite → retrieve → generate (最多 3 轮) | ✅ |
-| Human-in-the-Loop | LangGraph `interrupt_before` 真正中断，外部注入审批结果 | ✅ |
+| Human-in-the-Loop | SQLite checkpoint + 管理员批准/拒绝接口 + 图恢复执行 + 结果幂等投递，支持重启后续接 | ✅ |
 | 级联检索可视化 | retrieve 和 web_search 是独立图节点，流程可观测 | ✅ |
 | **政策时效** | effective_from/to 生效窗口，检索自动过滤过期 + 写入后缓存失效 | ✅ |
 
@@ -198,6 +198,7 @@
 | 人工介入 | 4 类场景 + 优先级 + 交接包 + 同窗口人工对话 | ✅ |
 
 > 聊天接口的共享链路、SSE 事件协议与核验等待行为见 [普通聊天与 SSE](docs/chat-transports.md)。
+> 管理员审批、任务状态和故障恢复见 [持久化回答审批](docs/workflow-reviews.md)。
 
 ### 📥 数据摄入
 

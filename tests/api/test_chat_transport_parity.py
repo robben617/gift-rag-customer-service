@@ -442,7 +442,14 @@ def test_real_langgraph_branches_have_transport_parity(
     streamed = next(
         event["data"] for event in _events(response) if event["event"] == "result"
     )
-    assert streamed == regular
+    if branch == "reject":
+        assert streamed["review_task_id"] and regular["review_task_id"]
+        assert streamed["review_task_id"] != regular["review_task_id"]
+        assert {k: v for k, v in streamed.items() if k != "review_task_id"} == {
+            k: v for k, v in regular.items() if k != "review_task_id"
+        }
+    else:
+        assert streamed == regular
     if branch == "policy":
         assert "商家承担" in streamed["reply"]
     elif branch == "sql":

@@ -10,3 +10,18 @@ os.environ.setdefault("JWT_SECRET", "test-secret-0123456789abcdef0123456789abcde
 os.environ.setdefault("ENABLE_DEMO_USERS", "true")
 # 聊天界面调试模式：测试环境强制关闭，保证状态栏文案断言确定（不受本地 .env 影响）
 os.environ.setdefault("UI_DEBUG_MODE", "false")
+
+
+# Keep new durable workflow state and cross-process lock files out of user data.
+import pytest
+
+
+@pytest.fixture(autouse=True)
+def isolate_workflow_storage(monkeypatch, tmp_path):
+    from src.config import settings
+
+    monkeypatch.setattr(
+        settings, "workflow_checkpoint_path", tmp_path / "checkpoints.db"
+    )
+    monkeypatch.setattr(settings, "workflow_review_path", tmp_path / "reviews.db")
+    monkeypatch.setattr(settings, "workflow_lock_dir", tmp_path / "locks")

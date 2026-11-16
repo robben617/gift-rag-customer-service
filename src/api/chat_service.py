@@ -2,10 +2,7 @@
 
 import asyncio
 import logging
-import threading
 import time
-from _thread import LockType
-from weakref import WeakValueDictionary
 
 from src.access import is_admin
 from src.api.auth import CurrentUser
@@ -13,24 +10,13 @@ from src.api.models import ChatRequest, ChatResponse, SearchResultItem
 from src.config import settings
 from src.conversation import Message, get_session_manager, get_session_memory
 from src.engineering.pii_redactor import get_pii_redactor
+from src.engineering.session_lock import session_guard
 from src.graph import get_workflow
 
 logger = logging.getLogger(__name__)
 
 ERROR_REPLY = "系统暂时繁忙，请稍后重试。"
 REVIEW_REPLY = "回答需人工核验，正在为您转接人工客服。"
-_SESSION_LOCKS: WeakValueDictionary[str, LockType] = WeakValueDictionary()
-_LOCK_REGISTRY_GUARD = threading.Lock()
-
-
-def _session_lock(sid: str) -> LockType:
-    # Strong references held by active/waiting calls keep their lock alive.
-    with _LOCK_REGISTRY_GUARD:
-        lock = _SESSION_LOCKS.get(sid)
-        if lock is None:
-            lock = threading.Lock()
-            _SESSION_LOCKS[sid] = lock
-        return lock
 
 
 async def execute_chat(req: ChatRequest, current_user: CurrentUser) -> ChatResponse:
@@ -41,7 +27,7 @@ async def execute_chat(req: ChatRequest, current_user: CurrentUser) -> ChatRespo
 def run_chat(req: ChatRequest, current_user: CurrentUser) -> ChatResponse:
     """Serialize turns within one user/session, across both transport adapters."""
     sid = f"{current_user.username}:{req.session_id}"
-    with _session_lock(sid):
+    with session_guard(sid):
         try:
             return _run_chat(req, current_user)
         except Exception:
@@ -97,6 +83,18 @@ def _run_chat(req: ChatRequest, current_user: CurrentUser) -> ChatResponse:
 
     workflow = get_workflow()
 
+    from src.api.review_service import flush_resolved, register_pending
+
+    flush_resolved(sid)
+    pending = register_pending(workflow, current_user, req.session_id)
+    if pending:
+        result = _finalize_result({"__interrupt__": True}, safe_query, "")
+        result.update(
+            answer="上一条回答仍在人工核验，请待处理后重试本次问题。",
+            review_task_id=pending["task_id"],
+        )
+        return _build_response(result, safe_query)
+
     # 重置 LLM token 累加器，统计本次请求真实用量（而非字符数估算）
     from src.engineering.llm_client import get_llm_client
 
@@ -104,7 +102,7 @@ def _run_chat(req: ChatRequest, current_user: CurrentUser) -> ChatResponse:
 
     # ── 多轮对话: 加载会话历史（指代消解用）──
     session_manager = get_session_manager()
-    session = session_manager.get_session(sid)
+    session = session_manager.refresh_session(sid)
     if not session:
         session = session_manager.create_session(sid)
     history = [{"role": m.role, "content": m.content} for m in session.messages[-6:]]
@@ -133,6 +131,9 @@ def _run_chat(req: ChatRequest, current_user: CurrentUser) -> ChatResponse:
             "error": "workflow_execution_failed",
         }
 
+    pending = register_pending(workflow, current_user, req.session_id)
+    if pending:
+        result["review_task_id"] = pending["task_id"]
     result = _finalize_result(result, safe_query, memory_context)
 
     # ── 多轮对话: 保存本轮消息到会话历史（用命名空间 sid，按用户隔离）──
@@ -249,6 +250,7 @@ def _build_response(result: dict, safe_query: str) -> ChatResponse:
         human_priority=result.get("human_priority", ""),
         emotion=result.get("emotion", "calm"),
         handoff_payload=result.get("handoff_payload", {}),
+        review_task_id=result.get("review_task_id", ""),
     )
 
     return response

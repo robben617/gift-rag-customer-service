@@ -1,6 +1,7 @@
 """管理员界面 — 人工介入管理 + 系统监控
 
-功能（5 个 Tab）：
+功能（6 个 Tab）：
+- 回答审批：查看草稿/证据，批准发送或拒绝后恢复图执行
 - 人工介入管理：查看待处理请求、标记处理结果（自动刷新）
 - 人工对话：转人工后同窗口与客户实时对话
 - 系统监控：查询量/成本/幻觉率 + 最近查询 + 健康检查/清缓存
@@ -299,6 +300,38 @@ def create_admin_ui() -> gr.Blocks:
         gr.Markdown("# 🎛️ 管理员控制台")
 
         with gr.Tabs():
+            with gr.Tab("📝 回答审批"):
+                from src.admin.review_api import (
+                    inspect_review,
+                    pending_reviews,
+                    submit_review,
+                )
+
+                gr.Markdown(
+                    "查看问题、证据与待审核回答后，批准发送或拒绝并重新检索。处理中任务可重试原决定。"
+                )
+                review_refresh = gr.Button("刷新待审批回答")
+                review_list = gr.JSON(value={"tasks": []}, label="待审批 / 处理中")
+                review_id = gr.Textbox(label="审批任务 ID")
+                review_inspect = gr.Button("查看回答与证据")
+                review_detail = gr.JSON(label="问题、证据、草稿和处理结果")
+                review_decision = gr.Radio(
+                    choices=[("批准并发送", "approve"), ("拒绝并重新检索", "reject")],
+                    label="审批决定",
+                )
+                review_note = gr.Textbox(label="审批备注（可选）")
+                review_submit = gr.Button("提交审批决定", variant="primary")
+                review_refresh.click(pending_reviews, outputs=[review_list])
+                review_inspect.click(
+                    inspect_review, inputs=[review_id], outputs=[review_detail]
+                )
+                review_submit.click(
+                    submit_review,
+                    inputs=[review_id, review_decision, review_note],
+                    outputs=[review_detail],
+                ).then(pending_reviews, outputs=[review_list])
+                gr.Timer(10).tick(pending_reviews, outputs=[review_list])
+
             # Tab 1: 人工介入管理
             with gr.Tab("📋 人工介入管理"):
                 gr.Markdown("### 待处理请求")

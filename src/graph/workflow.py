@@ -25,6 +25,9 @@
 """
 
 import logging
+import sqlite3
+import threading
+from pathlib import Path
 from typing import Annotated, Any, Literal
 
 from langgraph.graph import END, StateGraph
@@ -96,6 +99,8 @@ class RAGState(TypedDict):
     human_reason: str
     human_priority: str
     human_decision: str  # "approve" | "rejected" | "" (由外部注入)
+    approval_task_id: str
+    approval_consumed_id: str
     handoff_payload: dict  # 转人工交接包（摘要/实体/情绪/已尝试动作）
 
     # Agentic 循环控制
@@ -419,9 +424,20 @@ def human_approval(state: RAGState) -> dict:
     decision = state.get("human_decision", "")
 
     if decision == "approve":
-        return {"human_decision": "approve"}
+        return {
+            "human_decision": "approve",
+            "evaluation_passed": True,
+            "needs_human": False,
+            "human_reason": "",
+            "human_priority": "",
+            "handoff_payload": {},
+            "approval_consumed_id": state.get("approval_task_id", ""),
+        }
     elif decision == "rejected":
-        return {"human_decision": "rejected"}
+        return {
+            "human_decision": "rejected",
+            "approval_consumed_id": state.get("approval_task_id", ""),
+        }
     else:
         # 没有外部输入默认拒绝（安全性优先）
         return {"human_decision": "rejected"}
@@ -477,6 +493,7 @@ def rewrite_and_retrieve(state: RAGState) -> dict:
     return {
         "rewritten_query": rewritten,
         "loop_count": loop_count,
+        "human_decision": "",
     }
 
 
@@ -803,7 +820,7 @@ def build_rag_workflow() -> StateGraph:
 # ═══════════════════════════════════════
 
 
-def build_checkpointer():
+def build_checkpointer(path: Path | None = None):
     """构造 LangGraph checkpointer —— 静态中断（interrupt_before）的前置条件
 
     为什么必须有:
@@ -811,13 +828,16 @@ def build_checkpointer():
         update_state() 也就无法注入 human_decision，中断等于"停在那里没人能叫醒"。
       - 无 checkpointer 时 invoke 仍会停在断点，但不留快照，状态无法续接。
 
-    当前实现用内存版 MemorySaver: 零外部依赖，同进程内可中断/续接。
-    ⚠️ 生产注意:
-      1. 需要"进程重启后仍能续接"时，安装后端子包并替换为
-         ``langgraph-checkpoint-sqlite`` 的 SqliteSaver 或
-         ``langgraph-checkpoint-postgres`` 的 PostgresSaver；
-      2. MemorySaver 按 thread_id 累积快照且不回收，长驻服务需配会话清理或改用落盘后端。
+    传入 path 时使用 SQLite 持久化（生产工厂 get_workflow 使用该模式）。
+    不传 path 时仅创建内存实例，供隔离测试或临时图使用。
     """
+    if path is not None:
+        from langgraph.checkpoint.sqlite import SqliteSaver
+
+        path.parent.mkdir(parents=True, exist_ok=True)
+        conn = sqlite3.connect(str(path), check_same_thread=False, timeout=30)
+        return SqliteSaver(conn)
+
     from langgraph.checkpoint.memory import MemorySaver
 
     return MemorySaver()
@@ -873,13 +893,16 @@ class RAGWorkflow:
             result = workflow.resume(config)
     """
 
-    def __init__(self):
+    def __init__(self, checkpointer=None):
         self._graph = build_rag_workflow()
         # 在 human_approval 节点前中断，等待外部注入 human_decision。
         # checkpointer 不是可选项：没有它 get_state/update_state 全部不可用，
         # 中断将无法被检测、也无法被续接。
+        self._checkpointer = (
+            checkpointer if checkpointer is not None else build_checkpointer()
+        )
         self._app = self._graph.compile(
-            checkpointer=build_checkpointer(),
+            checkpointer=self._checkpointer,
             interrupt_before=["human_approval"],
         )
 
@@ -887,6 +910,17 @@ class RAGWorkflow:
     def app(self):
         """获取编译后的 LangGraph app（用于外部 update_state）"""
         return self._app
+
+    def snapshot(self, session_id: str):
+        return self._app.get_state({"configurable": {"thread_id": session_id}})
+
+    def pending_review(self, session_id: str):
+        snapshot = self.snapshot(session_id)
+        return snapshot if snapshot.next == ("human_approval",) else None
+
+    def close(self):
+        if hasattr(self._checkpointer, "conn"):
+            self._checkpointer.conn.close()
 
     def run(
         self,
@@ -952,6 +986,8 @@ class RAGWorkflow:
             "human_reason": "",
             "human_priority": "",
             "human_decision": "",
+            "approval_task_id": "",
+            "approval_consumed_id": "",
             "handoff_payload": {},
             "loop_count": 0,
             "error": "",
@@ -959,6 +995,11 @@ class RAGWorkflow:
 
         if config is None:
             config = {"configurable": {"thread_id": session_id}}
+
+        # Never replace an outstanding approval snapshot with a new question.
+        existing = self._app.get_state(config)
+        if existing.next:
+            return {**existing.values, "__interrupt__": True, "needs_human": True}
 
         try:
             result = self._app.invoke(initial_state, config)
@@ -1012,7 +1053,10 @@ class RAGWorkflow:
         """
         try:
             # 传入 None 表示使用 update_state 注入的值继续执行
-            return self._app.invoke(None, config)
+            result = self._app.invoke(None, config)
+            if _is_paused(self._app, config):
+                return {**result, "__interrupt__": True, "needs_human": True}
+            return result
         except Exception as e:
             logger.error("工作流恢复失败: %s", e)
             return {"error": str(e)}
@@ -1024,10 +1068,26 @@ class RAGWorkflow:
 
 # ── 模块级单例 ──
 
-from src.engineering.singleton import singleton_factory
+_workflow_instance = None
+_workflow_guard = threading.Lock()
 
 
-@singleton_factory
 def get_workflow() -> RAGWorkflow:
     """获取 RAGWorkflow 单例"""
-    return RAGWorkflow()
+    from src.config import settings
+
+    global _workflow_instance
+    with _workflow_guard:
+        if _workflow_instance is None:
+            _workflow_instance = RAGWorkflow(
+                checkpointer=build_checkpointer(settings.workflow_checkpoint_path)
+            )
+        return _workflow_instance
+
+
+def close_workflow():
+    global _workflow_instance
+    with _workflow_guard:
+        if _workflow_instance is not None:
+            _workflow_instance.close()
+            _workflow_instance = None

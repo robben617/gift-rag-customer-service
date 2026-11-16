@@ -23,7 +23,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.api.routers import auth, chat, evaluate, query, stats, stream, upload
+from src.api.routers import auth, chat, evaluate, query, reviews, stats, stream, upload
 from src.config import settings
 
 logger = logging.getLogger(__name__)
@@ -54,7 +54,12 @@ async def lifespan(app: FastAPI):
         logger.info("Chroma access_level 处理: %s", result)
     except Exception as e:
         logger.warning("Chroma access_level 处理跳过: %s", e)
-    yield
+    try:
+        yield
+    finally:
+        from src.graph.workflow import close_workflow
+
+        close_workflow()
 
 
 def create_app() -> FastAPI:
@@ -94,6 +99,7 @@ def create_app() -> FastAPI:
     app.include_router(chat.router)
     app.include_router(stream.router)
     app.include_router(evaluate.router)
+    app.include_router(reviews.router)
 
     # ── 根路由 ──
 
