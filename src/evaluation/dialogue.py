@@ -1,6 +1,7 @@
 """Independent HTTP dialogue evaluation; labels never enter chat requests."""
 
 import json
+import re
 import time
 import uuid
 from collections import Counter
@@ -17,6 +18,20 @@ class Expectation(BaseModel):
     missing_fields: list[str] = Field(default_factory=list)
     contains_any: list[str] = Field(default_factory=list)
     excludes: list[str] = Field(default_factory=list)
+    targets: list[str] = Field(default_factory=list)
+    evidence_groups: list[list[str]] = Field(default_factory=list)
+    answer_groups: list[list[str]] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def valid_groups(self):
+        for groups in (self.evidence_groups, self.answer_groups):
+            if any(
+                not group or any(not word.strip() for word in group) for group in groups
+            ):
+                raise ValueError("Expected nonempty alternatives in each group")
+        if set(self.targets) - {"rag", "policy", "sql", "direct", "human", "hybrid"}:
+            raise ValueError("Unknown route target")
+        return self
 
 
 class Turn(BaseModel):
@@ -32,6 +47,8 @@ class Turn(BaseModel):
             raise ValueError("Risk turns must require handoff")
         if self.no_evidence and not self.expect.needs_human:
             raise ValueError("This suite requires human verification without evidence")
+        if self.no_evidence and self.expect.evidence_groups:
+            raise ValueError("No-evidence turn cannot have gold evidence")
         return self
 
 
@@ -43,14 +60,39 @@ class Dialogue(BaseModel):
     turns: list[Turn] = Field(min_length=1)
 
 
-def load_dialogues(path: Path) -> list[Dialogue]:
+def load_dialogues(path: Path, *, corpus_path: Path | None = None) -> list[Dialogue]:
     raw = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(raw, list) or not raw:
         raise ValueError("Expected nonempty dialogue array")
     cases = [Dialogue.model_validate(row) for row in raw]
     if len({case.case_id for case in cases}) != len(cases):
         raise ValueError("Duplicate case IDs")
+    gold = {
+        doc_id
+        for case in cases
+        for turn in case.turns
+        for group in turn.expect.evidence_groups
+        for doc_id in group
+    }
+    if gold:
+        corpus = (
+            corpus_path
+            or Path(__file__).resolve().parents[2] / "data/faq/ecommerce_kb.json"
+        )
+        known = {
+            row["faq_id"] for row in json.loads(corpus.read_text(encoding="utf-8"))
+        }
+        if gold - known:
+            raise ValueError("Unknown gold FAQ IDs")
     return cases
+
+
+def _normalized(text: str) -> str:
+    return re.sub(r"\s+", "", text.casefold().translate(str.maketrans("～~—–", "----")))
+
+
+class PriorReviewPending(Exception):
+    """This turn was not processed because an earlier answer awaits review."""
 
 
 def http_chat(base_url: str, token: str, timeout: float = 120):
@@ -96,6 +138,9 @@ def evaluate_dialogues(cases: list[Dialogue], send, *, execution: str) -> dict:
                 "passed_turns",
                 "passed_dialogues",
                 "execution_errors",
+                "review_blocked_turns",
+                "evidence_turns",
+                "evidence_passed",
             ],
             0,
         )
@@ -103,6 +148,8 @@ def evaluate_dialogues(cases: list[Dialogue], send, *, execution: str) -> dict:
     for case in cases:
         session_id = f"eval-{run_id}-{case.case_id}"
         blocked = False
+        review_blocked = False
+        previous_review_id = ""
         case_pass = True
         for index, turn in enumerate(case.turns, 1):
             counts["turns"] += 1
@@ -110,10 +157,13 @@ def evaluate_dialogues(cases: list[Dialogue], send, *, execution: str) -> dict:
             counts["safe_turns"] += safe
             counts["risk_turns"] += turn.risk
             counts["no_evidence_turns"] += turn.no_evidence
+            counts["evidence_turns"] += bool(turn.expect.evidence_groups)
             started = time.perf_counter()
             output, errors, error_type = None, [], None
             try:
                 if blocked:
+                    if review_blocked:
+                        raise PriorReviewPending()
                     raise RuntimeError("prior_turn_failed")
                 output = send(turn.query, session_id)
                 if (
@@ -124,6 +174,10 @@ def evaluate_dialogues(cases: list[Dialogue], send, *, execution: str) -> dict:
                     or output["reply"] == "系统暂时繁忙，请稍后重试。"
                 ):
                     raise ValueError("invalid_or_failed_chat_response")
+                review_id = output.get("review_task_id") or ""
+                if previous_review_id and review_id == previous_review_id:
+                    raise PriorReviewPending()
+                previous_review_id = review_id
                 expected = turn.expect
                 if output["needs_human"] != expected.needs_human:
                     errors.append("needs_human")
@@ -142,6 +196,26 @@ def evaluate_dialogues(cases: list[Dialogue], send, *, execution: str) -> dict:
                     errors.append("reply_contains_any")
                 if any(word in output["reply"] for word in expected.excludes):
                     errors.append("reply_excludes")
+                if expected.targets and output.get("target") not in expected.targets:
+                    errors.append("target")
+                ids = {row["chunk_id"] for row in output.get("results", [])}
+                if expected.evidence_groups and not all(
+                    ids.intersection(group) for group in expected.evidence_groups
+                ):
+                    errors.append("evidence_groups")
+                if expected.answer_groups and not all(
+                    any(
+                        _normalized(word) in _normalized(output["reply"])
+                        for word in group
+                    )
+                    for group in expected.answer_groups
+                ):
+                    errors.append("answer_groups")
+            except PriorReviewPending:
+                error_type = "PriorReviewPending"
+                errors.append("prior_review_pending")
+                blocked = review_blocked = True
+                counts["review_blocked_turns"] += 1
             except Exception as exc:
                 # Do not serialize exception messages (may contain URLs or credentials).
                 error_type = type(exc).__name__
@@ -156,6 +230,11 @@ def evaluate_dialogues(cases: list[Dialogue], send, *, execution: str) -> dict:
                 not valid or not output["needs_human"]
             )
             counts["no_evidence_passed"] += turn.no_evidence and not errors
+            counts["evidence_passed"] += (
+                bool(turn.expect.evidence_groups)
+                and valid
+                and "evidence_groups" not in errors
+            )
             counts["passed_turns"] += not errors
             case_pass = case_pass and not errors
             details.append(
@@ -179,10 +258,10 @@ def evaluate_dialogues(cases: list[Dialogue], send, *, execution: str) -> dict:
         return counts[numerator] / counts[denominator] if counts[denominator] else None
 
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "run_id": run_id,
         "execution": execution,
-        "complete": not counts["execution_errors"],
+        "complete": not (counts["execution_errors"] or counts["review_blocked_turns"]),
         "dialogues": len(cases),
         "counts": dict(counts),
         "metrics": {
@@ -190,6 +269,7 @@ def evaluate_dialogues(cases: list[Dialogue], send, *, execution: str) -> dict:
             "safe_observation_coverage": ratio("safe_observed", "safe_turns"),
             "risk_miss_rate": ratio("risk_misses", "risk_turns"),
             "no_evidence_pass_rate": ratio("no_evidence_passed", "no_evidence_turns"),
+            "evidence_group_pass_rate": ratio("evidence_passed", "evidence_turns"),
             "turn_pass_rate": ratio("passed_turns", "turns"),
             "dialogue_pass_rate": counts["passed_dialogues"] / len(cases)
             if cases

@@ -100,3 +100,118 @@ def test_expected_labels_not_in_http_payload(monkeypatch):
         http_chat("http://localhost:8000", "test", 7)("hello", "isolated")["reply"]
         == "ok"
     )
+
+
+def test_rag_labels_have_known_evidence_and_cover_topic_changes():
+    cases = load_dialogues(DATASET.with_name("rag_dialogue_eval.json"))
+    assert len(cases) == 12
+    assert sum(len(case.turns) for case in cases) == 18
+    assert {"colloquial", "coreference", "topic_switch", "no_evidence"} <= {
+        tag for case in cases for tag in case.tags
+    }
+
+
+def test_previous_review_cannot_count_as_current_no_evidence_success():
+    case = Dialogue.model_validate(
+        {
+            "case_id": "dialogue-999",
+            "tags": ["rag"],
+            "rationale": "earlier review blocks new turn",
+            "turns": [
+                {
+                    "query": "known question",
+                    "risk": False,
+                    "expect": {"needs_human": False},
+                },
+                {
+                    "query": "unknown question",
+                    "risk": False,
+                    "no_evidence": True,
+                    "expect": {"needs_human": True},
+                },
+            ],
+        }
+    )
+    report = evaluate_dialogues(
+        [case],
+        lambda *args: {
+            "needs_human": True,
+            "reply": "上一条仍在人工核验",
+            "review_task_id": "same-task",
+        },
+        execution="controlled_in_process",
+    )
+    assert not report["complete"]
+    assert report["counts"]["review_blocked_turns"] == 1
+    assert report["counts"]["execution_errors"] == 0
+    assert report["metrics"]["no_evidence_pass_rate"] == 0
+    assert report["details"][1]["failures"] == ["prior_review_pending"]
+
+
+def test_relevant_evidence_and_answer_content_both_required():
+    case = Dialogue.model_validate(
+        {
+            "case_id": "dialogue-999",
+            "tags": ["rag"],
+            "rationale": "two required facts",
+            "turns": [
+                {
+                    "query": "question",
+                    "risk": False,
+                    "expect": {
+                        "needs_human": False,
+                        "targets": ["rag"],
+                        "evidence_groups": [["faq-001", "faq-002"], ["faq-003"]],
+                        "answer_groups": [["TPU", "软胶"], ["1-3"]],
+                    },
+                }
+            ],
+        }
+    )
+
+    def send(*args):
+        return {
+            "reply": "tpu 1 ～ 3",
+            "needs_human": False,
+            "target": "rag",
+            "results": [{"chunk_id": "faq-002"}, {"chunk_id": "faq-003"}],
+        }
+
+    good = evaluate_dialogues([case], send, execution="controlled_in_process")
+    assert good["metrics"]["turn_pass_rate"] == 1
+    assert good["metrics"]["evidence_group_pass_rate"] == 1
+    bad = evaluate_dialogues(
+        [case],
+        lambda *args: {
+            "reply": "TPU",
+            "needs_human": False,
+            "target": "direct",
+            "results": [{"chunk_id": "faq-002"}],
+        },
+        execution="controlled_in_process",
+    )
+    assert set(bad["details"][0]["failures"]) == {
+        "target",
+        "evidence_groups",
+        "answer_groups",
+    }
+    assert bad["metrics"]["evidence_group_pass_rate"] == 0
+
+
+@pytest.mark.parametrize("invalid", ["unknown", "empty_group", "contradiction"])
+def test_invalid_gold_evidence_rejected(tmp_path, invalid):
+    raw = json.loads(
+        DATASET.with_name("rag_dialogue_eval.json").read_text(encoding="utf-8")
+    )
+    turn = raw[0]["turns"][0]
+    if invalid == "unknown":
+        turn["expect"]["evidence_groups"] = [["faq-999"]]
+    elif invalid == "empty_group":
+        turn["expect"]["answer_groups"] = [[]]
+    else:
+        turn["no_evidence"] = True
+        turn["expect"]["needs_human"] = True
+    path = tmp_path / "bad.json"
+    path.write_text(json.dumps(raw), encoding="utf-8")
+    with pytest.raises(ValueError):
+        load_dialogues(path)

@@ -21,6 +21,12 @@ def order_ids(query: str) -> list[str]:
 
 def after_sales_kind(query: str, context: dict | None = None) -> AfterSalesKind:
     text = re.sub(r"\s+", "", query)
+    # Remove only an explicit leading dismissal; later refund requests still win.
+    text = re.sub(
+        r"^(?:先)?(?:不说|不聊|不讨论)(?:退货|退款|售后|换货)(?:了)?[，,。；;]+",
+        "",
+        text,
+    )
     if not re.search(
         r"退(?:款|钱|货|掉|一下)|(?:能不能|能|可以|可不可以)退(?:吗|么|货|款|钱|[？?]|$)|换货|售后|无理由|(?:帮我|给我).{0,10}退了",
         text,

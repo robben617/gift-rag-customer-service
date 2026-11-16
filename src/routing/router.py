@@ -8,6 +8,7 @@
 """
 
 import logging
+import re
 from typing import Optional
 
 from src.business.after_sales import after_sales_kind, order_ids
@@ -114,11 +115,18 @@ class IntentRouter:
         # 指代词兜底: 分类为 chitchat 但含指代词（那个/上次/它）→ 强制走 RAG
         # 场景: "上次那个券怎么用" "那个能退吗" —— LLM 分类成功但误判 chitchat
         # 改走 RAG 让多轮记忆/检索生效，避免直接闲聊回复
-        if intent_result.intent == Intent.CHITCHAT and _has_coreference(query):
+        business_question = bool(
+            re.search(r"门店|实体店|营业时间|几点开门|几点关门|打烊|电子发票", query)
+        )
+        if intent_result.intent == Intent.CHITCHAT and (
+            _has_coreference(query) or business_question
+        ):
             intent_result = IntentResult(
                 intent=Intent.PRODUCT_CONSULT,
                 confidence=0.5,
-                reasoning="指代词/追问，改走知识库检索",
+                reasoning="商家信息需核验证据"
+                if business_question
+                else "指代词/追问，改走知识库检索",
                 entities=intent_result.entities,
             )
             logger.info("指代词兜底: %s → product_consult", query[:30])

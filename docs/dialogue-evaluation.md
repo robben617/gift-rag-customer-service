@@ -54,4 +54,4 @@ python scripts/run_dialogue_benchmark.py --base-url http://127.0.0.1:8000 --depl
 python -m pytest tests/evaluation/test_dialogue.py tests/api/test_after_sales_flow.py -q -p no:cacheprovider
 ```
 
-下一阶段应在冻结新题后，用真实模型和隔离后端执行 HTTP 评测，并加入通用 RAG 无答案、口语检索和跨主题指代；人工复核失败样本，再按失败类别改检索或护栏。
+已补充通用 RAG 口语、指代和无答案题，并执行真实模型 HTTP 评测，详见 [通用 RAG 实测](rag-dialogue-evaluation.md)。评分器 v2 还会将上一轮审批阻塞单独记错，避免把等待人工算成新问题通过。此页引用的旧售后受控快照保留原版本；该集没有审批阻塞场景。

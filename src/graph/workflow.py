@@ -76,6 +76,7 @@ class RAGState(TypedDict):
     confidence: float
     target: str
     rewritten_query: str
+    resolved_query: str  # Raw follow-up completed before classification/rewrite.
     reasoning: str
     entities: dict  # 分类器提取的实体（订单号/商品名/快递单号）
 
@@ -150,14 +151,24 @@ def classify_intent(state: RAGState) -> dict:
             "reasoning": "承接同一售后条件澄清",
             "entities": {},
         }
+    routing_query = state["query"]
+    if contextual_kind == "none" and (
+        state.get("history") or state.get("memory_context")
+    ):
+        from src.conversation import get_coreference_resolver
+
+        routing_query = get_coreference_resolver().resolve(
+            routing_query, state.get("history") or [], state.get("memory_context") or ""
+        )
     router = get_router()
-    route_result = router.route(state["query"])
+    route_result = router.route(routing_query)
 
     return {
         "intent": route_result.intent_result.intent.value,
         "confidence": route_result.intent_result.confidence,
         "target": route_result.target.value,
         "rewritten_query": route_result.rewritten_query,
+        "resolved_query": routing_query,
         "reasoning": route_result.intent_result.reasoning,
         "entities": route_result.intent_result.entities,
     }
@@ -216,7 +227,7 @@ def retrieve_docs(state: RAGState) -> dict:
     # 指代消解: 补全改写后的追问（含三层记忆，解析"上次那个券"类跨轮指代）
     history = state.get("history") or []
     memory_context = state.get("memory_context") or ""
-    if history or memory_context:
+    if not state.get("resolved_query") and (history or memory_context):
         from src.conversation import get_coreference_resolver
 
         rewritten = get_coreference_resolver().resolve(
@@ -261,6 +272,8 @@ def retrieve_docs(state: RAGState) -> dict:
     ]
 
     return {
+        # Generation and correction must use the same completed query as retrieval.
+        "rewritten_query": rewritten,
         "retrieved_docs": docs,
         "search_time_ms": result.response.elapsed_ms,
         "degradation_level": result.level,
@@ -1032,6 +1045,7 @@ class RAGWorkflow:
             "confidence": 0.0,
             "target": "",
             "rewritten_query": query,
+            "resolved_query": "",
             "reasoning": "",
             "entities": {},
             "retrieved_docs": [],

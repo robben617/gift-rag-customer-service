@@ -1,0 +1,529 @@
+[
+  {
+    "case_id": "dialogue-101",
+    "tags": [
+      "rag",
+      "colloquial"
+    ],
+    "rationale": "优惠券使用方法有明确FAQ证据。",
+    "turns": [
+      {
+        "query": "券领了半天，下单到底在哪儿抵扣呀",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [],
+          "evidence_groups": [
+            [
+              "faq-051"
+            ]
+          ],
+          "answer_groups": [
+            [
+              "结算"
+            ],
+            [
+              "优惠券",
+              "券"
+            ]
+          ],
+          "targets": [
+            "rag"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-102",
+    "tags": [
+      "rag",
+      "colloquial"
+    ],
+    "rationale": "叠券应包含同类型限制，不能只答可以叠加。",
+    "turns": [
+      {
+        "query": "店铺给的券跟平台那张能一块儿使不？同一类的也行吗",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [],
+          "evidence_groups": [
+            [
+              "faq-052"
+            ]
+          ],
+          "answer_groups": [
+            [
+              "同类型",
+              "同一类型",
+              "同种",
+              "同类"
+            ],
+            [
+              "结算"
+            ]
+          ],
+          "targets": [
+            "rag"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-103",
+    "tags": [
+      "rag",
+      "colloquial"
+    ],
+    "rationale": "货到付款应给出不支持的明确结论。",
+    "turns": [
+      {
+        "query": "能不能东西到了我手上再给钱啊",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [],
+          "evidence_groups": [
+            [
+              "faq-060"
+            ]
+          ],
+          "answer_groups": [
+            [
+              "不支持",
+              "不能",
+              "不提供",
+              "不可以",
+              "无法"
+            ]
+          ],
+          "targets": [
+            "rag"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-104",
+    "tags": [
+      "rag",
+      "colloquial"
+    ],
+    "rationale": "选择快递公司的答复应基于店铺规则。",
+    "turns": [
+      {
+        "query": "寄东西时能指定走顺丰不",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [],
+          "evidence_groups": [
+            [
+              "faq-013"
+            ]
+          ],
+          "answer_groups": [
+            [
+              "不支持",
+              "不能",
+              "无法",
+              "不提供"
+            ]
+          ],
+          "targets": [
+            "rag"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-105",
+    "tags": [
+      "rag",
+      "multi_turn",
+      "coreference"
+    ],
+    "rationale": "第二轮需要继承电子发票主题并返回时效与邮箱。",
+    "turns": [
+      {
+        "query": "电子发票抬头怎么填",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [],
+          "evidence_groups": [
+            [
+              "faq-053"
+            ]
+          ],
+          "answer_groups": [
+            [
+              "个人"
+            ],
+            [
+              "企业"
+            ]
+          ],
+          "targets": [
+            "rag"
+          ]
+        }
+      },
+      {
+        "query": "那开好后发哪儿，得等多久？",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [],
+          "evidence_groups": [
+            [
+              "faq-054",
+              "faq-025"
+            ]
+          ],
+          "answer_groups": [
+            [
+              "邮箱"
+            ],
+            [
+              "1-3",
+              "1至3",
+              "1到3",
+              "一到三",
+              "一至三"
+            ]
+          ],
+          "targets": [
+            "rag"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-106",
+    "tags": [
+      "rag",
+      "multi_turn",
+      "topic_switch"
+    ],
+    "rationale": "从优惠券切换到电子发票，后续指代必须跟随新话题。",
+    "turns": [
+      {
+        "query": "下单怎么使用优惠券",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [],
+          "evidence_groups": [
+            [
+              "faq-051"
+            ]
+          ],
+          "answer_groups": [
+            [
+              "结算"
+            ]
+          ],
+          "targets": [
+            "rag"
+          ]
+        }
+      },
+      {
+        "query": "换个话题，电子发票怎么申请",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [],
+          "evidence_groups": [
+            [
+              "faq-025"
+            ]
+          ],
+          "answer_groups": [
+            [
+              "订单"
+            ],
+            [
+              "发票"
+            ]
+          ],
+          "targets": [
+            "rag"
+          ]
+        }
+      },
+      {
+        "query": "那多久能收到邮件呢",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [],
+          "evidence_groups": [
+            [
+              "faq-054",
+              "faq-025"
+            ]
+          ],
+          "answer_groups": [
+            [
+              "1-3",
+              "1至3",
+              "1到3",
+              "一到三",
+              "一至三"
+            ]
+          ],
+          "targets": [
+            "rag"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-107",
+    "tags": [
+      "rag",
+      "multi_turn",
+      "topic_switch"
+    ],
+    "rationale": "售后澄清不能污染新优惠券话题。",
+    "turns": [
+      {
+        "query": "这件衣服能退吗",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [],
+          "targets": [
+            "policy"
+          ]
+        }
+      },
+      {
+        "query": "先不说退货了，店铺券和平台券可以一起用吗",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [],
+          "evidence_groups": [
+            [
+              "faq-052",
+              "faq-038"
+            ]
+          ],
+          "answer_groups": [
+            [
+              "结算"
+            ]
+          ],
+          "targets": [
+            "rag"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-108",
+    "tags": [
+      "rag",
+      "multi_turn",
+      "topic_switch"
+    ],
+    "rationale": "商品咨询后切换付款方式，不能继续回答手机壳。",
+    "turns": [
+      {
+        "query": "我想问手机壳，用的啥料啊",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [],
+          "evidence_groups": [
+            [
+              "faq-032"
+            ]
+          ],
+          "answer_groups": [
+            [
+              "TPU",
+              "软胶"
+            ],
+            [
+              "PC",
+              "硬背板"
+            ]
+          ],
+          "targets": [
+            "rag"
+          ]
+        }
+      },
+      {
+        "query": "换个话题，能到货再付款不",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [],
+          "evidence_groups": [
+            [
+              "faq-060"
+            ]
+          ],
+          "answer_groups": [
+            [
+              "不支持",
+              "不能",
+              "不提供",
+              "不可以",
+              "无法"
+            ]
+          ],
+          "targets": [
+            "rag"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-109",
+    "tags": [
+      "rag",
+      "no_evidence",
+      "product_spec"
+    ],
+    "rationale": "FAQ只有通用商品说明，没有星云X9耳机容量，不能猜数字。",
+    "turns": [
+      {
+        "query": "星云X9耳机的电池容量到底是多少毫安时",
+        "risk": false,
+        "no_evidence": true,
+        "expect": {
+          "needs_human": true,
+          "excludes": [
+            "500毫安",
+            "1000毫安"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-110",
+    "tags": [
+      "rag",
+      "no_evidence",
+      "risk"
+    ],
+    "rationale": "没有具体饼干的配料和过敏原证据，不能作食品安全保证。",
+    "turns": [
+      {
+        "query": "礼盒里那款饼干有没有花生，能保证不过敏吗",
+        "risk": true,
+        "no_evidence": true,
+        "expect": {
+          "needs_human": true,
+          "excludes": [
+            "保证不过敏",
+            "绝对安全",
+            "不含花生"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-111",
+    "tags": [
+      "rag",
+      "no_evidence",
+      "merchant_detail"
+    ],
+    "rationale": "FAQ没有实体门店营业安排。",
+    "turns": [
+      {
+        "query": "你们南京新街口门店周日几点关门",
+        "risk": false,
+        "no_evidence": true,
+        "expect": {
+          "needs_human": true,
+          "excludes": [
+            "22:00",
+            "晚上十点",
+            "21:00"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-112",
+    "tags": [
+      "rag",
+      "multi_turn",
+      "no_evidence"
+    ],
+    "rationale": "先有证据再追问未知型号参数，不能把前轮通用材质当成新规格证据。",
+    "turns": [
+      {
+        "query": "手机壳一般是什么材质",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [],
+          "evidence_groups": [
+            [
+              "faq-032"
+            ]
+          ],
+          "answer_groups": [
+            [
+              "TPU",
+              "软胶"
+            ],
+            [
+              "PC",
+              "硬背板"
+            ]
+          ],
+          "targets": [
+            "rag"
+          ]
+        }
+      },
+      {
+        "query": "那星云X9联名款手机壳准确厚度是多少毫米",
+        "risk": false,
+        "no_evidence": true,
+        "expect": {
+          "needs_human": true,
+          "excludes": [
+            "厚度为2毫米",
+            "厚度是2毫米"
+          ]
+        }
+      }
+    ]
+  }
+]

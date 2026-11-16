@@ -86,6 +86,7 @@ SYSTEM_PROMPT = """你是一个电商客服意图分类器。
 - 如果不确定，选 confidence 最低的那个
 - 提取所有可识别的实体（订单号、商品名、快递单号等）
 - **优惠券/红包/满减/折扣相关 → product_consult**（不是 chitchat）
+- **门店地址、营业时间等商家信息 → product_consult**；即使不知道答案也不是闲聊，需检索证据。
 - **指代/追问**（如"上次那个券""那运费谁出""它支持吗"）→ 结合前文归为对应意图
   （product_consult / return_refund / order_query），**不要判为 chitchat**"""
 
