@@ -10,6 +10,26 @@ from src.routing.models import Intent, IntentResult, RouteResult, RouteTarget
 
 
 def test_real_graph_resolves_original_followup_before_lossy_rewrite(monkeypatch):
+    from src.generation.answerability import Assessment, evidence_input
+
+    def assess(query, docs, *, answer=None):
+        return Assessment(
+            "complete",
+            "covered",
+            evidence_input(query, docs, answer)[1],
+            [
+                {
+                    "doc_id": docs[0]["chunk_id"],
+                    "source_quote": docs[0]["text"],
+                    "answer_quote": answer or "",
+                }
+            ],
+        )
+
+    monkeypatch.setattr(
+        "src.generation.answerability.get_answerability_verifier",
+        lambda: SimpleNamespace(assess=assess),
+    )
     raw = "那多久能收到邮件呢"
     complete = "电子发票申请后多久发送到邮箱"
     calls = []

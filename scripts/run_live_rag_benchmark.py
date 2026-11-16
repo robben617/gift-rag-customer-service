@@ -132,6 +132,7 @@ def serve(run_dir: Path, port: int, corpus_path: Path):
         "src/retrieval/reranker.py",
         "src/generation/self_correction.py",
         "src/generation/hallucination_detector.py",
+        "src/generation/answerability.py",
         "src/api/chat_service.py",
         "src/config.py",
         "data/policies/returns.json",

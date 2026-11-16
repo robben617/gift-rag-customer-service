@@ -70,6 +70,7 @@ class DegradationResult:
     rewritten_query: str = ""
     web_results: list[dict] = field(default_factory=list)
     degradation_reason: str = ""
+    candidates: list[SearchResult] = field(default_factory=list)
 
 
 class DegradationStrategy:
@@ -181,6 +182,7 @@ class DegradationStrategy:
             )
 
         # ── Level 2: LLM 改写 query ──
+        candidates = {row.chunk_id: row for row in response.results}
         best_response = response
         best_score = self._max_score(response)
         best_query = query
@@ -202,6 +204,20 @@ class DegradationStrategy:
                 logger.warning("Level 2 改写检索异常，跳过本次改写: %s", e)
                 continue
             new_score = self._max_score(new_response)
+            for row in new_response.results:
+                candidates.setdefault(row.chunk_id, row)
+
+            # Passing the admission threshold does not require an extra 0.05 gain.
+            # Answerability is checked separately in the workflow before release.
+            if self._is_sufficient(new_response, threshold):
+                return DegradationResult(
+                    response=new_response,
+                    level=2,
+                    method="rewritten",
+                    original_query=query,
+                    rewritten_query=rewritten,
+                    candidates=list(candidates.values()),
+                )
 
             # 检查是否有改善
             if new_score > best_score + IMPROVEMENT_THRESHOLD:
@@ -209,38 +225,27 @@ class DegradationStrategy:
                 best_score = new_score
                 best_query = rewritten
 
-                if self._is_sufficient(new_response, threshold):
-                    logger.info(
-                        "Level 2 命中: rewritten=%s, max_score=%.4f",
-                        rewritten,
-                        new_score,
-                    )
-                    return DegradationResult(
-                        response=new_response,
-                        level=2,
-                        method="rewritten",
-                        original_query=query,
-                        rewritten_query=rewritten,
-                    )
-
         # ── Level 3: 查询扩展 (Multi-Query + HyDE) ──
         logger.info("Level 3 尝试查询扩展: %s", query[:50])
         expanded_response = self._expand_and_search(
             query, top_k, access_level=access_level
         )
         expanded_score = self._max_score(expanded_response)
+        for row in expanded_response.results:
+            candidates.setdefault(row.chunk_id, row)
+        if self._is_sufficient(expanded_response, threshold):
+            return DegradationResult(
+                response=expanded_response,
+                level=3,
+                method="expanded",
+                original_query=query,
+                rewritten_query=query,
+                candidates=list(candidates.values()),
+            )
         if expanded_score > best_score + IMPROVEMENT_THRESHOLD:
             best_response = expanded_response
             best_score = expanded_score
             logger.info("Level 3 命中: 查询扩展, max_score=%.4f", expanded_score)
-            if self._is_sufficient(expanded_response, threshold):
-                return DegradationResult(
-                    response=expanded_response,
-                    level=3,
-                    method="expanded",
-                    original_query=query,
-                    rewritten_query=query,
-                )
 
         # ── Level 4: 联网搜索 ──
         web_results = self._web_search(query)
@@ -290,6 +295,8 @@ class DegradationStrategy:
             original_query=query,
             rewritten_query=best_query,
             degradation_reason="L0 至 L5 六级降级均未找到足够相关的结果",
+            # Candidates remain untrusted; only explicit evidence checks can rescue them.
+            candidates=list(candidates.values()),
         )
 
     def _is_sufficient(self, response: SearchResponse, threshold: float) -> bool:

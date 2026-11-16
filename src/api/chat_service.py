@@ -254,6 +254,8 @@ def _build_response(result: dict, safe_query: str) -> ChatResponse:
         policy_status=result.get("policy_status", ""),
         policy_missing_fields=result.get("policy_missing_fields", []),
         policy_version=result.get("policy_version", ""),
+        evidence_status=result.get("evidence_status", ""),
+        answer_status=result.get("answer_status", ""),
     )
 
     return response

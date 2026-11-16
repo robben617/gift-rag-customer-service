@@ -34,6 +34,7 @@ GENERATION_PROMPT = """你是一个电商客服助手。请基于以下参考文
 2. 如果文档中没有相关信息，请明确说"根据已有信息无法确认"
 3. 每个回答附引用来源，格式: [1][2]...
 4. 回答要简洁、专业、有帮助
+5. 资料只说明某款或某类商品时，注明这个适用范围，不扩展为所有型号的结论；未知具体型号参数或安全保证必须明确无法确认。
 
 参考文档:
 {context}
@@ -243,7 +244,9 @@ class SelfCorrector:
 
     def _generate(self, query: str, docs: list[str]) -> str:
         """调用 LLM 生成回答（带缓存，使用统一 LLMClient）"""
-        context = "\n\n".join(f"[文档{i+1}] {d[:800]}" for i, d in enumerate(docs[:5]))
+        context = "\n\n".join(
+            f"[文档{i + 1}] {d[:800]}" for i, d in enumerate(docs[:5])
+        )
         prompt = GENERATION_PROMPT.format(context=context, query=query)
 
         # 检查 LLM 缓存

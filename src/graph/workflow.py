@@ -85,6 +85,10 @@ class RAGState(TypedDict):
     search_time_ms: float
     degradation_level: int
     degradation_method: str
+    evidence_assessment: dict
+    answer_assessment: dict
+    evidence_status: str
+    answer_status: str
 
     # 生成结果
     answer: str
@@ -260,6 +264,32 @@ def retrieve_docs(state: RAGState) -> dict:
         access_level=state.get("access_level", "public"),
     )
 
+    # Similarity failure is not proof of missing evidence. Recover local candidates
+    # only after a separate question-coverage check, never by lowering the cutoff.
+    recovered = None
+    if getattr(result, "candidates", None):
+        from src.embedding.models import SearchResponse
+        from src.generation.answerability import get_answerability_verifier
+
+        response = SearchResponse(
+            query=rewritten,
+            results=result.candidates,
+            total_found=len(result.candidates),
+            elapsed_ms=result.response.elapsed_ms,
+        )
+        if state.get("use_reranker", True) and retriever.reranker:
+            response = retriever.reranker.rerank_search_response(
+                rewritten, response, top_n=state.get("top_k", 5)
+            )
+        candidate_docs = [
+            {"chunk_id": r.chunk_id, "text": r.text} for r in response.results[:5]
+        ]
+        coverage_query = state.get("resolved_query") or rewritten
+        recovered = get_answerability_verifier().assess(coverage_query, candidate_docs)
+        if recovered.status == "complete":
+            result.response.results = response.results[:5]
+            result.level, result.method = 3, "evidence_recovered"
+
     docs = [
         {
             "chunk_id": r.chunk_id,
@@ -278,6 +308,9 @@ def retrieve_docs(state: RAGState) -> dict:
         "search_time_ms": result.response.elapsed_ms,
         "degradation_level": result.level,
         "degradation_method": result.method,
+        "evidence_assessment": recovered.to_dict()
+        if recovered and recovered.status == "complete"
+        else {},
     }
 
 
@@ -335,11 +368,34 @@ def generate_answer(state: RAGState) -> dict:
 
     from src.embedding.retriever import get_retriever
 
-    retriever = get_retriever()
-    corrector = get_corrector(retriever)
-
     retrieved_docs = state.get("retrieved_docs", [])
-    docs_texts = [d["text"] for d in retrieved_docs]
+    from src.generation.answerability import evidence_input, get_answerability_verifier
+
+    # Search keywords may broaden a generic question or drop a user constraint.
+    # Answer and verify the completed user request, not its retrieval abstraction.
+    query = state.get("resolved_query") or state["rewritten_query"]
+    verifier = get_answerability_verifier()
+    _, digest = evidence_input(query, retrieved_docs)
+    assessment = state.get("evidence_assessment") or {}
+    if assessment.get("input_hash") != digest or assessment.get("status") != "complete":
+        assessment = verifier.assess(query, retrieved_docs).to_dict()
+    evidence_status = assessment["status"]
+    if evidence_status != "complete":
+        # No second hidden retrieval/generation on empty evidence. A provider failure
+        # also cannot masquerade as a trustworthy answer or honest model refusal.
+        return {
+            "answer": "现有资料不足以确认这一问题，需要人工核验后答复。",
+            "faithfulness": 0.0,
+            "correction_rounds": 0,
+            "was_corrected": False,
+            "evidence_assessment": assessment,
+            "evidence_status": evidence_status,
+            "answer_assessment": {},
+            "answer_status": "insufficient",
+        }
+    supported = {row["doc_id"] for row in assessment["supports"]}
+    retrieved_docs = [row for row in retrieved_docs if row["chunk_id"] in supported]
+    docs_texts = [d["text"][:800] for d in retrieved_docs]
     sources = list(
         {d.get("source_file", "") for d in retrieved_docs if d.get("source_file")}
     )
@@ -347,30 +403,26 @@ def generate_answer(state: RAGState) -> dict:
     # 模块33: 空 docs 兜底会触发 generate_with_correction 内部再检索，
     # 必须透传 access_level —— 否则受限用户在"检索空→自行重搜"时无过滤漏检索（头号隐性泄漏）
     access_level = state.get("access_level", "public")
-
-    if not docs_texts:
-        # 降级：上游检索为空，走完整检索流程
-        result = corrector.generate_with_correction(
-            query=state["rewritten_query"],
-            top_k=state.get("top_k", 5),
-            use_rerank=state.get("use_reranker", True),
-            access_level=access_level,
-        )
-    else:
-        result = corrector.generate_with_docs(
-            query=state["rewritten_query"],
-            docs=docs_texts,
-            sources=sources,
-            top_k=state.get("top_k", 5),
-            use_rerank=state.get("use_reranker", True),
-            access_level=access_level,
-        )
+    corrector = get_corrector(get_retriever())
+    result = corrector.generate_with_docs(
+        query=query,
+        docs=docs_texts,
+        sources=sources,
+        top_k=state.get("top_k", 5),
+        use_rerank=state.get("use_reranker", True),
+        access_level=access_level,
+    )
+    answer_assessment = verifier.assess(query, retrieved_docs, answer=result.answer)
 
     return {
         "answer": result.answer,
         "faithfulness": result.faithfulness,
         "correction_rounds": result.correction_rounds,
         "was_corrected": result.was_corrected,
+        "evidence_assessment": assessment,
+        "evidence_status": evidence_status,
+        "answer_assessment": answer_assessment.to_dict(),
+        "answer_status": answer_assessment.status,
     }
 
 
@@ -409,26 +461,19 @@ def evaluate_quality(state: RAGState) -> dict:
     # 低忠实度关键词
     uncertain_phrases = ["无法确认", "不确定", "没有找到", "建议咨询", "建议您咨询"]
 
-    has_uncertain = any(phrase in answer for phrase in uncertain_phrases)
+    checked_answer = (
+        state.get("evidence_status") == "complete"
+        and state.get("answer_status") == "complete"
+    )
+    has_uncertain = (
+        any(phrase in answer for phrase in uncertain_phrases) and not checked_answer
+    )
+    coverage_failed = any(
+        state.get(key) in ("insufficient", "unavailable")
+        for key in ("evidence_status", "answer_status")
+    )
     quality_poor = faithfulness < min_faithfulness or degradation_level >= 4
-
-    if loop_count >= MAX_LOOP_COUNT:
-        # 已达最大循环次数，强制通过
-        # 修复: 含高敏承诺(价格/退款/政策)且忠实度不足时，不能无条件放行——转人工核验
-        if high_stake_cats and faithfulness < min_faithfulness:
-            logger.warning(
-                "已达循环上限但含高敏承诺(%s)且忠实度不足(%.2f)，转人工核验",
-                ",".join(high_stake_cats),
-                faithfulness,
-            )
-            return {"evaluation_score": faithfulness, "evaluation_passed": False}
-        logger.warning("已达最大循环次数 %d，强制通过评估", MAX_LOOP_COUNT)
-        return {
-            "evaluation_score": faithfulness,
-            "evaluation_passed": True,
-        }
-
-    if quality_poor or has_uncertain:
+    if quality_poor or has_uncertain or coverage_failed:
         reason_parts = []
         if high_stake_cats:
             reason_parts.append(f"高敏承诺需核验({','.join(high_stake_cats)})")
@@ -438,11 +483,14 @@ def evaluate_quality(state: RAGState) -> dict:
             reason_parts.append(f"检索降级严重(Level {degradation_level})")
         if has_uncertain:
             reason_parts.append("回答存在不确定性")
+        if coverage_failed:
+            reason_parts.append("资料或回答未完整覆盖当前问题，或核验不可用")
 
         logger.info("[节点] 评估不通过: %s", ", ".join(reason_parts))
         return {
             "evaluation_score": faithfulness,
             "evaluation_passed": False,
+            "human_reason": ", ".join(reason_parts),
         }
 
     logger.info("[节点] 评估通过: faithfulness=%.2f", faithfulness)
@@ -1052,6 +1100,10 @@ class RAGWorkflow:
             "search_time_ms": 0,
             "degradation_level": 1,
             "degradation_method": "dense",
+            "evidence_assessment": {},
+            "answer_assessment": {},
+            "evidence_status": "",
+            "answer_status": "",
             "answer": "",
             "faithfulness": 0.0,
             "correction_rounds": 0,

@@ -367,6 +367,28 @@ def test_real_langgraph_branches_have_transport_parity(
     env = environment
     query = "退货运费谁出" if branch == "policy" else "查询商品或订单"
     tool_calls = []
+    from src.generation.answerability import Assessment, evidence_input
+
+    def assess(query, docs, *, answer=None):
+        # Hold coverage fixed to exercise transport parity and the independent
+        # faithfulness gate (including a deliberately low-score generated draft).
+        return Assessment(
+            "complete",
+            "controlled",
+            evidence_input(query, docs, answer)[1],
+            [
+                {
+                    "doc_id": docs[0]["chunk_id"],
+                    "source_quote": docs[0]["text"],
+                    "answer_quote": answer or "",
+                }
+            ],
+        )
+
+    monkeypatch.setattr(
+        "src.generation.answerability.get_answerability_verifier",
+        lambda: SimpleNamespace(assess=assess),
+    )
 
     def classify(state):
         return {

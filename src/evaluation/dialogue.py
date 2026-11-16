@@ -172,6 +172,10 @@ def evaluate_dialogues(cases: list[Dialogue], send, *, execution: str) -> dict:
                     or not isinstance(output.get("reply"), str)
                     or not output["reply"].strip()
                     or output["reply"] == "系统暂时繁忙，请稍后重试。"
+                    or any(
+                        output.get(key) == "unavailable"
+                        for key in ("evidence_status", "answer_status")
+                    )
                 ):
                     raise ValueError("invalid_or_failed_chat_response")
                 review_id = output.get("review_task_id") or ""

@@ -148,6 +148,33 @@ def test_previous_review_cannot_count_as_current_no_evidence_success():
     assert report["details"][1]["failures"] == ["prior_review_pending"]
 
 
+def test_verifier_outage_is_not_credited_as_correct_abstention():
+    case = next(
+        c
+        for c in load_dialogues(DATASET.with_name("rag_dialogue_eval.json"))
+        if c.turns[0].no_evidence
+    )
+    report = evaluate_dialogues(
+        [case],
+        lambda *args: {
+            "needs_human": True,
+            "reply": "正在为您转人工",
+            "evidence_status": "unavailable",
+        },
+        execution="controlled_in_process",
+    )
+    assert not report["complete"]
+    assert report["counts"]["execution_errors"] == 1
+    assert report["metrics"]["no_evidence_pass_rate"] == 0
+
+
+def test_separate_no_evidence_control_labels():
+    cases = load_dialogues(DATASET.with_name("rag_guard_eval.json"))
+    assert len(cases) == 6
+    assert all(len(case.turns) == 1 and case.turns[0].no_evidence for case in cases)
+    assert sum(case.turns[0].risk for case in cases) == 3
+
+
 def test_relevant_evidence_and_answer_content_both_required():
     case = Dialogue.model_validate(
         {
