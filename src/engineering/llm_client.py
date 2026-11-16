@@ -25,7 +25,11 @@
 import json
 import logging
 import time
+from _thread import LockType
 from collections.abc import AsyncGenerator
+from contextvars import ContextVar
+from dataclasses import dataclass, field
+from threading import Lock
 from typing import Optional
 
 import httpx
@@ -37,6 +41,21 @@ logger = logging.getLogger(__name__)
 # 默认重试配置
 DEFAULT_MAX_RETRIES = 2
 DEFAULT_RETRY_DELAY = 1.0  # 秒
+
+
+@dataclass
+class _RequestUsage:
+    """A request owns this accumulator; copied graph contexts share it safely."""
+
+    last: dict = field(default_factory=dict)
+    total: dict = field(
+        default_factory=lambda: {
+            "prompt_tokens": 0,
+            "completion_tokens": 0,
+            "total_tokens": 0,
+        }
+    )
+    lock: LockType = field(default_factory=Lock)
 
 
 class LLMClient:
@@ -65,14 +84,9 @@ class LLMClient:
         self._max_retries = max_retries
         self._sync_client: Optional[httpx.Client] = None  # 同步客户端
         self._async_client: Optional[httpx.AsyncClient] = None  # 异步客户端
-        self.last_usage: dict = (
-            {}
-        )  # 最近一次调用的 usage（prompt/completion/total_tokens）
-        self._usage_total: dict = {
-            "prompt_tokens": 0,
-            "completion_tokens": 0,
-            "total_tokens": 0,
-        }  # 会话级 token 累加（每次请求 reset_usage 清零）
+        self._request_usage: ContextVar[_RequestUsage | None] = ContextVar(
+            f"llm_usage_{id(self)}", default=None
+        )
 
     # ── 公共 API ──
 
@@ -361,26 +375,35 @@ class LLMClient:
 
     def _record_usage(self, usage: dict) -> None:
         """记录单次调用 usage 并累加到会话总量（供成本统计）"""
-        self.last_usage = usage or {}
-        self._usage_total["prompt_tokens"] += self.last_usage.get("prompt_tokens", 0)
-        self._usage_total["completion_tokens"] += self.last_usage.get(
-            "completion_tokens", 0
-        )
-        self._usage_total["total_tokens"] += self.last_usage.get("total_tokens", 0)
+        state = self._usage_state()
+        with state.lock:
+            state.last = dict(usage or {})
+            for key in state.total:
+                state.total[key] += state.last.get(key, 0)
+
+    def _usage_state(self) -> _RequestUsage:
+        state = self._request_usage.get()
+        if state is None:
+            state = _RequestUsage()
+            self._request_usage.set(state)
+        return state
 
     def reset_usage(self) -> None:
         """重置会话 token 累加器（每次请求开始时调用）"""
-        self._usage_total = {
-            "prompt_tokens": 0,
-            "completion_tokens": 0,
-            "total_tokens": 0,
-        }
-        self.last_usage = {}
+        self._request_usage.set(_RequestUsage())
+
+    @property
+    def last_usage(self) -> dict:
+        state = self._usage_state()
+        with state.lock:
+            return dict(state.last)
 
     @property
     def total_usage(self) -> dict:
         """返回本次会话累计 token 用量（副本）"""
-        return dict(self._usage_total)
+        state = self._usage_state()
+        with state.lock:
+            return dict(state.total)
 
     def _do_call(
         self,
