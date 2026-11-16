@@ -63,7 +63,7 @@ def after_sales_kind(query: str, context: dict | None = None) -> AfterSalesKind:
         return "refund_action"
     # Questions about applying are informational, even though they contain 申请.
     if re.search(
-        r"怎么|如何|怎样|哪里|哪儿|多少|流程|规则|政策|条件|时限|期限|多久|几天|什么时候|是否|能否|能不能|可不可以|可以.*吗|能.*吗|想了解|想知道|想问",
+        r"怎么|如何|怎样|哪里|哪儿|多少|流程|规则|政策|规定|条件|时限|期限|多久|几天|什么时候|是否|能否|能不能|可不可以|可以.*吗|能.*吗|想了解|想知道|想问",
         text,
     ):
         return "policy"

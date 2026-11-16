@@ -347,7 +347,7 @@ class ReturnPolicyService:
         if not scenarios and kind in ("policy", "unclear"):
             if re.search(r"可以退|能否退|是否能退|退不退", query):
                 scenarios = ["window"]
-            elif re.search(r"规则|政策", query):
+            elif re.search(r"规则|政策|规定", query):
                 scenarios = ["window", "process", "refund_time"]
             else:
                 return PolicyDecision(
@@ -385,7 +385,7 @@ class ReturnPolicyService:
             )
             return decision
         if re.search(
-            r"活动|特价|专属政策|特殊政策|手续费|补差价|折旧|页面.*(?:不能退|不退)|仅退款|部分退款|取消(?:退款|退货)|(?:退款|退货).{0,5}取消",
+            r"活动|特价|预售|专属政策|特殊政策|手续费|补差价|折旧|页面.*(?:不能退|不退)|仅退款|部分退款|取消(?:退款|退货)|(?:退款|退货).{0,5}取消",
             query,
         ):
             decision.reply, decision.status, decision.needs_human = (

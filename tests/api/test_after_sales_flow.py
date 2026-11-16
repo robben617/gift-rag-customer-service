@@ -80,6 +80,31 @@ def _streamed(response):
     return next(event["data"] for event in events if event["event"] == "result")
 
 
+def test_independent_dialogue_suite_through_real_chat_graph(env, tmp_path):
+    from pathlib import Path
+
+    from src.evaluation.dialogue import evaluate_dialogues, load_dialogues
+
+    cases = load_dialogues(
+        Path(__file__).resolve().parents[2] / "data/dialogue_eval.json"
+    )
+
+    def send(query, session_id):
+        response = env.tc.post(
+            "/api/chat", json={"query": query, "session_id": session_id}
+        )
+        response.raise_for_status()
+        return response.json()
+
+    report = evaluate_dialogues(cases, send, execution="controlled_in_process")
+    (tmp_path / "dialogue-report.json").write_text(
+        json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+    failures = [d for d in report["details"] if d["failures"]]
+    assert report["complete"], failures
+    assert not failures, failures
+
+
 @pytest.mark.parametrize(
     "query,human,word",
     [

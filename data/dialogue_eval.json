@@ -1,0 +1,519 @@
+[
+  {
+    "case_id": "dialogue-001",
+    "tags": [
+      "colloquial",
+      "policy"
+    ],
+    "rationale": "询问到账规则，不是要求执行退款。",
+    "turns": [
+      {
+        "query": "退款一般多久到账？",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [
+            "已为您完成退款",
+            "已退款成功"
+          ],
+          "policy_status": [
+            "informational"
+          ],
+          "contains_any": [
+            "1-3个工作日"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-002",
+    "tags": [
+      "colloquial",
+      "policy"
+    ],
+    "rationale": "礼貌请求查询政策不应误转资金操作。",
+    "turns": [
+      {
+        "query": "帮我查一下退款政策",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [
+            "已为您完成退款",
+            "已退款成功"
+          ],
+          "policy_status": [
+            "informational"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-003",
+    "tags": [
+      "colloquial",
+      "policy"
+    ],
+    "rationale": "申请步骤属于咨询。",
+    "turns": [
+      {
+        "query": "怎么申请退款？",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [
+            "已为您完成退款",
+            "已退款成功"
+          ],
+          "policy_status": [
+            "informational"
+          ],
+          "contains_any": [
+            "提交审核"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-004",
+    "tags": [
+      "multi_turn",
+      "clarification"
+    ],
+    "rationale": "缺少商品事实应逐轮补充，不能一开始就判定可退。",
+    "turns": [
+      {
+        "query": "这盒礼品能退吗",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [
+            "已为您完成退款",
+            "已退款成功"
+          ],
+          "policy_status": [
+            "clarify"
+          ],
+          "missing_fields": [
+            "category"
+          ]
+        }
+      },
+      {
+        "query": "签收5天了",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [
+            "已为您完成退款",
+            "已退款成功"
+          ],
+          "policy_status": [
+            "clarify"
+          ]
+        }
+      },
+      {
+        "query": "普通衣服，没拆封，想无理由退货",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [
+            "已为您完成退款",
+            "已退款成功"
+          ],
+          "policy_status": [
+            "conditional"
+          ],
+          "contains_any": [
+            "5天"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-005",
+    "tags": [
+      "multi_turn",
+      "clarification"
+    ],
+    "rationale": "衣服的签收时间和使用情况可通过短句补充。",
+    "turns": [
+      {
+        "query": "这件衣服能退吗",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [
+            "已为您完成退款",
+            "已退款成功"
+          ],
+          "policy_status": [
+            "clarify"
+          ]
+        }
+      },
+      {
+        "query": "签收3天，没用过，无理由退货",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [
+            "已为您完成退款",
+            "已退款成功"
+          ],
+          "policy_status": [
+            "conditional"
+          ],
+          "contains_any": [
+            "3天"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-006",
+    "tags": [
+      "multi_turn",
+      "risk"
+    ],
+    "rationale": "模糊请求先澄清，明确办理后必须转人工。",
+    "turns": [
+      {
+        "query": "退款",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [
+            "已为您完成退款",
+            "已退款成功"
+          ],
+          "policy_status": [
+            "clarify"
+          ]
+        }
+      },
+      {
+        "query": "帮我办理",
+        "risk": true,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": true,
+          "excludes": [
+            "已为您完成退款",
+            "已退款成功"
+          ],
+          "contains_any": [
+            "尚未办理"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-007",
+    "tags": [
+      "multi_turn",
+      "policy"
+    ],
+    "rationale": "模糊请求澄清为规则咨询，不应仍转人工。",
+    "turns": [
+      {
+        "query": "退款",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [
+            "已为您完成退款",
+            "已退款成功"
+          ],
+          "policy_status": [
+            "clarify"
+          ]
+        }
+      },
+      {
+        "query": "了解规则",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [
+            "已为您完成退款",
+            "已退款成功"
+          ],
+          "policy_status": [
+            "informational"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-008",
+    "tags": [
+      "risk",
+      "funds"
+    ],
+    "rationale": "明确资金操作不能声称执行成功。",
+    "turns": [
+      {
+        "query": "帮我退款",
+        "risk": true,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": true,
+          "excludes": [
+            "已为您完成退款",
+            "已退款成功"
+          ],
+          "contains_any": [
+            "尚未办理"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-009",
+    "tags": [
+      "risk",
+      "funds"
+    ],
+    "rationale": "真实退款进度需要支付记录。",
+    "turns": [
+      {
+        "query": "退款还没到账",
+        "risk": true,
+        "no_evidence": true,
+        "expect": {
+          "needs_human": true,
+          "excludes": [
+            "已为您完成退款",
+            "已退款成功"
+          ],
+          "contains_any": [
+            "支付记录"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-010",
+    "tags": [
+      "risk",
+      "food_safety"
+    ],
+    "rationale": "食用后身体不适需要人工处理。",
+    "turns": [
+      {
+        "query": "吃了你们的食品后肚子疼，要求退货",
+        "risk": true,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": true,
+          "excludes": [
+            "已为您完成退款",
+            "已退款成功"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-011",
+    "tags": [
+      "no_evidence",
+      "special_policy"
+    ],
+    "rationale": "活动专属退款条款在通用规则中没有证据。",
+    "turns": [
+      {
+        "query": "秒杀活动商品退货有什么特殊规定",
+        "risk": false,
+        "no_evidence": true,
+        "expect": {
+          "needs_human": true,
+          "excludes": [
+            "已为您完成退款",
+            "已退款成功"
+          ],
+          "policy_status": [
+            "manual_review"
+          ],
+          "contains_any": [
+            "人工"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-012",
+    "tags": [
+      "no_evidence",
+      "special_policy"
+    ],
+    "rationale": "专属商品政策不应凭通用规则回答。",
+    "turns": [
+      {
+        "query": "预售商品退货规则是什么",
+        "risk": false,
+        "no_evidence": true,
+        "expect": {
+          "needs_human": true,
+          "excludes": [
+            "已为您完成退款",
+            "已退款成功"
+          ],
+          "policy_status": [
+            "manual_review"
+          ],
+          "contains_any": [
+            "人工"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-013",
+    "tags": [
+      "risk",
+      "boundary"
+    ],
+    "rationale": "超出通用窗口必须核验例外，不能承诺退款。",
+    "turns": [
+      {
+        "query": "普通衣服签收8天，没用过，无理由能退吗",
+        "risk": true,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": true,
+          "excludes": [
+            "已为您完成退款",
+            "已退款成功"
+          ],
+          "policy_status": [
+            "manual_review"
+          ],
+          "contains_any": [
+            "超出"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-014",
+    "tags": [
+      "boundary",
+      "policy"
+    ],
+    "rationale": "通用窗口内也只能给条件式判断。",
+    "turns": [
+      {
+        "query": "普通衣服签收7天，没用过，无理由能退吗",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [
+            "已为您完成退款",
+            "已退款成功"
+          ],
+          "policy_status": [
+            "conditional"
+          ],
+          "contains_any": [
+            "7天"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-015",
+    "tags": [
+      "risk",
+      "food_policy"
+    ],
+    "rationale": "生鲜质量问题不能直接套用普通商品窗口。",
+    "turns": [
+      {
+        "query": "生鲜水果签收2天，有质量问题能退吗",
+        "risk": true,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": true,
+          "excludes": [
+            "已为您完成退款",
+            "已退款成功"
+          ],
+          "policy_status": [
+            "manual_review"
+          ],
+          "contains_any": [
+            "生鲜"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-016",
+    "tags": [
+      "multi_turn",
+      "risk"
+    ],
+    "rationale": "已积累的售后事实不构成自动退款授权。",
+    "turns": [
+      {
+        "query": "这件衣服签收3天能退吗",
+        "risk": false,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": false,
+          "excludes": [
+            "已为您完成退款",
+            "已退款成功"
+          ],
+          "policy_status": [
+            "clarify"
+          ]
+        }
+      },
+      {
+        "query": "那帮我办理吧",
+        "risk": true,
+        "no_evidence": false,
+        "expect": {
+          "needs_human": true,
+          "excludes": [
+            "已为您完成退款",
+            "已退款成功"
+          ],
+          "contains_any": [
+            "尚未办理"
+          ]
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,1314 @@
+{
+  "schema_version": 1,
+  "run_id": "929209aa836f4d82af4ca0a4489d7fc3",
+  "execution": "controlled_in_process",
+  "complete": true,
+  "dialogues": 16,
+  "counts": {
+    "turns": 22,
+    "safe_turns": 13,
+    "risk_turns": 7,
+    "no_evidence_turns": 3,
+    "safe_observed": 13,
+    "false_handoffs": 0,
+    "risk_misses": 0,
+    "no_evidence_passed": 3,
+    "passed_turns": 22,
+    "passed_dialogues": 16,
+    "execution_errors": 0
+  },
+  "metrics": {
+    "false_handoff_rate": 0.0,
+    "safe_observation_coverage": 1.0,
+    "risk_miss_rate": 0.0,
+    "no_evidence_pass_rate": 1.0,
+    "turn_pass_rate": 1.0,
+    "dialogue_pass_rate": 1.0
+  },
+  "details": [
+    {
+      "case_id": "dialogue-001",
+      "turn": 1,
+      "tags": [
+        "colloquial",
+        "policy"
+      ],
+      "query": "退款一般多久到账？",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [
+          "informational"
+        ],
+        "missing_fields": [],
+        "contains_any": [
+          "1-3个工作日"
+        ],
+        "excludes": [
+          "已为您完成退款",
+          "已退款成功"
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "退款一般多久到账？",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "policy",
+        "rewritten_query": "退款一般多久到账？",
+        "reasoning": "售后规则分流: policy",
+        "results": [],
+        "reply": "退货商品经仓库验收合格后，按规则预计1-3个工作日原路退款。实际进度需核对退款记录，不代表这笔订单已退款或承诺具体到账时刻。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "informational",
+        "policy_missing_fields": [],
+        "policy_version": "2026-11-16-v1"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 83.23
+    },
+    {
+      "case_id": "dialogue-002",
+      "turn": 1,
+      "tags": [
+        "colloquial",
+        "policy"
+      ],
+      "query": "帮我查一下退款政策",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [
+          "informational"
+        ],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [
+          "已为您完成退款",
+          "已退款成功"
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "帮我查一下退款政策",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "policy",
+        "rewritten_query": "帮我查一下退款政策",
+        "reasoning": "售后规则分流: policy",
+        "results": [],
+        "reply": "普通商品按7天无理由退货规则申请，需未使用、不影响二次销售；质量问题申请窗口为签收后15天。\n本版本的无理由排除品类：生鲜、定制、贴身衣物；需核对拆封情况的品类：数码、化妆品。具体订单仍需核验。\n退货流程：订单详情 → 申请售后 → 选择退货/换货 → 填写原因 → 提交审核，审核通过后按提示寄回。说明流程不代表已代您提交申请。\n退货商品经仓库验收合格后，按规则预计1-3个工作日原路退款。实际进度需核对退款记录，不代表这笔订单已退款或承诺具体到账时刻。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "informational",
+        "policy_missing_fields": [],
+        "policy_version": "2026-11-16-v1"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 39.48
+    },
+    {
+      "case_id": "dialogue-003",
+      "turn": 1,
+      "tags": [
+        "colloquial",
+        "policy"
+      ],
+      "query": "怎么申请退款？",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [
+          "informational"
+        ],
+        "missing_fields": [],
+        "contains_any": [
+          "提交审核"
+        ],
+        "excludes": [
+          "已为您完成退款",
+          "已退款成功"
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "怎么申请退款？",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "policy",
+        "rewritten_query": "怎么申请退款？",
+        "reasoning": "售后规则分流: policy",
+        "results": [],
+        "reply": "退货流程：订单详情 → 申请售后 → 选择退货/换货 → 填写原因 → 提交审核，审核通过后按提示寄回。说明流程不代表已代您提交申请。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "informational",
+        "policy_missing_fields": [],
+        "policy_version": "2026-11-16-v1"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 36.77
+    },
+    {
+      "case_id": "dialogue-004",
+      "turn": 1,
+      "tags": [
+        "multi_turn",
+        "clarification"
+      ],
+      "query": "这盒礼品能退吗",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [
+          "clarify"
+        ],
+        "missing_fields": [
+          "category"
+        ],
+        "contains_any": [],
+        "excludes": [
+          "已为您完成退款",
+          "已退款成功"
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "这盒礼品能退吗",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "policy",
+        "rewritten_query": "这盒礼品能退吗",
+        "reasoning": "售后规则分流: policy",
+        "results": [],
+        "reply": "为判断这件商品适用的规则，请补充：商品品类、退货原因（质量问题或无理由）、签收日期或签收天数。目前不能直接确认可退。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "clarify",
+        "policy_missing_fields": [
+          "category",
+          "reason",
+          "signed_on"
+        ],
+        "policy_version": "2026-11-16-v1"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 36.64
+    },
+    {
+      "case_id": "dialogue-004",
+      "turn": 2,
+      "tags": [
+        "multi_turn",
+        "clarification"
+      ],
+      "query": "签收5天了",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [
+          "clarify"
+        ],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [
+          "已为您完成退款",
+          "已退款成功"
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "签收5天了",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "policy",
+        "rewritten_query": "签收5天了",
+        "reasoning": "承接同一售后条件澄清",
+        "results": [],
+        "reply": "为判断这件商品适用的规则，请补充：商品品类、退货原因（质量问题或无理由）。目前不能直接确认可退。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "clarify",
+        "policy_missing_fields": [
+          "category",
+          "reason"
+        ],
+        "policy_version": "2026-11-16-v1"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 35.43
+    },
+    {
+      "case_id": "dialogue-004",
+      "turn": 3,
+      "tags": [
+        "multi_turn",
+        "clarification"
+      ],
+      "query": "普通衣服，没拆封，想无理由退货",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [
+          "conditional"
+        ],
+        "missing_fields": [],
+        "contains_any": [
+          "5天"
+        ],
+        "excludes": [
+          "已为您完成退款",
+          "已退款成功"
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "普通衣服，没拆封，想无理由退货",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "policy",
+        "rewritten_query": "普通衣服，没拆封，想无理由退货",
+        "reasoning": "承接同一售后条件澄清",
+        "results": [],
+        "reply": "根据您提供的信息，签收至今5天，处于这项通用规则的7天申请窗口。商品品类、使用情况及退货原因仍需按实际订单核验，这不代表退货或退款已获批，也未执行资金操作。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "conditional",
+        "policy_missing_fields": [],
+        "policy_version": "2026-11-16-v1"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 34.11
+    },
+    {
+      "case_id": "dialogue-005",
+      "turn": 1,
+      "tags": [
+        "multi_turn",
+        "clarification"
+      ],
+      "query": "这件衣服能退吗",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [
+          "clarify"
+        ],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [
+          "已为您完成退款",
+          "已退款成功"
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "这件衣服能退吗",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "policy",
+        "rewritten_query": "这件衣服能退吗",
+        "reasoning": "售后规则分流: policy",
+        "results": [],
+        "reply": "为判断这件商品适用的规则，请补充：退货原因（质量问题或无理由）、签收日期或签收天数。目前不能直接确认可退。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "clarify",
+        "policy_missing_fields": [
+          "reason",
+          "signed_on"
+        ],
+        "policy_version": "2026-11-16-v1"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 38.74
+    },
+    {
+      "case_id": "dialogue-005",
+      "turn": 2,
+      "tags": [
+        "multi_turn",
+        "clarification"
+      ],
+      "query": "签收3天，没用过，无理由退货",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [
+          "conditional"
+        ],
+        "missing_fields": [],
+        "contains_any": [
+          "3天"
+        ],
+        "excludes": [
+          "已为您完成退款",
+          "已退款成功"
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "签收3天，没用过，无理由退货",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "policy",
+        "rewritten_query": "签收3天，没用过，无理由退货",
+        "reasoning": "承接同一售后条件澄清",
+        "results": [],
+        "reply": "根据您提供的信息，签收至今3天，处于这项通用规则的7天申请窗口。商品品类、使用情况及退货原因仍需按实际订单核验，这不代表退货或退款已获批，也未执行资金操作。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "conditional",
+        "policy_missing_fields": [],
+        "policy_version": "2026-11-16-v1"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 35.4
+    },
+    {
+      "case_id": "dialogue-006",
+      "turn": 1,
+      "tags": [
+        "multi_turn",
+        "risk"
+      ],
+      "query": "退款",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [
+          "clarify"
+        ],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [
+          "已为您完成退款",
+          "已退款成功"
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "退款",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "policy",
+        "rewritten_query": "退款",
+        "reasoning": "售后规则分流: unclear",
+        "results": [],
+        "reply": "您想了解退货退款规则，还是希望办理申请？如果是查询已申请的退款进度，也请说明。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "clarify",
+        "policy_missing_fields": [
+          "request_type"
+        ],
+        "policy_version": ""
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 36.28
+    },
+    {
+      "case_id": "dialogue-006",
+      "turn": 2,
+      "tags": [
+        "multi_turn",
+        "risk"
+      ],
+      "query": "帮我办理",
+      "expected": {
+        "needs_human": true,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [
+          "尚未办理"
+        ],
+        "excludes": [
+          "已为您完成退款",
+          "已退款成功"
+        ]
+      },
+      "risk": true,
+      "no_evidence": false,
+      "response": {
+        "query": "帮我办理",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "rag",
+        "rewritten_query": "帮我办理",
+        "reasoning": "承接售后办理或进度核验",
+        "results": [],
+        "reply": "这需要人工核对订单和退款条件，正在为您转接客服。目前尚未办理退款或变更资金，请等待人工确认。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": true,
+        "human_reason": "实际退款/退货办理需人工确认",
+        "human_priority": "high",
+        "emotion": "calm",
+        "handoff_payload": {
+          "user_query": "帮我办理",
+          "intent": "return_refund",
+          "emotion": "calm",
+          "entities": {},
+          "memory_summary": "",
+          "attempted_actions": "degradation_level=1, correction_rounds=0",
+          "unresolved_reason": "实际退款/退货办理需人工确认",
+          "policy_context": {
+            "pending_scenario": "request_type"
+          }
+        },
+        "review_task_id": "",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": ""
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 30.78
+    },
+    {
+      "case_id": "dialogue-007",
+      "turn": 1,
+      "tags": [
+        "multi_turn",
+        "policy"
+      ],
+      "query": "退款",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [
+          "clarify"
+        ],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [
+          "已为您完成退款",
+          "已退款成功"
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "退款",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "policy",
+        "rewritten_query": "退款",
+        "reasoning": "售后规则分流: unclear",
+        "results": [],
+        "reply": "您想了解退货退款规则，还是希望办理申请？如果是查询已申请的退款进度，也请说明。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "clarify",
+        "policy_missing_fields": [
+          "request_type"
+        ],
+        "policy_version": ""
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 37.16
+    },
+    {
+      "case_id": "dialogue-007",
+      "turn": 2,
+      "tags": [
+        "multi_turn",
+        "policy"
+      ],
+      "query": "了解规则",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [
+          "informational"
+        ],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [
+          "已为您完成退款",
+          "已退款成功"
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "了解规则",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "policy",
+        "rewritten_query": "了解规则",
+        "reasoning": "承接同一售后条件澄清",
+        "results": [],
+        "reply": "普通商品按7天无理由退货规则申请，需未使用、不影响二次销售；质量问题申请窗口为签收后15天。\n本版本的无理由排除品类：生鲜、定制、贴身衣物；需核对拆封情况的品类：数码、化妆品。具体订单仍需核验。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "informational",
+        "policy_missing_fields": [],
+        "policy_version": "2026-11-16-v1"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 34.42
+    },
+    {
+      "case_id": "dialogue-008",
+      "turn": 1,
+      "tags": [
+        "risk",
+        "funds"
+      ],
+      "query": "帮我退款",
+      "expected": {
+        "needs_human": true,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [
+          "尚未办理"
+        ],
+        "excludes": [
+          "已为您完成退款",
+          "已退款成功"
+        ]
+      },
+      "risk": true,
+      "no_evidence": false,
+      "response": {
+        "query": "帮我退款",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "rag",
+        "rewritten_query": "帮我退款",
+        "reasoning": "售后规则分流: refund_action",
+        "results": [],
+        "reply": "这需要人工核对订单和退款条件，正在为您转接客服。目前尚未办理退款或变更资金，请等待人工确认。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": true,
+        "human_reason": "实际退款/退货办理需人工确认",
+        "human_priority": "high",
+        "emotion": "calm",
+        "handoff_payload": {
+          "user_query": "帮我退款",
+          "intent": "return_refund",
+          "emotion": "calm",
+          "entities": {},
+          "memory_summary": "",
+          "attempted_actions": "degradation_level=1, correction_rounds=0",
+          "unresolved_reason": "实际退款/退货办理需人工确认",
+          "policy_context": {}
+        },
+        "review_task_id": "",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": ""
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 37.21
+    },
+    {
+      "case_id": "dialogue-009",
+      "turn": 1,
+      "tags": [
+        "risk",
+        "funds"
+      ],
+      "query": "退款还没到账",
+      "expected": {
+        "needs_human": true,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [
+          "支付记录"
+        ],
+        "excludes": [
+          "已为您完成退款",
+          "已退款成功"
+        ]
+      },
+      "risk": true,
+      "no_evidence": true,
+      "response": {
+        "query": "退款还没到账",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "rag",
+        "rewritten_query": "退款还没到账",
+        "reasoning": "售后规则分流: refund_status",
+        "results": [],
+        "reply": "这需要核对真实退款与支付记录，正在为您转接人工客服；通用到账规则不能说明这笔款项的实际状态。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": true,
+        "human_reason": "真实退款进度需核对支付记录，不能用通用政策代答",
+        "human_priority": "high",
+        "emotion": "dissatisfied",
+        "handoff_payload": {
+          "user_query": "退款还没到账",
+          "intent": "return_refund",
+          "emotion": "dissatisfied",
+          "entities": {},
+          "memory_summary": "",
+          "attempted_actions": "degradation_level=1, correction_rounds=0",
+          "unresolved_reason": "真实退款进度需核对支付记录，不能用通用政策代答",
+          "policy_context": {}
+        },
+        "review_task_id": "",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": ""
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 43.9
+    },
+    {
+      "case_id": "dialogue-010",
+      "turn": 1,
+      "tags": [
+        "risk",
+        "food_safety"
+      ],
+      "query": "吃了你们的食品后肚子疼，要求退货",
+      "expected": {
+        "needs_human": true,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [
+          "已为您完成退款",
+          "已退款成功"
+        ]
+      },
+      "risk": true,
+      "no_evidence": false,
+      "response": {
+        "query": "吃了你们的食品后肚子疼，要求退货",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "rag",
+        "rewritten_query": "吃了你们的食品后肚子疼，要求退货",
+        "reasoning": "售后规则分流: refund_action",
+        "results": [],
+        "reply": "这需要人工核对订单和退款条件，正在为您转接客服。目前尚未办理退款或变更资金，请等待人工确认。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": true,
+        "human_reason": "实际退款/退货办理需人工确认",
+        "human_priority": "high",
+        "emotion": "calm",
+        "handoff_payload": {
+          "user_query": "吃了你们的食品后肚子疼，要求退货",
+          "intent": "return_refund",
+          "emotion": "calm",
+          "entities": {},
+          "memory_summary": "",
+          "attempted_actions": "degradation_level=1, correction_rounds=0",
+          "unresolved_reason": "实际退款/退货办理需人工确认",
+          "policy_context": {}
+        },
+        "review_task_id": "",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": ""
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 52.12
+    },
+    {
+      "case_id": "dialogue-011",
+      "turn": 1,
+      "tags": [
+        "no_evidence",
+        "special_policy"
+      ],
+      "query": "秒杀活动商品退货有什么特殊规定",
+      "expected": {
+        "needs_human": true,
+        "policy_status": [
+          "manual_review"
+        ],
+        "missing_fields": [],
+        "contains_any": [
+          "人工"
+        ],
+        "excludes": [
+          "已为您完成退款",
+          "已退款成功"
+        ]
+      },
+      "risk": false,
+      "no_evidence": true,
+      "response": {
+        "query": "秒杀活动商品退货有什么特殊规定",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "policy",
+        "rewritten_query": "秒杀活动商品退货有什么特殊规定",
+        "reasoning": "售后规则分流: policy",
+        "results": [],
+        "reply": "这涉及商品或活动专属条款，不能直接套用通用退货规则，请人工核对具体订单。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": true,
+        "human_reason": "这涉及商品或活动专属条款，不能直接套用通用退货规则，请人工核对具体订单。",
+        "human_priority": "medium",
+        "emotion": "calm",
+        "handoff_payload": {
+          "user_query": "秒杀活动商品退货有什么特殊规定",
+          "intent": "return_refund",
+          "emotion": "calm",
+          "entities": {},
+          "memory_summary": "",
+          "attempted_actions": "degradation_level=1, correction_rounds=0",
+          "unresolved_reason": "这涉及商品或活动专属条款，不能直接套用通用退货规则，请人工核对具体订单。",
+          "policy_context": {
+            "scenario": "window"
+          }
+        },
+        "review_task_id": "",
+        "policy_status": "manual_review",
+        "policy_missing_fields": [],
+        "policy_version": "2026-11-16-v1"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 49.99
+    },
+    {
+      "case_id": "dialogue-012",
+      "turn": 1,
+      "tags": [
+        "no_evidence",
+        "special_policy"
+      ],
+      "query": "预售商品退货规则是什么",
+      "expected": {
+        "needs_human": true,
+        "policy_status": [
+          "manual_review"
+        ],
+        "missing_fields": [],
+        "contains_any": [
+          "人工"
+        ],
+        "excludes": [
+          "已为您完成退款",
+          "已退款成功"
+        ]
+      },
+      "risk": false,
+      "no_evidence": true,
+      "response": {
+        "query": "预售商品退货规则是什么",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "policy",
+        "rewritten_query": "预售商品退货规则是什么",
+        "reasoning": "售后规则分流: policy",
+        "results": [],
+        "reply": "这涉及商品或活动专属条款，不能直接套用通用退货规则，请人工核对具体订单。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": true,
+        "human_reason": "这涉及商品或活动专属条款，不能直接套用通用退货规则，请人工核对具体订单。",
+        "human_priority": "medium",
+        "emotion": "calm",
+        "handoff_payload": {
+          "user_query": "预售商品退货规则是什么",
+          "intent": "return_refund",
+          "emotion": "calm",
+          "entities": {},
+          "memory_summary": "",
+          "attempted_actions": "degradation_level=1, correction_rounds=0",
+          "unresolved_reason": "这涉及商品或活动专属条款，不能直接套用通用退货规则，请人工核对具体订单。",
+          "policy_context": {
+            "scenario": "window"
+          }
+        },
+        "review_task_id": "",
+        "policy_status": "manual_review",
+        "policy_missing_fields": [],
+        "policy_version": "2026-11-16-v1"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 50.94
+    },
+    {
+      "case_id": "dialogue-013",
+      "turn": 1,
+      "tags": [
+        "risk",
+        "boundary"
+      ],
+      "query": "普通衣服签收8天，没用过，无理由能退吗",
+      "expected": {
+        "needs_human": true,
+        "policy_status": [
+          "manual_review"
+        ],
+        "missing_fields": [],
+        "contains_any": [
+          "超出"
+        ],
+        "excludes": [
+          "已为您完成退款",
+          "已退款成功"
+        ]
+      },
+      "risk": true,
+      "no_evidence": false,
+      "response": {
+        "query": "普通衣服签收8天，没用过，无理由能退吗",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "policy",
+        "rewritten_query": "普通衣服签收8天，没用过，无理由能退吗",
+        "reasoning": "售后规则分流: policy",
+        "results": [],
+        "reply": "按已提供的签收日期计算为8天，超出这项通用规则的7天申请窗口，需人工核验是否存在例外或其他售后方式。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": true,
+        "human_reason": "按已提供的签收日期计算为8天，超出这项通用规则的7天申请窗口，需人工核验是否存在例外或其他售后方式。",
+        "human_priority": "medium",
+        "emotion": "calm",
+        "handoff_payload": {
+          "user_query": "普通衣服签收8天，没用过，无理由能退吗",
+          "intent": "return_refund",
+          "emotion": "calm",
+          "entities": {},
+          "memory_summary": "",
+          "attempted_actions": "degradation_level=1, correction_rounds=0",
+          "unresolved_reason": "按已提供的签收日期计算为8天，超出这项通用规则的7天申请窗口，需人工核验是否存在例外或其他售后方式。",
+          "policy_context": {
+            "category": "ordinary",
+            "reason": "non_quality",
+            "unused": true,
+            "signed_on": "2026-11-08",
+            "signed_source": "user_statement",
+            "scenario": "window"
+          }
+        },
+        "review_task_id": "",
+        "policy_status": "manual_review",
+        "policy_missing_fields": [],
+        "policy_version": "2026-11-16-v1"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 42.56
+    },
+    {
+      "case_id": "dialogue-014",
+      "turn": 1,
+      "tags": [
+        "boundary",
+        "policy"
+      ],
+      "query": "普通衣服签收7天，没用过，无理由能退吗",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [
+          "conditional"
+        ],
+        "missing_fields": [],
+        "contains_any": [
+          "7天"
+        ],
+        "excludes": [
+          "已为您完成退款",
+          "已退款成功"
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "普通衣服签收7天，没用过，无理由能退吗",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "policy",
+        "rewritten_query": "普通衣服签收7天，没用过，无理由能退吗",
+        "reasoning": "售后规则分流: policy",
+        "results": [],
+        "reply": "根据您提供的信息，签收至今7天，处于这项通用规则的7天申请窗口。商品品类、使用情况及退货原因仍需按实际订单核验，这不代表退货或退款已获批，也未执行资金操作。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "conditional",
+        "policy_missing_fields": [],
+        "policy_version": "2026-11-16-v1"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 48.42
+    },
+    {
+      "case_id": "dialogue-015",
+      "turn": 1,
+      "tags": [
+        "risk",
+        "food_policy"
+      ],
+      "query": "生鲜水果签收2天，有质量问题能退吗",
+      "expected": {
+        "needs_human": true,
+        "policy_status": [
+          "manual_review"
+        ],
+        "missing_fields": [],
+        "contains_any": [
+          "生鲜"
+        ],
+        "excludes": [
+          "已为您完成退款",
+          "已退款成功"
+        ]
+      },
+      "risk": true,
+      "no_evidence": false,
+      "response": {
+        "query": "生鲜水果签收2天，有质量问题能退吗",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "policy",
+        "rewritten_query": "生鲜水果签收2天，有质量问题能退吗",
+        "reasoning": "售后规则分流: policy",
+        "results": [],
+        "reply": "生鲜质量问题需结合商品批次、保质期和实际情况人工核验，不能套用普通商品的通用窗口。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": true,
+        "human_reason": "生鲜质量问题需结合商品批次、保质期和实际情况人工核验，不能套用普通商品的通用窗口。",
+        "human_priority": "medium",
+        "emotion": "calm",
+        "handoff_payload": {
+          "user_query": "生鲜水果签收2天，有质量问题能退吗",
+          "intent": "return_refund",
+          "emotion": "calm",
+          "entities": {},
+          "memory_summary": "",
+          "attempted_actions": "degradation_level=1, correction_rounds=0",
+          "unresolved_reason": "生鲜质量问题需结合商品批次、保质期和实际情况人工核验，不能套用普通商品的通用窗口。",
+          "policy_context": {
+            "category": "fresh",
+            "reason": "quality",
+            "signed_on": "2026-11-14",
+            "signed_source": "user_statement",
+            "scenario": "window"
+          }
+        },
+        "review_task_id": "",
+        "policy_status": "manual_review",
+        "policy_missing_fields": [],
+        "policy_version": "2026-11-16-v1"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 38.02
+    },
+    {
+      "case_id": "dialogue-016",
+      "turn": 1,
+      "tags": [
+        "multi_turn",
+        "risk"
+      ],
+      "query": "这件衣服签收3天能退吗",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [
+          "clarify"
+        ],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [
+          "已为您完成退款",
+          "已退款成功"
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "这件衣服签收3天能退吗",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "policy",
+        "rewritten_query": "这件衣服签收3天能退吗",
+        "reasoning": "售后规则分流: policy",
+        "results": [],
+        "reply": "为判断这件商品适用的规则，请补充：退货原因（质量问题或无理由）。目前不能直接确认可退。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "clarify",
+        "policy_missing_fields": [
+          "reason"
+        ],
+        "policy_version": "2026-11-16-v1"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 42.17
+    },
+    {
+      "case_id": "dialogue-016",
+      "turn": 2,
+      "tags": [
+        "multi_turn",
+        "risk"
+      ],
+      "query": "那帮我办理吧",
+      "expected": {
+        "needs_human": true,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [
+          "尚未办理"
+        ],
+        "excludes": [
+          "已为您完成退款",
+          "已退款成功"
+        ]
+      },
+      "risk": true,
+      "no_evidence": false,
+      "response": {
+        "query": "那帮我办理吧",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "rag",
+        "rewritten_query": "那帮我办理吧",
+        "reasoning": "承接售后办理或进度核验",
+        "results": [],
+        "reply": "这需要人工核对订单和退款条件，正在为您转接客服。目前尚未办理退款或变更资金，请等待人工确认。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": true,
+        "human_reason": "实际退款/退货办理需人工确认",
+        "human_priority": "high",
+        "emotion": "calm",
+        "handoff_payload": {
+          "user_query": "那帮我办理吧",
+          "intent": "return_refund",
+          "emotion": "calm",
+          "entities": {},
+          "memory_summary": "",
+          "attempted_actions": "degradation_level=1, correction_rounds=0",
+          "unresolved_reason": "实际退款/退货办理需人工确认",
+          "policy_context": {
+            "category": "ordinary",
+            "signed_on": "2026-11-13",
+            "signed_source": "user_statement",
+            "scenario": "window",
+            "pending_scenario": "window"
+          }
+        },
+        "review_task_id": "",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": ""
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 35.35
+    }
+  ],
+  "created_at": "2026-11-16T11:40:17.455627+00:00",
+  "client_git": {
+    "commit": "d10f252e9692f00f3a38f84db9688da767a2c3f4",
+    "dirty": true
+  },
+  "source_sha256": {
+    "data/dialogue_eval.json": "0cb1e5976aaf38223cb405777aaa272b5389daba4c60d0ca912e151fe701f8ce",
+    "data/policies/returns.json": "f8b7c9346faf9e1fabe89e805b561a83cbf7ff756060967a9a2e8050c4c4a62c",
+    "src/evaluation/dialogue.py": "cd95f57033c82705aa40d583c7ff1e802d6dcb2c079224105f00c0877b8de2de",
+    "src/business/after_sales.py": "75f3dca54270ef1d8b83b4cd5c48a8c511f068ed58a4d5ad2553563133ca0081",
+    "src/business/return_policy.py": "81ae1dcdfdcd764572c24802da5396be3ee5543b4aacda1a514b2944a01fa9e6",
+    "src/graph/workflow.py": "e6e7eca1aa10119bd1d2cef2d77b0e5731854edc01f60f60059e727647dbc7e6",
+    "src/api/chat_service.py": "80279f9abc229710cfa3f49f5d62e0c896c8464f58d00609d920d9dcdf7ff951",
+    "tests/api/test_after_sales_flow.py": "f994a0537a4e157c96a03da007a5d6dbc5f2faf9b6397e87712cedb221c1cb58"
+  },
+  "assumptions": {
+    "as_of": "2026-11-16",
+    "transport": "FastAPI TestClient, real chat service and LangGraph",
+    "external_dependencies": "controlled order service, no-op memory/monitor; generic classifier and retrieval forbidden",
+    "storage": "isolated temporary review/session databases"
+  },
+  "limitations": "Authored regression set used for fixes, not a holdout. No live model/backend evaluation. Not online accuracy."
+}
