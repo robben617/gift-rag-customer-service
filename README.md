@@ -182,7 +182,7 @@
 | **熔断器** | 三态状态机 CLOSED→OPEN→HALF_OPEN，LLM/Embedding 独立阈值 | ✅ |
 | 三层缓存 | Query 缓存 + Embedding 缓存 + LLM 响应缓存（Redis 可序列化） | ✅ |
 | 结构化日志 | JSON 行文件 + ANSI 控制台双输出 | ✅ |
-| 成本监控 | 每日统计 (请求量/费用/模型分布)、P99 延迟 | ✅ |
+| 成本监控 | 请求级阶段耗时、模型调用/重试、供应商 Token、用量缺失标记与费率估算；[真实性能基线](docs/rag-performance.md) | ✅ |
 | 生产级错误处理 | 重试策略 + 降级 + 兜底 | ✅ |
 | 线程安全单例 | @singleton_factory 双重检查锁定 | ✅ |
 | 速率限制 | Embedding 编码并发控制 | ✅ |

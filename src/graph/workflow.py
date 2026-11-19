@@ -253,9 +253,31 @@ def retrieve_docs(state: RAGState) -> dict:
     )
 
     from src.embedding.retriever import get_retriever
+    from src.generation.answerability import (
+        Assessment,
+        evidence_input,
+        get_answerability_verifier,
+    )
 
     retriever = get_retriever()
     strategy = get_degradation_strategy(retriever)
+    coverage_query = state.get("resolved_query") or rewritten
+    checked: dict[str, Assessment] = {}
+
+    def check_candidates(rows):
+        docs = [{"chunk_id": row.chunk_id, "text": row.text} for row in rows[:5]]
+        _, digest = evidence_input(coverage_query, docs)
+        if digest not in checked:
+            assessment = get_answerability_verifier().assess(coverage_query, docs)
+            # A transient error can be tried again after degradation. Neither status
+            # can qualify candidates for an early return.
+            if assessment.status != "unavailable":
+                checked[digest] = assessment
+            return assessment
+        return checked[digest]
+
+    def accept_initial_evidence(rows):
+        return check_candidates(rows).status == "complete"
 
     result = strategy.search_with_degradation(
         query=original_query,
@@ -263,14 +285,13 @@ def retrieve_docs(state: RAGState) -> dict:
         top_k=state.get("top_k", 5),
         use_rerank=state.get("use_reranker", True),
         access_level=state.get("access_level", "public"),
+        accept_initial_evidence=accept_initial_evidence,
     )
 
     # Similarity failure is not proof of missing evidence. Recover local candidates
     # only after a separate question-coverage check, never by lowering the cutoff.
-    recovered = None
     if getattr(result, "candidates", None):
         from src.embedding.models import SearchResponse
-        from src.generation.answerability import get_answerability_verifier
 
         response = SearchResponse(
             query=rewritten,
@@ -282,11 +303,7 @@ def retrieve_docs(state: RAGState) -> dict:
             response = retriever.reranker.rerank_search_response(
                 rewritten, response, top_n=state.get("top_k", 5)
             )
-        candidate_docs = [
-            {"chunk_id": r.chunk_id, "text": r.text} for r in response.results[:5]
-        ]
-        coverage_query = state.get("resolved_query") or rewritten
-        recovered = get_answerability_verifier().assess(coverage_query, candidate_docs)
+        recovered = check_candidates(response.results)
         if recovered.status == "complete":
             result.response.results = response.results[:5]
             result.level, result.method = 3, "evidence_recovered"
@@ -302,6 +319,10 @@ def retrieve_docs(state: RAGState) -> dict:
         for r in result.response.results
     ]
 
+    # Forward a known negative verdict only when the exact delivered documents
+    # were checked. This prevents the generation node from repeating that request.
+    _, delivered_digest = evidence_input(coverage_query, docs)
+    assessment = checked.get(delivered_digest)
     return {
         # Generation and correction must use the same completed query as retrieval.
         "rewritten_query": rewritten,
@@ -309,9 +330,7 @@ def retrieve_docs(state: RAGState) -> dict:
         "search_time_ms": result.response.elapsed_ms,
         "degradation_level": result.level,
         "degradation_method": result.method,
-        "evidence_assessment": recovered.to_dict()
-        if recovered and recovered.status == "complete"
-        else {},
+        "evidence_assessment": assessment.to_dict() if assessment else {},
     }
 
 
@@ -378,7 +397,10 @@ def generate_answer(state: RAGState) -> dict:
     verifier = get_answerability_verifier()
     _, digest = evidence_input(query, retrieved_docs)
     assessment = state.get("evidence_assessment") or {}
-    if assessment.get("input_hash") != digest or assessment.get("status") != "complete":
+    if assessment.get("input_hash") != digest or assessment.get("status") not in (
+        "complete",
+        "insufficient",
+    ):
         assessment = verifier.assess(query, retrieved_docs).to_dict()
     evidence_status = assessment["status"]
     if evidence_status != "complete":

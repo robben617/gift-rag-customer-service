@@ -101,6 +101,72 @@ def test_empty_evidence_never_calls_generation_or_hidden_retrieval(monkeypatch):
     assert result["faithfulness"] == 0
 
 
+@pytest.mark.parametrize(
+    "status,expected_checks", [("complete", 1), ("insufficient", 1), ("unavailable", 2)]
+)
+def test_initial_coverage_can_skip_rewrites_and_reuses_only_exact_stable_verdicts(
+    monkeypatch, status, expected_checks
+):
+    retriever = SimpleNamespace(search=lambda **kw: response(0.55), reranker=None)
+    strategy = DegradationStrategy(retriever)
+    rewrites = []
+
+    def rewrite(query, attempt):
+        rewrites.append(attempt)
+        return query + str(attempt)
+
+    monkeypatch.setattr(strategy, "_rewrite_query", rewrite)
+    monkeypatch.setattr(strategy, "_expand_and_search", lambda *a, **kw: response(0.55))
+    monkeypatch.setattr(strategy, "_web_search", lambda *a: [])
+    monkeypatch.setattr("src.embedding.retriever.get_retriever", lambda: retriever)
+    monkeypatch.setattr(workflow, "get_degradation_strategy", lambda _: strategy)
+    calls = []
+
+    def assess(query, docs, *, answer=None):
+        assert query == "到货后能不能再付钱"
+        calls.append(answer)
+        supports = (
+            [{"doc_id": "faq-060", "source_quote": "不支持货到付款"}]
+            if status == "complete"
+            else []
+        )
+        return Assessment(
+            status, "controlled", evidence_input(query, docs, answer)[1], supports
+        )
+
+    monkeypatch.setattr(
+        "src.generation.answerability.get_answerability_verifier",
+        lambda: SimpleNamespace(assess=assess),
+    )
+    state = {"query": "到货后能不能再付钱", "rewritten_query": "到货后能不能再付钱"}
+    output = workflow.retrieve_docs(state)
+    assert len(calls) == expected_checks
+    if status == "complete":
+        assert rewrites == []
+        assert output["degradation_method"] == "evidence_recovered"
+        assert output["evidence_assessment"]["status"] == "complete"
+        monkeypatch.setattr(
+            workflow,
+            "get_corrector",
+            lambda _: SimpleNamespace(
+                generate_with_docs=lambda **kw: SimpleNamespace(
+                    answer="不支持货到付款。",
+                    faithfulness=1,
+                    correction_rounds=0,
+                    was_corrected=False,
+                )
+            ),
+        )
+        assert (
+            workflow.generate_answer({**state, **output})["answer_status"] == "complete"
+        )
+        assert calls == [None, "不支持货到付款。"]
+    else:
+        assert rewrites == [0, 1]
+        assert output["degradation_method"] == "fallback"
+        assert not output["retrieved_docs"]
+
+
 def test_generation_and_coverage_use_user_intent_instead_of_search_keywords(
     monkeypatch,
 ):

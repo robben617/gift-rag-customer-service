@@ -17,6 +17,7 @@
 
 import logging
 from concurrent.futures import ThreadPoolExecutor
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Optional
 
@@ -96,6 +97,7 @@ class DegradationStrategy:
         use_rerank: bool = True,
         secondary_query: str | None = None,
         access_level: str = "public",
+        accept_initial_evidence: Callable[[list[SearchResult]], bool] | None = None,
     ) -> DegradationResult:
         """带降级的检索（Level 1 支持双路召回）
 
@@ -107,6 +109,7 @@ class DegradationStrategy:
             secondary_query: 改写后问题（提供时 Level 1 走双路召回，
                              原始+改写并行合并去重；不提供则退化为单路）
             access_level: 模块33 内容权限等级，透传给各级检索（Level 0-3）
+            accept_initial_evidence: Optional coverage check for local candidates before L2.
 
         Returns:
             DegradationResult
@@ -179,6 +182,19 @@ class DegradationStrategy:
                 response=response,
                 level=1,
                 method="dense",
+                original_query=query,
+            )
+
+        # The workflow can establish coverage before paying for additional searches.
+        if (
+            response.results
+            and accept_initial_evidence
+            and accept_initial_evidence(response.results)
+        ):
+            return DegradationResult(
+                response=response,
+                level=3,
+                method="evidence_recovered",
                 original_query=query,
             )
 
