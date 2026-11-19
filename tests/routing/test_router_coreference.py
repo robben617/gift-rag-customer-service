@@ -3,14 +3,6 @@
 from src.routing.models import Intent, IntentResult, RouteTarget
 from src.routing.router import IntentRouter, _has_coreference
 
-import pytest
-
-
-@pytest.fixture(autouse=True)
-def isolate_rewrite(monkeypatch):
-    # These tests exercise routing guards; query rewriting must not call a live API.
-    monkeypatch.setattr(IntentRouter, "_rewrite_query", lambda self, query: query)
-
 
 class TestHasCoreference:
     def test_coreference_detected(self):
@@ -47,9 +39,8 @@ class TestCoreferenceGuard:
         assert result.intent_result.intent == Intent.CHITCHAT
         assert result.target == RouteTarget.DIRECT
 
-    def test_merchant_hours_cannot_be_answered_with_generic_greeting(self, monkeypatch):
+    def test_merchant_hours_cannot_be_answered_with_generic_greeting(self):
         r = IntentRouter(classifier=_FakeClassifier(Intent.CHITCHAT))
-        monkeypatch.setattr(r, "_rewrite_query", lambda query: query)
         result = r.route("你们南京新街口门店周日几点关门")
         assert result.intent_result.intent == Intent.PRODUCT_CONSULT
         assert result.target == RouteTarget.RAG

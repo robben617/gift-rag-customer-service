@@ -12,7 +12,6 @@ import re
 from typing import Optional
 
 from src.business.after_sales import after_sales_kind, order_ids
-from src.engineering.llm_client import get_llm_client
 
 from .classifier import IntentClassifier, get_classifier
 from .models import Intent, IntentResult, RouteResult, RouteTarget
@@ -55,25 +54,6 @@ def _has_coreference(query: str) -> bool:
     return any(m in query for m in _COREFERENCE_MARKERS)
 
 
-# ── 查询改写模板（RAG 路由用）──
-
-QUERY_REWRITE_PROMPT = """你是电商客服查询改写器。将用户的口语化问题改写为适合向量检索的简洁查询。
-
-规则:
-1. 去掉语气词、客套话
-2. 保留核心关键词
-3. 补充隐含的电商上下文
-4. 输出一句话，不超过 50 字
-
-示例:
-- "你好，请问我想退货的话应该怎么做呀" → "退货流程"
-- "这个手机壳支持 iPhone 15 Pro Max 吗" → "手机壳 iPhone 15 Pro Max 兼容性"
-- "我的快递怎么还没到啊" → "物流配送时间"
-
-用户问题: {query}
-改写结果:"""
-
-
 class IntentRouter:
     """意图路由器 — 分类 + 路由 + 查询改写
 
@@ -86,7 +66,7 @@ class IntentRouter:
         self.classifier = classifier or get_classifier()
 
     def route(self, query: str) -> RouteResult:
-        """完整路由流程: 意图分类 → 路由决策 → 查询改写（RAG 路由时）"""
+        """Apply business routing rules to one classification and rewrite result."""
 
         # ── 步骤1: 意图分类 ──
         after_sales = after_sales_kind(query)
@@ -150,7 +130,7 @@ class IntentRouter:
         # ── 步骤3: 查询改写（仅 RAG 路由）──
         rewritten = query
         if target in (RouteTarget.RAG, RouteTarget.HYBRID):
-            rewritten = self._rewrite_query(query)
+            rewritten = intent_result.rewritten_query or query
 
         return RouteResult(
             intent_result=intent_result,
@@ -159,31 +139,6 @@ class IntentRouter:
             rewritten_query=rewritten,
             handler=target.value,
         )
-
-    def _rewrite_query(self, query: str) -> str:
-        """查询改写 — 口语化 → 检索友好"""
-        try:
-            client = get_llm_client()
-            rewritten = client.chat_with_fallback(
-                messages=[
-                    {
-                        "role": "user",
-                        "content": QUERY_REWRITE_PROMPT.format(query=query),
-                    }
-                ],
-                fallback_value=query,
-                temperature=0.1,
-                max_tokens=100,
-                timeout=10,
-            )
-            # 防止 LLM 返回多余内容
-            if len(rewritten) > 100:
-                rewritten = rewritten[:100]
-            logger.debug("查询改写: %s → %s", query, rewritten)
-            return rewritten
-        except Exception as e:
-            logger.warning("查询改写失败，使用原始 query: %s", e)
-            return query
 
 
 # ── 模块级单例 ──

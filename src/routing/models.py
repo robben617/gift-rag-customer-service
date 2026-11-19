@@ -33,6 +33,7 @@ class IntentResult:
     confidence: float  # 0~1
     reasoning: str = ""  # LLM 的判断理由
     entities: dict = field(default_factory=dict)  # 提取的实体（订单号、商品名等）
+    rewritten_query: str = ""  # Optional search hint from the same classification call.
 
 
 @dataclass

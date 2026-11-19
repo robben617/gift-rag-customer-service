@@ -130,6 +130,7 @@ def serve(run_dir: Path, port: int, corpus_path: Path):
         "src/conversation/memory.py",
         "src/routing/router.py",
         "src/routing/classifier.py",
+        "src/routing/models.py",
         "src/embedding/degradation.py",
         "src/embedding/retriever.py",
         "src/embedding/embedder.py",

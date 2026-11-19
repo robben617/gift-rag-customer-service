@@ -1,0 +1,6037 @@
+{
+  "schema_version": 2,
+  "run_id": "4203ccfe5ec14d04ac88d6b078ce0957",
+  "execution": "http_service",
+  "complete": true,
+  "dialogues": 12,
+  "counts": {
+    "turns": 18,
+    "safe_turns": 14,
+    "risk_turns": 1,
+    "no_evidence_turns": 4,
+    "safe_observed": 14,
+    "false_handoffs": 1,
+    "risk_misses": 0,
+    "no_evidence_passed": 4,
+    "passed_turns": 17,
+    "passed_dialogues": 11,
+    "execution_errors": 0,
+    "review_blocked_turns": 0,
+    "evidence_turns": 13,
+    "evidence_passed": 13
+  },
+  "metrics": {
+    "false_handoff_rate": 0.07142857142857142,
+    "safe_observation_coverage": 1.0,
+    "risk_miss_rate": 0.0,
+    "no_evidence_pass_rate": 1.0,
+    "evidence_group_pass_rate": 1.0,
+    "turn_pass_rate": 0.9444444444444444,
+    "dialogue_pass_rate": 0.9166666666666666
+  },
+  "details": [
+    {
+      "case_id": "dialogue-101",
+      "turn": 1,
+      "tags": [
+        "rag",
+        "colloquial"
+      ],
+      "query": "券领了半天，下单到底在哪儿抵扣呀",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [],
+        "targets": [
+          "rag"
+        ],
+        "evidence_groups": [
+          [
+            "faq-051"
+          ]
+        ],
+        "answer_groups": [
+          [
+            "结算"
+          ],
+          [
+            "优惠券",
+            "券"
+          ]
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "券领了半天，下单到底在哪儿抵扣呀",
+        "trace_id": "edd70e127e90415cabf0bc152e0c3ac4",
+        "intent": "product_consult",
+        "confidence": 0.85,
+        "target": "rag",
+        "rewritten_query": "优惠券领取后下单时在哪里抵扣使用",
+        "reasoning": "咨询优惠券在下单时的抵扣使用方式，属优惠券规则类商品咨询。",
+        "results": [
+          {
+            "chunk_id": "faq-051",
+            "text": "## Q51: 怎么用优惠券？\n\n下单时在结算页面选择可用优惠券，系统自动抵扣。需满足券面满减条件。\n\n*关键词: 优惠券, 使用, 结算*",
+            "score": 0.683,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-057",
+            "text": "## Q57: 有会员折扣吗？\n\n平台会员可享受专属折扣和积分抵扣，具体等级优惠见会员中心。\n\n*关键词: 会员, 折扣, 积分*",
+            "score": 0.5224,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-038",
+            "text": "## Q38: 能和其他折扣一起用吗？\n\n店铺券和平台券一般可叠加，以结算页为准。秒杀商品不参与优惠券活动。\n\n*关键词: 优惠券, 叠加, 结算*",
+            "score": 0.6115,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-046",
+            "text": "## Q46: 赠品没收到\n\n请提供订单号，我们核实后将补发赠品或提供等值优惠券补偿。赠品遗漏不影响主商品售后。\n\n*关键词: 赠品, 补发, 订单号*",
+            "score": 0.5468,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-041",
+            "text": "## Q41: 收到的东西是坏的\n\n签收后24小时内拍照保留证据，在订单中申请退换货并上传照片。核实后免费换新或全额退款。\n\n*关键词: 破损, 退换, 照片*",
+            "score": 0.5257,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          }
+        ],
+        "reply": "您好，优惠券在下单时于**结算页面选择使用**，系统会自动抵扣，但需满足券面满减条件哦。[1]\n\n如果您在结算页面没看到可用优惠券，建议先确认订单金额是否达到该券的满减门槛。[1]\n\n根据已有信息无法确认您具体领取的是哪张券及其使用条件，如仍有问题可提供券的具体信息进一步核实。",
+        "search_time_ms": 62.9,
+        "degradation_level": 3,
+        "degradation_method": "evidence_recovered",
+        "faithfulness": 1.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "complete",
+        "answer_status": "complete"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 30980.4,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "edd70e127e90415cabf0bc152e0c3ac4",
+        "total_ms": 30964.586,
+        "llm_calls": 5,
+        "llm_attempts": 5,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 5,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 2797,
+          "completion_tokens": 691,
+          "total_tokens": 3488
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 2.996,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.011,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 2650.832,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 2652.76,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.583,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 1634.654,
+            "status": "ok"
+          },
+          {
+            "name": "graph.retrieve",
+            "elapsed_ms": 23678.187,
+            "status": "ok"
+          },
+          {
+            "name": "generation.answer",
+            "elapsed_ms": 1327.875,
+            "status": "ok"
+          },
+          {
+            "name": "generation.faithfulness",
+            "elapsed_ms": 1671.016,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.answer",
+            "elapsed_ms": 1450.372,
+            "status": "ok"
+          },
+          {
+            "name": "graph.generate",
+            "elapsed_ms": 4449.913,
+            "status": "ok"
+          },
+          {
+            "name": "graph.evaluate_quality",
+            "elapsed_ms": 3.929,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 1.206,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "5275b25e2105453988876facb485b45e",
+            "elapsed_ms": 2650.769
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "079954ba2ad34f4395a7d3cdd7ef14d4",
+            "elapsed_ms": 1634.44
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "80ab12a0d8dd4c0fa7387a8f43d4aeb9",
+            "elapsed_ms": 1327.769
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "0617493d56a944759790b91b98f61e22",
+            "elapsed_ms": 1670.89
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "4c774a89b07b433ab7defd2b08c0de82",
+            "elapsed_ms": 1450.218
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "5275b25e2105453988876facb485b45e",
+            "usage": {
+              "prompt_tokens": 1004,
+              "completion_tokens": 114,
+              "total_tokens": 1118
+            },
+            "usage_complete": true,
+            "elapsed_ms": 2650.706
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "079954ba2ad34f4395a7d3cdd7ef14d4",
+            "usage": {
+              "prompt_tokens": 734,
+              "completion_tokens": 88,
+              "total_tokens": 822
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1634.394
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "80ab12a0d8dd4c0fa7387a8f43d4aeb9",
+            "usage": {
+              "prompt_tokens": 186,
+              "completion_tokens": 84,
+              "total_tokens": 270
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1327.73
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "0617493d56a944759790b91b98f61e22",
+            "usage": {
+              "prompt_tokens": 319,
+              "completion_tokens": 285,
+              "total_tokens": 604
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1670.85
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "4c774a89b07b433ab7defd2b08c0de82",
+            "usage": {
+              "prompt_tokens": 554,
+              "completion_tokens": 120,
+              "total_tokens": 674
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1450.18
+          }
+        ],
+        "estimated_cost_cny": 0.004179,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    },
+    {
+      "case_id": "dialogue-102",
+      "turn": 1,
+      "tags": [
+        "rag",
+        "colloquial"
+      ],
+      "query": "店铺给的券跟平台那张能一块儿使不？同一类的也行吗",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [],
+        "targets": [
+          "rag"
+        ],
+        "evidence_groups": [
+          [
+            "faq-052"
+          ]
+        ],
+        "answer_groups": [
+          [
+            "同类型",
+            "同一类型",
+            "同种",
+            "同类"
+          ],
+          [
+            "结算"
+          ]
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "店铺给的券跟平台那张能一块儿使不？同一类的也行吗",
+        "trace_id": "22e6b3db04744ec980cbb03219717e1d",
+        "intent": "product_consult",
+        "confidence": 0.9,
+        "target": "rag",
+        "rewritten_query": "店铺优惠券和平台优惠券能否叠加使用，同类券是否可同时使用",
+        "reasoning": "咨询店铺券与平台券能否叠加使用，属优惠券使用规则，归为商品咨询类。",
+        "results": [
+          {
+            "chunk_id": "faq-052",
+            "text": "## Q52: 优惠券能叠加吗？\n\n店铺优惠券和平台优惠券通常可叠加，但同一订单内同类型券不可叠加。以结算页为准。\n\n*关键词: 优惠券, 叠加, 结算*",
+            "score": 0.7987,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-038",
+            "text": "## Q38: 能和其他折扣一起用吗？\n\n店铺券和平台券一般可叠加，以结算页为准。秒杀商品不参与优惠券活动。\n\n*关键词: 优惠券, 叠加, 结算*",
+            "score": 0.7823,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-057",
+            "text": "## Q57: 有会员折扣吗？\n\n平台会员可享受专属折扣和积分抵扣，具体等级优惠见会员中心。\n\n*关键词: 会员, 折扣, 积分*",
+            "score": 0.5265,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-045",
+            "text": "## Q45: 怀疑是假货\n\n请在订单中申请平台鉴定或提供证据。平台核实后支持假一赔三，并处罚商家。\n\n*关键词: 假货, 鉴定, 赔偿*",
+            "score": 0.4878,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-039",
+            "text": "## Q39: 这个和那个哪个好？\n\n请对比两款商品的参数、价格和评价，根据您的需求选择。无法直接代您判断。\n\n*关键词: 对比, 选择, 评价*",
+            "score": 0.4695,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          }
+        ],
+        "reply": "店铺券和平台券通常可以叠加使用，但同一订单内同类型券不可叠加，最终以结算页为准。[1][2] 另外，秒杀商品不参与优惠券活动。[2]",
+        "search_time_ms": 6.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 1.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "complete",
+        "answer_status": "complete"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 8081.09,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "22e6b3db04744ec980cbb03219717e1d",
+        "total_ms": 8072.467,
+        "llm_calls": 5,
+        "llm_attempts": 5,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 5,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 2917,
+          "completion_tokens": 693,
+          "total_tokens": 3610
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 2.803,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.009,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 1407.703,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 1408.25,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.512,
+            "status": "ok"
+          },
+          {
+            "name": "graph.retrieve",
+            "elapsed_ms": 2231.716,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 908.689,
+            "status": "ok"
+          },
+          {
+            "name": "generation.answer",
+            "elapsed_ms": 1018.06,
+            "status": "ok"
+          },
+          {
+            "name": "generation.faithfulness",
+            "elapsed_ms": 1368.883,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.answer",
+            "elapsed_ms": 1088.589,
+            "status": "ok"
+          },
+          {
+            "name": "graph.generate",
+            "elapsed_ms": 4384.68,
+            "status": "ok"
+          },
+          {
+            "name": "graph.evaluate_quality",
+            "elapsed_ms": 0.847,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 0.093,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "d8107fd8e35042d49c191435262275a5",
+            "elapsed_ms": 1407.642
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "e9dc027894fe49ce87b631ef08913a3a",
+            "elapsed_ms": 908.532
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "e9bf58568c4449708cae1009601e6e0e",
+            "elapsed_ms": 1017.945
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "c217fdd209a34e468692f4a3c940807e",
+            "elapsed_ms": 1368.744
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "d4fb9da0a3594d24bb3ee784076c7621",
+            "elapsed_ms": 1088.417
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "d8107fd8e35042d49c191435262275a5",
+            "usage": {
+              "prompt_tokens": 1010,
+              "completion_tokens": 126,
+              "total_tokens": 1136
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1407.6
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "e9dc027894fe49ce87b631ef08913a3a",
+            "usage": {
+              "prompt_tokens": 732,
+              "completion_tokens": 126,
+              "total_tokens": 858
+            },
+            "usage_complete": true,
+            "elapsed_ms": 908.497
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "e9bf58568c4449708cae1009601e6e0e",
+            "usage": {
+              "prompt_tokens": 249,
+              "completion_tokens": 44,
+              "total_tokens": 293
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1017.898
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "c217fdd209a34e468692f4a3c940807e",
+            "usage": {
+              "prompt_tokens": 336,
+              "completion_tokens": 230,
+              "total_tokens": 566
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1368.702
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "d4fb9da0a3594d24bb3ee784076c7621",
+            "usage": {
+              "prompt_tokens": 590,
+              "completion_tokens": 167,
+              "total_tokens": 757
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1088.377
+          }
+        ],
+        "estimated_cost_cny": 0.004303,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    },
+    {
+      "case_id": "dialogue-103",
+      "turn": 1,
+      "tags": [
+        "rag",
+        "colloquial"
+      ],
+      "query": "能不能东西到了我手上再给钱啊",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [],
+        "targets": [
+          "rag"
+        ],
+        "evidence_groups": [
+          [
+            "faq-060"
+          ]
+        ],
+        "answer_groups": [
+          [
+            "不支持",
+            "不能",
+            "不提供",
+            "不可以",
+            "无法"
+          ]
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "能不能东西到了我手上再给钱啊",
+        "trace_id": "6424517c2e5a445595eabf1acf049def",
+        "intent": "order_query",
+        "confidence": 0.6,
+        "target": "rag",
+        "rewritten_query": "是否支持货到付款",
+        "reasoning": "用户询问能否货到付款，属于支付方式问题，归为订单/支付类。",
+        "results": [
+          {
+            "chunk_id": "faq-060",
+            "text": "## Q60: 支持货到付款吗？\n\n本平台不支持货到付款，所有订单需在线支付。支付成功后安排发货。\n\n*关键词: 货到付款, 在线支付, 不支持*",
+            "score": 0.6915,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-041",
+            "text": "## Q41: 收到的东西是坏的\n\n签收后24小时内拍照保留证据，在订单中申请退换货并上传照片。核实后免费换新或全额退款。\n\n*关键词: 破损, 退换, 照片*",
+            "score": 0.4804,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-009",
+            "text": "## Q9: 我退回去的货你们收到了吗？什么时候退钱？\n\n您可在订单中查看退货物流签收状态。仓库签收后1-3个工作日发起退款，退款金额原路返回。超过3个工作日未到账请联系在线客服。\n\n*关键词: 退货, 签收, 退款*",
+            "score": 0.5071,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-046",
+            "text": "## Q46: 赠品没收到\n\n请提供订单号，我们核实后将补发赠品或提供等值优惠券补偿。赠品遗漏不影响主商品售后。\n\n*关键词: 赠品, 补发, 订单号*",
+            "score": 0.4948,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-006",
+            "text": "## Q6: 换货和退货有啥不一样？\n\n退货是退回商品后原路退款给您，换货是退回商品后商家重新发一件新品给您。两者均支持签收后7天内申请。\n\n*关键词: 退货, 换货, 退款*",
+            "score": 0.4524,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          }
+        ],
+        "reply": "根据已有信息无法确认您所指的具体商品或型号是否支持货到付款。不过，就平台整体支付方式而言，本平台不支持货到付款，所有订单需在线支付，支付成功后安排发货[1]。\n\n如果您希望“东西到了再给钱”，目前平台规则下无法实现，建议您选择在线支付完成下单[1]。",
+        "search_time_ms": 5.6,
+        "degradation_level": 3,
+        "degradation_method": "evidence_recovered",
+        "faithfulness": 1.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "complete",
+        "answer_status": "complete"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 9485.04,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "6424517c2e5a445595eabf1acf049def",
+        "total_ms": 9464.627,
+        "llm_calls": 5,
+        "llm_attempts": 5,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 5,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 2807,
+          "completion_tokens": 718,
+          "total_tokens": 3525
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 1.925,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.009,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 1259.771,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 1260.323,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.579,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 1185.475,
+            "status": "ok"
+          },
+          {
+            "name": "graph.retrieve",
+            "elapsed_ms": 3663.604,
+            "status": "ok"
+          },
+          {
+            "name": "generation.answer",
+            "elapsed_ms": 1418.531,
+            "status": "ok"
+          },
+          {
+            "name": "generation.faithfulness",
+            "elapsed_ms": 1898.533,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.answer",
+            "elapsed_ms": 1143.552,
+            "status": "ok"
+          },
+          {
+            "name": "graph.generate",
+            "elapsed_ms": 4461.26,
+            "status": "ok"
+          },
+          {
+            "name": "graph.evaluate_quality",
+            "elapsed_ms": 0.957,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 0.063,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "10f5b21c37d74dcfbd2edbb58830825a",
+            "elapsed_ms": 1259.71
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "769814028ccc4237a8c9a44e87f0a865",
+            "elapsed_ms": 1185.324
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "94a27c90e0024924873cf16c063251ae",
+            "elapsed_ms": 1418.437
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "fa9b1f12eb8f4a0094c93bf64209412b",
+            "elapsed_ms": 1898.408
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "03b2fc831f104eeda43525285b73de2c",
+            "elapsed_ms": 1143.376
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "10f5b21c37d74dcfbd2edbb58830825a",
+            "usage": {
+              "prompt_tokens": 1003,
+              "completion_tokens": 125,
+              "total_tokens": 1128
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1259.674
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "769814028ccc4237a8c9a44e87f0a865",
+            "usage": {
+              "prompt_tokens": 774,
+              "completion_tokens": 71,
+              "total_tokens": 845
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1185.281
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "94a27c90e0024924873cf16c063251ae",
+            "usage": {
+              "prompt_tokens": 184,
+              "completion_tokens": 72,
+              "total_tokens": 256
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1418.398
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "fa9b1f12eb8f4a0094c93bf64209412b",
+            "usage": {
+              "prompt_tokens": 306,
+              "completion_tokens": 356,
+              "total_tokens": 662
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1898.365
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "03b2fc831f104eeda43525285b73de2c",
+            "usage": {
+              "prompt_tokens": 540,
+              "completion_tokens": 94,
+              "total_tokens": 634
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1143.331
+          }
+        ],
+        "estimated_cost_cny": 0.004243,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    },
+    {
+      "case_id": "dialogue-104",
+      "turn": 1,
+      "tags": [
+        "rag",
+        "colloquial"
+      ],
+      "query": "寄东西时能指定走顺丰不",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [],
+        "targets": [
+          "rag"
+        ],
+        "evidence_groups": [
+          [
+            "faq-013"
+          ]
+        ],
+        "answer_groups": [
+          [
+            "不支持",
+            "不能",
+            "无法",
+            "不提供"
+          ]
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "寄东西时能指定走顺丰不",
+        "trace_id": "ccd6538597cd481a8e0bf206e4cb2e78",
+        "intent": "logistics",
+        "confidence": 0.9,
+        "target": "rag",
+        "rewritten_query": "发货时能否指定顺丰快递",
+        "reasoning": "询问发货时能否指定快递公司，属于配送方式问题",
+        "results": [
+          {
+            "chunk_id": "faq-013",
+            "text": "## Q13: 能不能选快递公司？\n\n本店不支持指定快递公司，系统根据收货地址自动匹配最合适的快递服务商。\n\n*关键词: 快递, 指定, 不支持*",
+            "score": 0.5786,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-016",
+            "text": "## Q16: 现在疫情能正常发货吗？\n\n疫情影响地区配送可能延迟，具体以商品页配送说明为准。正常地区不受影响。\n\n*关键词: 发货, 延迟, 配送*",
+            "score": 0.5661,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-018",
+            "text": "## Q18: 发货了能改地址吗？\n\n已发货的订单无法在线修改地址。只能联系客服尝试联系快递公司拦截转寄，不保证成功。\n\n*关键词: 地址, 发货, 转寄*",
+            "score": 0.5311,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-012",
+            "text": "## Q12: 发货后几天能到？\n\n发货后省内1-2天送达，省外3-5天送达。具体时效以物流页面预计时间为准。\n\n*关键词: 发货, 送达, 省内*",
+            "score": 0.5211,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-014",
+            "text": "## Q14: 地址写错了能改吗？\n\n未发货的订单可在详情中修改收货地址。已发货的订单无法在线修改，只能尝试联系客服转寄。\n\n*关键词: 地址, 修改, 发货*",
+            "score": 0.5021,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          }
+        ],
+        "reply": "回答需人工核验，正在为您转接人工客服。",
+        "search_time_ms": 6.9,
+        "degradation_level": 3,
+        "degradation_method": "evidence_recovered",
+        "faithfulness": 0.625,
+        "correction_rounds": 2,
+        "was_corrected": true,
+        "needs_human": true,
+        "human_reason": "忠实度不足(0.62<0.7)",
+        "human_priority": "medium",
+        "emotion": "calm",
+        "handoff_payload": {
+          "user_query": "寄东西时能指定走顺丰不",
+          "intent": "logistics",
+          "emotion": "calm",
+          "entities": {},
+          "memory_summary": "",
+          "attempted_actions": "degradation_level=3, correction_rounds=2",
+          "unresolved_reason": "忠实度不足(0.62<0.7)"
+        },
+        "review_task_id": "7d1dc6c62326525f9f90d9168ebd7849",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "complete",
+        "answer_status": "complete"
+      },
+      "failures": [
+        "needs_human",
+        "answer_groups"
+      ],
+      "error_type": null,
+      "elapsed_ms": 17937.25,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "ccd6538597cd481a8e0bf206e4cb2e78",
+        "total_ms": 17910.519,
+        "llm_calls": 10,
+        "llm_attempts": 10,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 10,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 4332,
+          "completion_tokens": 1216,
+          "total_tokens": 5548
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 1.867,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.007,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 996.459,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 997.143,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.304,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 952.425,
+            "status": "ok"
+          },
+          {
+            "name": "graph.retrieve",
+            "elapsed_ms": 2916.927,
+            "status": "ok"
+          },
+          {
+            "name": "generation.answer",
+            "elapsed_ms": 818.23,
+            "status": "ok"
+          },
+          {
+            "name": "generation.faithfulness",
+            "elapsed_ms": 2241.222,
+            "status": "ok"
+          },
+          {
+            "name": "generation.missing_info",
+            "elapsed_ms": 439.838,
+            "status": "ok"
+          },
+          {
+            "name": "generation.answer",
+            "elapsed_ms": 1214.108,
+            "status": "ok"
+          },
+          {
+            "name": "generation.faithfulness",
+            "elapsed_ms": 1430.293,
+            "status": "ok"
+          },
+          {
+            "name": "generation.missing_info",
+            "elapsed_ms": 929.757,
+            "status": "ok"
+          },
+          {
+            "name": "generation.answer",
+            "elapsed_ms": 0.052,
+            "status": "ok"
+          },
+          {
+            "name": "generation.faithfulness",
+            "elapsed_ms": 1601.609,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.answer",
+            "elapsed_ms": 1058.711,
+            "status": "ok"
+          },
+          {
+            "name": "graph.generate",
+            "elapsed_ms": 13948.854,
+            "status": "ok"
+          },
+          {
+            "name": "graph.evaluate_quality",
+            "elapsed_ms": 0.579,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 0.06,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "218cbbbc205249c4bbda352696229f4a",
+            "elapsed_ms": 996.409
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "2d41b85acaff46a79036b1e72f864fb0",
+            "elapsed_ms": 952.284
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "559759267ba047138086e2e3c6211038",
+            "elapsed_ms": 818.161
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "ec0e1e9c85cb41a48e1b9e8e8cd38bb6",
+            "elapsed_ms": 2241.017
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.missing_info",
+            "status": "ok",
+            "call_id": "14c73f1a4f984c7ba37ee20ad4d98184",
+            "elapsed_ms": 439.785
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "fc6eb9a7dd3b49c591b614fcefccc363",
+            "elapsed_ms": 1214.004
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "51d0b389e59a4b05ab44921ee9bf8115",
+            "elapsed_ms": 1430.175
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.missing_info",
+            "status": "ok",
+            "call_id": "a186ec36a59c48ccb4d6d206d5202282",
+            "elapsed_ms": 929.711
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "8324543363cc491687af17778ac3b18c",
+            "elapsed_ms": 1601.499
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "7af33a3d21ce47d98b5f5bc4e138872a",
+            "elapsed_ms": 1058.574
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "218cbbbc205249c4bbda352696229f4a",
+            "usage": {
+              "prompt_tokens": 1003,
+              "completion_tokens": 106,
+              "total_tokens": 1109
+            },
+            "usage_complete": true,
+            "elapsed_ms": 996.375
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "2d41b85acaff46a79036b1e72f864fb0",
+            "usage": {
+              "prompt_tokens": 732,
+              "completion_tokens": 80,
+              "total_tokens": 812
+            },
+            "usage_complete": true,
+            "elapsed_ms": 952.237
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "559759267ba047138086e2e3c6211038",
+            "usage": {
+              "prompt_tokens": 181,
+              "completion_tokens": 34,
+              "total_tokens": 215
+            },
+            "usage_complete": true,
+            "elapsed_ms": 818.129
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "ec0e1e9c85cb41a48e1b9e8e8cd38bb6",
+            "usage": {
+              "prompt_tokens": 265,
+              "completion_tokens": 231,
+              "total_tokens": 496
+            },
+            "usage_complete": true,
+            "elapsed_ms": 2240.976
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.missing_info",
+            "status": "ok",
+            "call_id": "14c73f1a4f984c7ba37ee20ad4d98184",
+            "usage": {
+              "prompt_tokens": 88,
+              "completion_tokens": 14,
+              "total_tokens": 102
+            },
+            "usage_complete": true,
+            "elapsed_ms": 439.747
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "fc6eb9a7dd3b49c591b614fcefccc363",
+            "usage": {
+              "prompt_tokens": 404,
+              "completion_tokens": 60,
+              "total_tokens": 464
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1213.965
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "51d0b389e59a4b05ab44921ee9bf8115",
+            "usage": {
+              "prompt_tokens": 514,
+              "completion_tokens": 295,
+              "total_tokens": 809
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1430.132
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.missing_info",
+            "status": "ok",
+            "call_id": "a186ec36a59c48ccb4d6d206d5202282",
+            "usage": {
+              "prompt_tokens": 103,
+              "completion_tokens": 12,
+              "total_tokens": 115
+            },
+            "usage_complete": true,
+            "elapsed_ms": 929.676
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "8324543363cc491687af17778ac3b18c",
+            "usage": {
+              "prompt_tokens": 514,
+              "completion_tokens": 300,
+              "total_tokens": 814
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1601.457
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "7af33a3d21ce47d98b5f5bc4e138872a",
+            "usage": {
+              "prompt_tokens": 528,
+              "completion_tokens": 84,
+              "total_tokens": 612
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1058.539
+          }
+        ],
+        "estimated_cost_cny": 0.006764,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    },
+    {
+      "case_id": "dialogue-105",
+      "turn": 1,
+      "tags": [
+        "rag",
+        "multi_turn",
+        "coreference"
+      ],
+      "query": "电子发票抬头怎么填",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [],
+        "targets": [
+          "rag"
+        ],
+        "evidence_groups": [
+          [
+            "faq-053"
+          ]
+        ],
+        "answer_groups": [
+          [
+            "个人"
+          ],
+          [
+            "企业"
+          ]
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "电子发票抬头怎么填",
+        "trace_id": "10c99c1727ca42e48de947a11e34944f",
+        "intent": "order_query",
+        "confidence": 0.85,
+        "target": "rag",
+        "rewritten_query": "电子发票抬头如何填写",
+        "reasoning": "咨询电子发票抬头填写方式，属于发票相关订单问题",
+        "results": [
+          {
+            "chunk_id": "faq-053",
+            "text": "## Q53: 发票抬头怎么填？\n\n申请电子发票时选择个人或企业，填写名称和税号（企业需）。抬头一经提交不可修改。\n\n*关键词: 发票, 抬头, 税号*",
+            "score": 0.7997,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-025",
+            "text": "## Q25: 怎么申请开发票？\n\n订单完成后在详情页申请电子发票，支持个人或企业抬头。发票在申请后1-3个工作日发送到邮箱。\n\n*关键词: 发票, 申请, 订单*",
+            "score": 0.6556,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-054",
+            "text": "## Q54: 电子发票什么时候发？\n\n订单完成后申请，1-3个工作日发送到邮箱。可下载打印。\n\n*关键词: 发票, 工作日, 邮箱*",
+            "score": 0.573,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-014",
+            "text": "## Q14: 地址写错了能改吗？\n\n未发货的订单可在详情中修改收货地址。已发货的订单无法在线修改，只能尝试联系客服转寄。\n\n*关键词: 地址, 修改, 发货*",
+            "score": 0.4018,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-010",
+            "text": "## Q10: 退货地址怎么填？\n\n提交退货申请后系统会自动显示退货地址，按该地址寄回即可。无需自行填写，直接使用系统提供的地址和收件人信息。\n\n*关键词: 退货, 地址, 系统*",
+            "score": 0.4016,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          }
+        ],
+        "reply": "电子发票抬头填写方式如下：申请电子发票时选择个人或企业，填写名称和税号（企业需填写税号）。请注意，抬头一经提交不可修改。[1]\n\n来源：[1] 文档1 Q53",
+        "search_time_ms": 6.6,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 1.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "complete",
+        "answer_status": "complete"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 6611.12,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "10c99c1727ca42e48de947a11e34944f",
+        "total_ms": 6589.396,
+        "llm_calls": 5,
+        "llm_attempts": 5,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 5,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 2715,
+          "completion_tokens": 535,
+          "total_tokens": 3250
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 1.916,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.01,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 988.187,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 988.667,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.364,
+            "status": "ok"
+          },
+          {
+            "name": "graph.retrieve",
+            "elapsed_ms": 706.339,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 1330.584,
+            "status": "ok"
+          },
+          {
+            "name": "generation.answer",
+            "elapsed_ms": 1038.809,
+            "status": "ok"
+          },
+          {
+            "name": "generation.faithfulness",
+            "elapsed_ms": 1091.323,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.answer",
+            "elapsed_ms": 1381.369,
+            "status": "ok"
+          },
+          {
+            "name": "graph.generate",
+            "elapsed_ms": 4842.635,
+            "status": "ok"
+          },
+          {
+            "name": "graph.evaluate_quality",
+            "elapsed_ms": 0.661,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 0.076,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "114b8126a5164617814f024c8caea17f",
+            "elapsed_ms": 988.14
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "4bbf253b2a1d46a19a013dbeb1847f63",
+            "elapsed_ms": 1330.435
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "606e4bf267ea48a7b35b2c13e6cc6640",
+            "elapsed_ms": 1038.682
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "4226982857514c168541e17a4e201294",
+            "elapsed_ms": 1091.214
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "f83e7f0bacac4333852a92364e75f7d2",
+            "elapsed_ms": 1381.149
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "114b8126a5164617814f024c8caea17f",
+            "usage": {
+              "prompt_tokens": 999,
+              "completion_tokens": 104,
+              "total_tokens": 1103
+            },
+            "usage_complete": true,
+            "elapsed_ms": 988.069
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "4bbf253b2a1d46a19a013dbeb1847f63",
+            "usage": {
+              "prompt_tokens": 736,
+              "completion_tokens": 91,
+              "total_tokens": 827
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1330.391
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "606e4bf267ea48a7b35b2c13e6cc6640",
+            "usage": {
+              "prompt_tokens": 183,
+              "completion_tokens": 47,
+              "total_tokens": 230
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1038.643
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "4226982857514c168541e17a4e201294",
+            "usage": {
+              "prompt_tokens": 285,
+              "completion_tokens": 173,
+              "total_tokens": 458
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1091.173
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "f83e7f0bacac4333852a92364e75f7d2",
+            "usage": {
+              "prompt_tokens": 512,
+              "completion_tokens": 120,
+              "total_tokens": 632
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1381.105
+          }
+        ],
+        "estimated_cost_cny": 0.003785,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    },
+    {
+      "case_id": "dialogue-105",
+      "turn": 2,
+      "tags": [
+        "rag",
+        "multi_turn",
+        "coreference"
+      ],
+      "query": "那开好后发哪儿，得等多久？",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [],
+        "targets": [
+          "rag"
+        ],
+        "evidence_groups": [
+          [
+            "faq-054",
+            "faq-025"
+          ]
+        ],
+        "answer_groups": [
+          [
+            "邮箱"
+          ],
+          [
+            "1-3",
+            "1至3",
+            "1到3",
+            "一到三",
+            "一至三"
+          ]
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "那开好后发哪儿，得等多久？",
+        "trace_id": "44f628f73f1e44ebbe87576816de6a1c",
+        "intent": "order_query",
+        "confidence": 0.95,
+        "target": "rag",
+        "rewritten_query": "电子发票开具后的发送方式和到账时间",
+        "reasoning": "询问电子发票的发送方式和到账时间，属于发票相关的订单服务问题。",
+        "results": [
+          {
+            "chunk_id": "faq-012",
+            "text": "## Q12: 发货后几天能到？\n\n发货后省内1-2天送达，省外3-5天送达。具体时效以物流页面预计时间为准。\n\n*关键词: 发货, 送达, 省内*",
+            "score": 0.5164,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-011",
+            "text": "## Q11: 下单后多久发货？\n\n付款后1-3个工作日内发货，预售商品以页面标注时间为准。超时未发货可点击催发货。\n\n*关键词: 发货, 工作日, 预售*",
+            "score": 0.5633,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-054",
+            "text": "## Q54: 电子发票什么时候发？\n\n订单完成后申请，1-3个工作日发送到邮箱。可下载打印。\n\n*关键词: 发票, 工作日, 邮箱*",
+            "score": 0.7082,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-019",
+            "text": "## Q19: 为什么迟迟不发货？\n\n付款后1-3个工作日内发货，预售商品除外。若超时未发，订单会显示延迟原因，可催发货或申请退款。\n\n*关键词: 发货, 延迟, 工作日*",
+            "score": 0.4859,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-005",
+            "text": "## Q5: 退款要等多久才能到账？\n\n仓库签收退货后1-3个工作日退款到原支付账户。银行处理速度会影响具体到账时间，但不会超过3个工作日。\n\n*关键词: 退款, 到账, 工作日*",
+            "score": 0.5751,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          }
+        ],
+        "reply": "电子发票在订单完成后申请，会在1-3个工作日内发送到您的邮箱，可下载打印。[1]\n\n来源：[1] 文档1 Q54",
+        "search_time_ms": 8.4,
+        "degradation_level": 3,
+        "degradation_method": "evidence_recovered",
+        "faithfulness": 1.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "complete",
+        "answer_status": "complete"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 8378.45,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "44f628f73f1e44ebbe87576816de6a1c",
+        "total_ms": 8370.125,
+        "llm_calls": 6,
+        "llm_attempts": 6,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 6,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 3033,
+          "completion_tokens": 501,
+          "total_tokens": 3534
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 2.641,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.012,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 1230.766,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 1975.331,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.481,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 848.559,
+            "status": "ok"
+          },
+          {
+            "name": "graph.retrieve",
+            "elapsed_ms": 2907.515,
+            "status": "ok"
+          },
+          {
+            "name": "generation.answer",
+            "elapsed_ms": 1167.22,
+            "status": "ok"
+          },
+          {
+            "name": "generation.faithfulness",
+            "elapsed_ms": 1078.796,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.answer",
+            "elapsed_ms": 1159.253,
+            "status": "ok"
+          },
+          {
+            "name": "graph.generate",
+            "elapsed_ms": 3405.985,
+            "status": "ok"
+          },
+          {
+            "name": "graph.evaluate_quality",
+            "elapsed_ms": 0.652,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 0.06,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "graph.classify_intent",
+            "status": "ok",
+            "call_id": "494f81cf2ee342c8b87be85e8585ddc4",
+            "elapsed_ms": 743.492
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "02321533fcf64217a4b2ddfee331754b",
+            "elapsed_ms": 1230.699
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "540c4376b47a4ed8abac2d474de5c505",
+            "elapsed_ms": 848.412
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "561affa5263f47d78add838dd6130366",
+            "elapsed_ms": 1167.116
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "1e371e67352d4f1a843dbecc7c87b484",
+            "elapsed_ms": 1078.59
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "09a996aaf54f4036b069db068366f5a9",
+            "elapsed_ms": 1159.05
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "graph.classify_intent",
+            "status": "ok",
+            "call_id": "494f81cf2ee342c8b87be85e8585ddc4",
+            "usage": {
+              "prompt_tokens": 338,
+              "completion_tokens": 11,
+              "total_tokens": 349
+            },
+            "usage_complete": true,
+            "elapsed_ms": 743.452
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "02321533fcf64217a4b2ddfee331754b",
+            "usage": {
+              "prompt_tokens": 1005,
+              "completion_tokens": 127,
+              "total_tokens": 1132
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1230.658
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "540c4376b47a4ed8abac2d474de5c505",
+            "usage": {
+              "prompt_tokens": 750,
+              "completion_tokens": 79,
+              "total_tokens": 829
+            },
+            "usage_complete": true,
+            "elapsed_ms": 848.37
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "561affa5263f47d78add838dd6130366",
+            "usage": {
+              "prompt_tokens": 181,
+              "completion_tokens": 33,
+              "total_tokens": 214
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1167.062
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "1e371e67352d4f1a843dbecc7c87b484",
+            "usage": {
+              "prompt_tokens": 263,
+              "completion_tokens": 159,
+              "total_tokens": 422
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1078.543
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "09a996aaf54f4036b069db068366f5a9",
+            "usage": {
+              "prompt_tokens": 496,
+              "completion_tokens": 92,
+              "total_tokens": 588
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1158.993
+          }
+        ],
+        "estimated_cost_cny": 0.004035,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    },
+    {
+      "case_id": "dialogue-106",
+      "turn": 1,
+      "tags": [
+        "rag",
+        "multi_turn",
+        "topic_switch"
+      ],
+      "query": "下单怎么使用优惠券",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [],
+        "targets": [
+          "rag"
+        ],
+        "evidence_groups": [
+          [
+            "faq-051"
+          ]
+        ],
+        "answer_groups": [
+          [
+            "结算"
+          ]
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "下单怎么使用优惠券",
+        "trace_id": "dd0fe41f29724648856dd343ee9613fd",
+        "intent": "product_consult",
+        "confidence": 0.85,
+        "target": "rag",
+        "rewritten_query": "下单时如何使用优惠券",
+        "reasoning": "咨询优惠券使用方式，属优惠券规则类，按规则归为商品咨询。",
+        "results": [
+          {
+            "chunk_id": "faq-051",
+            "text": "## Q51: 怎么用优惠券？\n\n下单时在结算页面选择可用优惠券，系统自动抵扣。需满足券面满减条件。\n\n*关键词: 优惠券, 使用, 结算*",
+            "score": 0.6961,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-038",
+            "text": "## Q38: 能和其他折扣一起用吗？\n\n店铺券和平台券一般可叠加，以结算页为准。秒杀商品不参与优惠券活动。\n\n*关键词: 优惠券, 叠加, 结算*",
+            "score": 0.6115,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-052",
+            "text": "## Q52: 优惠券能叠加吗？\n\n店铺优惠券和平台优惠券通常可叠加，但同一订单内同类型券不可叠加。以结算页为准。\n\n*关键词: 优惠券, 叠加, 结算*",
+            "score": 0.5844,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-046",
+            "text": "## Q46: 赠品没收到\n\n请提供订单号，我们核实后将补发赠品或提供等值优惠券补偿。赠品遗漏不影响主商品售后。\n\n*关键词: 赠品, 补发, 订单号*",
+            "score": 0.5146,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-057",
+            "text": "## Q57: 有会员折扣吗？\n\n平台会员可享受专属折扣和积分抵扣，具体等级优惠见会员中心。\n\n*关键词: 会员, 折扣, 积分*",
+            "score": 0.4805,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          }
+        ],
+        "reply": "下单时在结算页面选择可用优惠券，系统会自动抵扣，但需满足券面满减条件。[1]\n\n来源：[1] 文档1 Q51",
+        "search_time_ms": 5.2,
+        "degradation_level": 3,
+        "degradation_method": "evidence_recovered",
+        "faithfulness": 1.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "complete",
+        "answer_status": "complete"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 6187.14,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "dd0fe41f29724648856dd343ee9613fd",
+        "total_ms": 6179.389,
+        "llm_calls": 5,
+        "llm_attempts": 5,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 5,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 2676,
+          "completion_tokens": 518,
+          "total_tokens": 3194
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 2.57,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.01,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 1137.424,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 1137.91,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.366,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 684.367,
+            "status": "ok"
+          },
+          {
+            "name": "graph.retrieve",
+            "elapsed_ms": 2283.439,
+            "status": "ok"
+          },
+          {
+            "name": "generation.answer",
+            "elapsed_ms": 690.986,
+            "status": "ok"
+          },
+          {
+            "name": "generation.faithfulness",
+            "elapsed_ms": 979.57,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.answer",
+            "elapsed_ms": 1017.199,
+            "status": "ok"
+          },
+          {
+            "name": "graph.generate",
+            "elapsed_ms": 2688.217,
+            "status": "ok"
+          },
+          {
+            "name": "graph.evaluate_quality",
+            "elapsed_ms": 0.593,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 0.27,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "0d6ac1e6eec349dd8d8dd2ec6370dd80",
+            "elapsed_ms": 1137.371
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "fad7b0817bc24aa6894c54e0064745d8",
+            "elapsed_ms": 684.238
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "7b6599a20d9c4dff9075dfaecdef6642",
+            "elapsed_ms": 690.914
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "d62ad32ecce941828be9cf3f6c390cd0",
+            "elapsed_ms": 979.464
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "224e21392cd1492193563fde47c3f8ec",
+            "elapsed_ms": 1017.026
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "0d6ac1e6eec349dd8d8dd2ec6370dd80",
+            "usage": {
+              "prompt_tokens": 999,
+              "completion_tokens": 126,
+              "total_tokens": 1125
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1137.334
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "fad7b0817bc24aa6894c54e0064745d8",
+            "usage": {
+              "prompt_tokens": 729,
+              "completion_tokens": 97,
+              "total_tokens": 826
+            },
+            "usage_complete": true,
+            "elapsed_ms": 684.201
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "7b6599a20d9c4dff9075dfaecdef6642",
+            "usage": {
+              "prompt_tokens": 181,
+              "completion_tokens": 34,
+              "total_tokens": 215
+            },
+            "usage_complete": true,
+            "elapsed_ms": 690.88
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "d62ad32ecce941828be9cf3f6c390cd0",
+            "usage": {
+              "prompt_tokens": 270,
+              "completion_tokens": 164,
+              "total_tokens": 434
+            },
+            "usage_complete": true,
+            "elapsed_ms": 979.424
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "224e21392cd1492193563fde47c3f8ec",
+            "usage": {
+              "prompt_tokens": 497,
+              "completion_tokens": 97,
+              "total_tokens": 594
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1016.962
+          }
+        ],
+        "estimated_cost_cny": 0.003712,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    },
+    {
+      "case_id": "dialogue-106",
+      "turn": 2,
+      "tags": [
+        "rag",
+        "multi_turn",
+        "topic_switch"
+      ],
+      "query": "换个话题，电子发票怎么申请",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [],
+        "targets": [
+          "rag"
+        ],
+        "evidence_groups": [
+          [
+            "faq-025"
+          ]
+        ],
+        "answer_groups": [
+          [
+            "订单"
+          ],
+          [
+            "发票"
+          ]
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "换个话题，电子发票怎么申请",
+        "trace_id": "2a72825493ca4b4a8a8ed7490f653f86",
+        "intent": "order_query",
+        "confidence": 0.92,
+        "target": "rag",
+        "rewritten_query": "电子发票申请流程",
+        "reasoning": "咨询电子发票申请方式，属于发票相关订单事务",
+        "results": [
+          {
+            "chunk_id": "faq-025",
+            "text": "## Q25: 怎么申请开发票？\n\n订单完成后在详情页申请电子发票，支持个人或企业抬头。发票在申请后1-3个工作日发送到邮箱。\n\n*关键词: 发票, 申请, 订单*",
+            "score": 0.7455,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-054",
+            "text": "## Q54: 电子发票什么时候发？\n\n订单完成后申请，1-3个工作日发送到邮箱。可下载打印。\n\n*关键词: 发票, 工作日, 邮箱*",
+            "score": 0.7113,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-053",
+            "text": "## Q53: 发票抬头怎么填？\n\n申请电子发票时选择个人或企业，填写名称和税号（企业需）。抬头一经提交不可修改。\n\n*关键词: 发票, 抬头, 税号*",
+            "score": 0.6795,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-047",
+            "text": "## Q47: 发错货了\n\n在订单中申请售后并上传收到的商品照片，我们将免费换发正确商品，运费全部由我们承担。\n\n*关键词: 发错, 售后, 换发*",
+            "score": 0.533,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-015",
+            "text": "## Q15: 快递显示签收但我没收到包裹\n\n先确认家人、同事或物业是否代收。确认未收到请在订单中点击“未收到货”申请处理，平台24小时内核实。\n\n*关键词: 签收, 未收到, 核实*",
+            "score": 0.4161,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          }
+        ],
+        "reply": "电子发票申请方式如下：订单完成后，在订单详情页申请电子发票，支持个人或企业抬头；发票会在申请后1-3个工作日发送到邮箱。[1]\n\n填写抬头时，选择个人或企业并填写名称，企业需填写税号；抬头一经提交不可修改。[2]",
+        "search_time_ms": 6.1,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 1.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "complete",
+        "answer_status": "complete"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 9450.99,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "2a72825493ca4b4a8a8ed7490f653f86",
+        "total_ms": 9443.115,
+        "llm_calls": 6,
+        "llm_attempts": 6,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 6,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 3232,
+          "completion_tokens": 804,
+          "total_tokens": 4036
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 2.545,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.016,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 886.203,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 1622.213,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.953,
+            "status": "ok"
+          },
+          {
+            "name": "graph.retrieve",
+            "elapsed_ms": 2631.463,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 1427.609,
+            "status": "ok"
+          },
+          {
+            "name": "generation.answer",
+            "elapsed_ms": 851.445,
+            "status": "ok"
+          },
+          {
+            "name": "generation.faithfulness",
+            "elapsed_ms": 1697.887,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.answer",
+            "elapsed_ms": 1169.532,
+            "status": "ok"
+          },
+          {
+            "name": "graph.generate",
+            "elapsed_ms": 5146.997,
+            "status": "ok"
+          },
+          {
+            "name": "graph.evaluate_quality",
+            "elapsed_ms": 0.563,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 0.076,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "graph.classify_intent",
+            "status": "ok",
+            "call_id": "269b412b26ce44199791a891b630bde0",
+            "elapsed_ms": 733.034
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "eae3ab965296424b9c32057ac3ef7959",
+            "elapsed_ms": 886.127
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "f580ac748a4b4353ad8b5a4f3ac8a0e3",
+            "elapsed_ms": 1427.385
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "6e39d6a4908a4bef8d57016b4a92d9d2",
+            "elapsed_ms": 851.286
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "760df90194804c769e491e356bf54cab",
+            "elapsed_ms": 1697.76
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "712bfc0ed7c64758b5f80426696f32c1",
+            "elapsed_ms": 1169.344
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "graph.classify_intent",
+            "status": "ok",
+            "call_id": "269b412b26ce44199791a891b630bde0",
+            "usage": {
+              "prompt_tokens": 310,
+              "completion_tokens": 4,
+              "total_tokens": 314
+            },
+            "usage_complete": true,
+            "elapsed_ms": 732.998
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "eae3ab965296424b9c32057ac3ef7959",
+            "usage": {
+              "prompt_tokens": 998,
+              "completion_tokens": 117,
+              "total_tokens": 1115
+            },
+            "usage_complete": true,
+            "elapsed_ms": 886.081
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "f580ac748a4b4353ad8b5a4f3ac8a0e3",
+            "usage": {
+              "prompt_tokens": 734,
+              "completion_tokens": 126,
+              "total_tokens": 860
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1427.341
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "6e39d6a4908a4bef8d57016b4a92d9d2",
+            "usage": {
+              "prompt_tokens": 236,
+              "completion_tokens": 64,
+              "total_tokens": 300
+            },
+            "usage_complete": true,
+            "elapsed_ms": 851.245
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "760df90194804c769e491e356bf54cab",
+            "usage": {
+              "prompt_tokens": 355,
+              "completion_tokens": 302,
+              "total_tokens": 657
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1697.717
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "712bfc0ed7c64758b5f80426696f32c1",
+            "usage": {
+              "prompt_tokens": 599,
+              "completion_tokens": 191,
+              "total_tokens": 790
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1169.301
+          }
+        ],
+        "estimated_cost_cny": 0.00484,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    },
+    {
+      "case_id": "dialogue-106",
+      "turn": 3,
+      "tags": [
+        "rag",
+        "multi_turn",
+        "topic_switch"
+      ],
+      "query": "那多久能收到邮件呢",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [],
+        "targets": [
+          "rag"
+        ],
+        "evidence_groups": [
+          [
+            "faq-054",
+            "faq-025"
+          ]
+        ],
+        "answer_groups": [
+          [
+            "1-3",
+            "1至3",
+            "1到3",
+            "一到三",
+            "一至三"
+          ]
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "那多久能收到邮件呢",
+        "trace_id": "da6858ccb6ea41d9b7ae1d5f4c0ee454",
+        "intent": "order_query",
+        "confidence": 0.92,
+        "target": "rag",
+        "rewritten_query": "电子发票申请后多久收到邮件",
+        "reasoning": "咨询电子发票申请后的邮件送达时间，属于发票相关订单问题。",
+        "results": [
+          {
+            "chunk_id": "faq-054",
+            "text": "## Q54: 电子发票什么时候发？\n\n订单完成后申请，1-3个工作日发送到邮箱。可下载打印。\n\n*关键词: 发票, 工作日, 邮箱*",
+            "score": 0.7182,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-012",
+            "text": "## Q12: 发货后几天能到？\n\n发货后省内1-2天送达，省外3-5天送达。具体时效以物流页面预计时间为准。\n\n*关键词: 发货, 送达, 省内*",
+            "score": 0.5364,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-011",
+            "text": "## Q11: 下单后多久发货？\n\n付款后1-3个工作日内发货，预售商品以页面标注时间为准。超时未发货可点击催发货。\n\n*关键词: 发货, 工作日, 预售*",
+            "score": 0.5748,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-020",
+            "text": "## Q20: 可以加急发货吗？\n\n不支持加急发货服务，所有订单按付款顺序在1-3个工作日内发出。请耐心等待。\n\n*关键词: 加急, 发货, 不支持*",
+            "score": 0.457,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-019",
+            "text": "## Q19: 为什么迟迟不发货？\n\n付款后1-3个工作日内发货，预售商品除外。若超时未发，订单会显示延迟原因，可催发货或申请退款。\n\n*关键词: 发货, 延迟, 工作日*",
+            "score": 0.4981,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          }
+        ],
+        "reply": "电子发票在订单完成后申请，1-3个工作日内发送到邮箱，可下载打印。[1]\n\n注：该时效说明适用于文档所述电子发票场景，其他类型发票的时效根据已有信息无法确认。",
+        "search_time_ms": 5.5,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 1.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "complete",
+        "answer_status": "complete"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 9274.15,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "da6858ccb6ea41d9b7ae1d5f4c0ee454",
+        "total_ms": 9266.073,
+        "llm_calls": 6,
+        "llm_attempts": 6,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 6,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 3161,
+          "completion_tokens": 560,
+          "total_tokens": 3721
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 2.83,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.017,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 1330.146,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 2053.831,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.679,
+            "status": "ok"
+          },
+          {
+            "name": "graph.retrieve",
+            "elapsed_ms": 2002.338,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 1590.946,
+            "status": "ok"
+          },
+          {
+            "name": "generation.answer",
+            "elapsed_ms": 860.075,
+            "status": "ok"
+          },
+          {
+            "name": "generation.faithfulness",
+            "elapsed_ms": 1451.747,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.answer",
+            "elapsed_ms": 1228.715,
+            "status": "ok"
+          },
+          {
+            "name": "graph.generate",
+            "elapsed_ms": 5132.017,
+            "status": "ok"
+          },
+          {
+            "name": "graph.evaluate_quality",
+            "elapsed_ms": 0.512,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 0.071,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "graph.classify_intent",
+            "status": "ok",
+            "call_id": "2cecdc888bcf4930ace8a18d3a6ecd2c",
+            "elapsed_ms": 722.782
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "b230d3eb32944654bacfeef39c38ff0c",
+            "elapsed_ms": 1330.08
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "37bba76d13924f8aa4a339ff964732a7",
+            "elapsed_ms": 1590.79
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "b84c4ce1d8dc492bb3b7662be889d61b",
+            "elapsed_ms": 859.957
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "accfdfefc45f4a1e8c046e4124ffec12",
+            "elapsed_ms": 1451.668
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "5de0438725c04f42ad2ef2953831057a",
+            "elapsed_ms": 1228.588
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "graph.classify_intent",
+            "status": "ok",
+            "call_id": "2cecdc888bcf4930ace8a18d3a6ecd2c",
+            "usage": {
+              "prompt_tokens": 466,
+              "completion_tokens": 8,
+              "total_tokens": 474
+            },
+            "usage_complete": true,
+            "elapsed_ms": 722.742
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "b230d3eb32944654bacfeef39c38ff0c",
+            "usage": {
+              "prompt_tokens": 1002,
+              "completion_tokens": 123,
+              "total_tokens": 1125
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1330.038
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "37bba76d13924f8aa4a339ff964732a7",
+            "usage": {
+              "prompt_tokens": 736,
+              "completion_tokens": 72,
+              "total_tokens": 808
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1590.743
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "b84c4ce1d8dc492bb3b7662be889d61b",
+            "usage": {
+              "prompt_tokens": 178,
+              "completion_tokens": 45,
+              "total_tokens": 223
+            },
+            "usage_complete": true,
+            "elapsed_ms": 859.917
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "accfdfefc45f4a1e8c046e4124ffec12",
+            "usage": {
+              "prompt_tokens": 274,
+              "completion_tokens": 216,
+              "total_tokens": 490
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1451.637
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "5de0438725c04f42ad2ef2953831057a",
+            "usage": {
+              "prompt_tokens": 505,
+              "completion_tokens": 96,
+              "total_tokens": 601
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1228.552
+          }
+        ],
+        "estimated_cost_cny": 0.004281,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    },
+    {
+      "case_id": "dialogue-107",
+      "turn": 1,
+      "tags": [
+        "rag",
+        "multi_turn",
+        "topic_switch"
+      ],
+      "query": "这件衣服能退吗",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [],
+        "targets": [
+          "policy"
+        ],
+        "evidence_groups": [],
+        "answer_groups": []
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "这件衣服能退吗",
+        "trace_id": "e0117ae0503b444d91a6e05251a05a44",
+        "intent": "return_refund",
+        "confidence": 0.95,
+        "target": "policy",
+        "rewritten_query": "这件衣服能退吗",
+        "reasoning": "售后规则分流: policy",
+        "results": [],
+        "reply": "为判断这件商品适用的规则，请补充：退货原因（质量问题或无理由）、签收日期或签收天数。目前不能直接确认可退。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "clarify",
+        "policy_missing_fields": [
+          "reason",
+          "signed_on"
+        ],
+        "policy_version": "2026-11-16-v1",
+        "evidence_status": "",
+        "answer_status": ""
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 77.56,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "e0117ae0503b444d91a6e05251a05a44",
+        "total_ms": 69.467,
+        "llm_calls": 0,
+        "llm_attempts": 0,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 0,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 2.155,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.009,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 5.7,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.797,
+            "status": "ok"
+          },
+          {
+            "name": "graph.policy",
+            "elapsed_ms": 11.249,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 0.106,
+            "status": "ok"
+          }
+        ],
+        "calls": [],
+        "attempts": [],
+        "estimated_cost_cny": 0,
+        "pricing_snapshot": {}
+      }
+    },
+    {
+      "case_id": "dialogue-107",
+      "turn": 2,
+      "tags": [
+        "rag",
+        "multi_turn",
+        "topic_switch"
+      ],
+      "query": "先不说退货了，店铺券和平台券可以一起用吗",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [],
+        "targets": [
+          "rag"
+        ],
+        "evidence_groups": [
+          [
+            "faq-052",
+            "faq-038"
+          ]
+        ],
+        "answer_groups": [
+          [
+            "结算"
+          ]
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "先不说退货了，店铺券和平台券可以一起用吗",
+        "trace_id": "ab4a38e3e7914a229a0c334961695ec7",
+        "intent": "product_consult",
+        "confidence": 0.9,
+        "target": "rag",
+        "rewritten_query": "店铺券和平台券能否叠加使用",
+        "reasoning": "咨询店铺券与平台券能否叠加使用，属于优惠券使用规则问题，按规则归为商品咨询。",
+        "results": [
+          {
+            "chunk_id": "faq-038",
+            "text": "## Q38: 能和其他折扣一起用吗？\n\n店铺券和平台券一般可叠加，以结算页为准。秒杀商品不参与优惠券活动。\n\n*关键词: 优惠券, 叠加, 结算*",
+            "score": 0.7277,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-052",
+            "text": "## Q52: 优惠券能叠加吗？\n\n店铺优惠券和平台优惠券通常可叠加，但同一订单内同类型券不可叠加。以结算页为准。\n\n*关键词: 优惠券, 叠加, 结算*",
+            "score": 0.73,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-006",
+            "text": "## Q6: 换货和退货有啥不一样？\n\n退货是退回商品后原路退款给您，换货是退回商品后商家重新发一件新品给您。两者均支持签收后7天内申请。\n\n*关键词: 退货, 换货, 退款*",
+            "score": 0.5921,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-051",
+            "text": "## Q51: 怎么用优惠券？\n\n下单时在结算页面选择可用优惠券，系统自动抵扣。需满足券面满减条件。\n\n*关键词: 优惠券, 使用, 结算*",
+            "score": 0.5582,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-046",
+            "text": "## Q46: 赠品没收到\n\n请提供订单号，我们核实后将补发赠品或提供等值优惠券补偿。赠品遗漏不影响主商品售后。\n\n*关键词: 赠品, 补发, 订单号*",
+            "score": 0.5677,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          }
+        ],
+        "reply": "店铺券和平台券一般可以叠加使用，但同一订单内同类型券不可叠加，最终以结算页为准。另外，秒杀商品不参与优惠券活动。[1][2]",
+        "search_time_ms": 5.6,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 1.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "complete",
+        "answer_status": "complete"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 7763.36,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "ab4a38e3e7914a229a0c334961695ec7",
+        "total_ms": 7755.736,
+        "llm_calls": 6,
+        "llm_attempts": 6,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 6,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 3221,
+          "completion_tokens": 703,
+          "total_tokens": 3924
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 2.048,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.008,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 892.532,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 1471.709,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.377,
+            "status": "ok"
+          },
+          {
+            "name": "graph.retrieve",
+            "elapsed_ms": 2188.694,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 1300.587,
+            "status": "ok"
+          },
+          {
+            "name": "generation.answer",
+            "elapsed_ms": 597.698,
+            "status": "ok"
+          },
+          {
+            "name": "generation.faithfulness",
+            "elapsed_ms": 1287.24,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.answer",
+            "elapsed_ms": 866.401,
+            "status": "ok"
+          },
+          {
+            "name": "graph.generate",
+            "elapsed_ms": 4052.409,
+            "status": "ok"
+          },
+          {
+            "name": "graph.evaluate_quality",
+            "elapsed_ms": 0.497,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 0.093,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "graph.classify_intent",
+            "status": "ok",
+            "call_id": "68485b1e342846c4ac5f3bc407dd5d60",
+            "elapsed_ms": 578.173
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "a1c272d7ee9e4730bbfb04da95a5a664",
+            "elapsed_ms": 892.48
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "9dca7929c8a54564b20a501efc726093",
+            "elapsed_ms": 1300.439
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "a6eb4f480e9b4ff3a592107bf734eab4",
+            "elapsed_ms": 597.577
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "7e615af37b9445f8a36595f7ec25805c",
+            "elapsed_ms": 1287.136
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "86b29fa65a4e43e582a5f8e9ac7a5ee1",
+            "elapsed_ms": 866.261
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "graph.classify_intent",
+            "status": "ok",
+            "call_id": "68485b1e342846c4ac5f3bc407dd5d60",
+            "usage": {
+              "prompt_tokens": 311,
+              "completion_tokens": 9,
+              "total_tokens": 320
+            },
+            "usage_complete": true,
+            "elapsed_ms": 578.126
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "a1c272d7ee9e4730bbfb04da95a5a664",
+            "usage": {
+              "prompt_tokens": 1003,
+              "completion_tokens": 119,
+              "total_tokens": 1122
+            },
+            "usage_complete": true,
+            "elapsed_ms": 892.442
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "9dca7929c8a54564b20a501efc726093",
+            "usage": {
+              "prompt_tokens": 752,
+              "completion_tokens": 132,
+              "total_tokens": 884
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1300.396
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "a6eb4f480e9b4ff3a592107bf734eab4",
+            "usage": {
+              "prompt_tokens": 242,
+              "completion_tokens": 41,
+              "total_tokens": 283
+            },
+            "usage_complete": true,
+            "elapsed_ms": 597.535
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "7e615af37b9445f8a36595f7ec25805c",
+            "usage": {
+              "prompt_tokens": 333,
+              "completion_tokens": 230,
+              "total_tokens": 563
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1287.095
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "86b29fa65a4e43e582a5f8e9ac7a5ee1",
+            "usage": {
+              "prompt_tokens": 580,
+              "completion_tokens": 172,
+              "total_tokens": 752
+            },
+            "usage_complete": true,
+            "elapsed_ms": 866.226
+          }
+        ],
+        "estimated_cost_cny": 0.004627,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    },
+    {
+      "case_id": "dialogue-108",
+      "turn": 1,
+      "tags": [
+        "rag",
+        "multi_turn",
+        "topic_switch"
+      ],
+      "query": "我想问手机壳，用的啥料啊",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [],
+        "targets": [
+          "rag"
+        ],
+        "evidence_groups": [
+          [
+            "faq-032"
+          ]
+        ],
+        "answer_groups": [
+          [
+            "TPU",
+            "软胶"
+          ],
+          [
+            "PC",
+            "硬背板"
+          ]
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "我想问手机壳，用的啥料啊",
+        "trace_id": "9734c09287c04ecdbd2495df5ab62856",
+        "intent": "product_consult",
+        "confidence": 0.95,
+        "target": "rag",
+        "rewritten_query": "手机壳的材质是什么",
+        "reasoning": "询问手机壳的材质参数，属于商品咨询。",
+        "results": [
+          {
+            "chunk_id": "faq-032",
+            "text": "## Q32: 这个手机壳是啥材质？\n\n手机壳采用TPU软胶加PC硬背板双材质，防摔抗震。具体材质见商品参数。\n\n*关键词: 手机壳, 材质, TPU*",
+            "score": 0.7524,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-031",
+            "text": "## Q31: 这件衣服什么面料？\n\n详情页面标注面料成分，如棉、涤纶等。未标注可联系店铺客服索取质检报告。\n\n*关键词: 面料, 成分, 详情*",
+            "score": 0.4675,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-049",
+            "text": "## Q49: 包装破损\n\n如外包装破损导致内部商品受损，请拍照上传并申请退换。若商品完好则不影响使用。\n\n*关键词: 包装, 破损, 退换*",
+            "score": 0.4096,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-037",
+            "text": "## Q37: 商品安全吗？有甲醛吗？\n\n所有商品通过国家质检认证，符合安全标准。检测报告可在详情页底部查看。\n\n*关键词: 安全, 质检, 认证*",
+            "score": 0.4251,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          }
+        ],
+        "reply": "这款手机壳采用 **TPU软胶 + PC硬背板** 双材质，具有防摔抗震的特点。具体材质信息可查看商品参数。[1]\n\n> 注：以上信息仅适用于该款手机壳，其他型号的材质情况根据已有信息无法确认。",
+        "search_time_ms": 5.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 1.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "complete",
+        "answer_status": "complete"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 5195.01,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "9734c09287c04ecdbd2495df5ab62856",
+        "total_ms": 5176.04,
+        "llm_calls": 5,
+        "llm_attempts": 5,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 5,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 2684,
+          "completion_tokens": 595,
+          "total_tokens": 3279
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 1.867,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.008,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 683.153,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 683.631,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.313,
+            "status": "ok"
+          },
+          {
+            "name": "graph.retrieve",
+            "elapsed_ms": 333.352,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 828.633,
+            "status": "ok"
+          },
+          {
+            "name": "generation.answer",
+            "elapsed_ms": 958.998,
+            "status": "ok"
+          },
+          {
+            "name": "generation.faithfulness",
+            "elapsed_ms": 1140.94,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.answer",
+            "elapsed_ms": 1150.36,
+            "status": "ok"
+          },
+          {
+            "name": "graph.generate",
+            "elapsed_ms": 4079.432,
+            "status": "ok"
+          },
+          {
+            "name": "graph.evaluate_quality",
+            "elapsed_ms": 0.748,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 0.148,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "4d898910d0da44ab91e521a84c1dd07c",
+            "elapsed_ms": 683.1
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "0197bfc40f24449fa8ac26beeeea0cad",
+            "elapsed_ms": 828.475
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "c93bcc785e254b82aec90773a2f16a9c",
+            "elapsed_ms": 958.89
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "f6d701dc00be4998b62b7a4f826c922b",
+            "elapsed_ms": 1140.832
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "6281591e8e724d00be54b1fdcd04c3aa",
+            "elapsed_ms": 1150.2
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "4d898910d0da44ab91e521a84c1dd07c",
+            "usage": {
+              "prompt_tokens": 1003,
+              "completion_tokens": 126,
+              "total_tokens": 1129
+            },
+            "usage_complete": true,
+            "elapsed_ms": 683.068
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "0197bfc40f24449fa8ac26beeeea0cad",
+            "usage": {
+              "prompt_tokens": 661,
+              "completion_tokens": 77,
+              "total_tokens": 738
+            },
+            "usage_complete": true,
+            "elapsed_ms": 828.425
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "c93bcc785e254b82aec90773a2f16a9c",
+            "usage": {
+              "prompt_tokens": 190,
+              "completion_tokens": 59,
+              "total_tokens": 249
+            },
+            "usage_complete": true,
+            "elapsed_ms": 958.851
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "f6d701dc00be4998b62b7a4f826c922b",
+            "usage": {
+              "prompt_tokens": 299,
+              "completion_tokens": 237,
+              "total_tokens": 536
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1140.791
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "6281591e8e724d00be54b1fdcd04c3aa",
+            "usage": {
+              "prompt_tokens": 531,
+              "completion_tokens": 96,
+              "total_tokens": 627
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1150.158
+          }
+        ],
+        "estimated_cost_cny": 0.003874,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    },
+    {
+      "case_id": "dialogue-108",
+      "turn": 2,
+      "tags": [
+        "rag",
+        "multi_turn",
+        "topic_switch"
+      ],
+      "query": "换个话题，能到货再付款不",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [],
+        "targets": [
+          "rag"
+        ],
+        "evidence_groups": [
+          [
+            "faq-060"
+          ]
+        ],
+        "answer_groups": [
+          [
+            "不支持",
+            "不能",
+            "不提供",
+            "不可以",
+            "无法"
+          ]
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "换个话题，能到货再付款不",
+        "trace_id": "c6fb384e245745af8ca92c8fd6c1e657",
+        "intent": "order_query",
+        "confidence": 0.6,
+        "target": "rag",
+        "rewritten_query": "是否支持货到付款",
+        "reasoning": "询问是否支持货到付款，属于支付方式问题，归为订单/支付类",
+        "results": [
+          {
+            "chunk_id": "faq-060",
+            "text": "## Q60: 支持货到付款吗？\n\n本平台不支持货到付款，所有订单需在线支付。支付成功后安排发货。\n\n*关键词: 货到付款, 在线支付, 不支持*",
+            "score": 0.6915,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-027",
+            "text": "## Q27: 支付方式能换吗？\n\n未付款的订单可在支付页面重新选择支付方式。已付款的订单不支持更改支付方式。\n\n*关键词: 支付, 订单, 方式*",
+            "score": 0.5625,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-006",
+            "text": "## Q6: 换货和退货有啥不一样？\n\n退货是退回商品后原路退款给您，换货是退回商品后商家重新发一件新品给您。两者均支持签收后7天内申请。\n\n*关键词: 退货, 换货, 退款*",
+            "score": 0.5426,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-023",
+            "text": "## Q23: 下错单了能换商品吗？\n\n已付款未发货的订单不支持修改商品，建议取消后重新下单。已发货的只能收货后退换。\n\n*关键词: 订单, 取消, 修改*",
+            "score": 0.5892,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-009",
+            "text": "## Q9: 我退回去的货你们收到了吗？什么时候退钱？\n\n您可在订单中查看退货物流签收状态。仓库签收后1-3个工作日发起退款，退款金额原路返回。超过3个工作日未到账请联系在线客服。\n\n*关键词: 退货, 签收, 退款*",
+            "score": 0.5141,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          }
+        ],
+        "reply": "根据已有信息无法确认您所指的具体商品是否支持货到付款。不过，参考文档明确说明：本平台不支持货到付款，所有订单需在线支付，支付成功后安排发货[1]。\n\n因此，如果您是在本平台购物，不能到货再付款，需要先在线支付。",
+        "search_time_ms": 6.2,
+        "degradation_level": 3,
+        "degradation_method": "evidence_recovered",
+        "faithfulness": 1.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "complete",
+        "answer_status": "complete"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 8971.26,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "c6fb384e245745af8ca92c8fd6c1e657",
+        "total_ms": 8952.201,
+        "llm_calls": 6,
+        "llm_attempts": 6,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 6,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 3133,
+          "completion_tokens": 642,
+          "total_tokens": 3775
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 1.887,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.008,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 971.566,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 1578.193,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.285,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 860.281,
+            "status": "ok"
+          },
+          {
+            "name": "graph.retrieve",
+            "elapsed_ms": 3145.02,
+            "status": "ok"
+          },
+          {
+            "name": "generation.answer",
+            "elapsed_ms": 1387.52,
+            "status": "ok"
+          },
+          {
+            "name": "generation.faithfulness",
+            "elapsed_ms": 1509.114,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.answer",
+            "elapsed_ms": 1252.454,
+            "status": "ok"
+          },
+          {
+            "name": "graph.generate",
+            "elapsed_ms": 4149.551,
+            "status": "ok"
+          },
+          {
+            "name": "graph.evaluate_quality",
+            "elapsed_ms": 0.935,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 0.072,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "graph.classify_intent",
+            "status": "ok",
+            "call_id": "c2402fbb5f1042f3bfc2cef169f6d284",
+            "elapsed_ms": 605.526
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "ecfdbb9a06e34b67a378260355a69398",
+            "elapsed_ms": 971.507
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "43127184a712430bbf910011945685f9",
+            "elapsed_ms": 860.133
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "be0cceb60deb44dc83c5fce558285a69",
+            "elapsed_ms": 1387.45
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "17edb186f29c4c24aae1a60e88dd2c99",
+            "elapsed_ms": 1509.017
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "f045fa10608744e980debe7210918881",
+            "elapsed_ms": 1252.315
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "graph.classify_intent",
+            "status": "ok",
+            "call_id": "c2402fbb5f1042f3bfc2cef169f6d284",
+            "usage": {
+              "prompt_tokens": 368,
+              "completion_tokens": 6,
+              "total_tokens": 374
+            },
+            "usage_complete": true,
+            "elapsed_ms": 605.486
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "ecfdbb9a06e34b67a378260355a69398",
+            "usage": {
+              "prompt_tokens": 1000,
+              "completion_tokens": 110,
+              "total_tokens": 1110
+            },
+            "usage_complete": true,
+            "elapsed_ms": 971.47
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "43127184a712430bbf910011945685f9",
+            "usage": {
+              "prompt_tokens": 764,
+              "completion_tokens": 70,
+              "total_tokens": 834
+            },
+            "usage_complete": true,
+            "elapsed_ms": 860.094
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "be0cceb60deb44dc83c5fce558285a69",
+            "usage": {
+              "prompt_tokens": 181,
+              "completion_tokens": 61,
+              "total_tokens": 242
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1387.415
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "17edb186f29c4c24aae1a60e88dd2c99",
+            "usage": {
+              "prompt_tokens": 295,
+              "completion_tokens": 301,
+              "total_tokens": 596
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1508.971
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "f045fa10608744e980debe7210918881",
+            "usage": {
+              "prompt_tokens": 525,
+              "completion_tokens": 94,
+              "total_tokens": 619
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1252.277
+          }
+        ],
+        "estimated_cost_cny": 0.004417,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    },
+    {
+      "case_id": "dialogue-109",
+      "turn": 1,
+      "tags": [
+        "rag",
+        "no_evidence",
+        "product_spec"
+      ],
+      "query": "星云X9耳机的电池容量到底是多少毫安时",
+      "expected": {
+        "needs_human": true,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [
+          "500毫安",
+          "1000毫安"
+        ],
+        "targets": [],
+        "evidence_groups": [],
+        "answer_groups": []
+      },
+      "risk": false,
+      "no_evidence": true,
+      "response": {
+        "query": "星云X9耳机的电池容量到底是多少毫安时",
+        "trace_id": "8293d09d2c434493a24e3675a8d26ea6",
+        "intent": "product_consult",
+        "confidence": 0.97,
+        "target": "rag",
+        "rewritten_query": "星云X9耳机电池容量多少毫安时",
+        "reasoning": "咨询商品参数（电池容量），属商品咨询。",
+        "results": [],
+        "reply": "回答需人工核验，正在为您转接人工客服。",
+        "search_time_ms": 3.0,
+        "degradation_level": 5,
+        "degradation_method": "fallback",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": true,
+        "human_reason": "忠实度不足(0.00<0.7), 检索降级严重(Level 5), 资料或回答未完整覆盖当前问题，或核验不可用",
+        "human_priority": "medium",
+        "emotion": "calm",
+        "handoff_payload": {
+          "user_query": "星云X9耳机的电池容量到底是多少毫安时",
+          "intent": "product_consult",
+          "emotion": "calm",
+          "entities": {
+            "product_name": "星云X9耳机"
+          },
+          "memory_summary": "",
+          "attempted_actions": "degradation_level=5, correction_rounds=0",
+          "unresolved_reason": "忠实度不足(0.00<0.7), 检索降级严重(Level 5), 资料或回答未完整覆盖当前问题，或核验不可用"
+        },
+        "review_task_id": "d38627bbb93e5aa399760b2b10c5d3c2",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "insufficient",
+        "answer_status": "insufficient"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 9543.19,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "8293d09d2c434493a24e3675a8d26ea6",
+        "total_ms": 9526.656,
+        "llm_calls": 7,
+        "llm_attempts": 7,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 7,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 2496,
+          "completion_tokens": 424,
+          "total_tokens": 2920
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 1.851,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.006,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 1251.301,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 1251.878,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.38,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 1138.505,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.rewrite",
+            "elapsed_ms": 412.42,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.rewrite",
+            "elapsed_ms": 715.377,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.expand",
+            "elapsed_ms": 3102.139,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 908.025,
+            "status": "ok"
+          },
+          {
+            "name": "graph.retrieve",
+            "elapsed_ms": 8180.81,
+            "status": "ok"
+          },
+          {
+            "name": "graph.web_search",
+            "elapsed_ms": 0.679,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 0.027,
+            "status": "ok"
+          },
+          {
+            "name": "graph.generate",
+            "elapsed_ms": 0.557,
+            "status": "ok"
+          },
+          {
+            "name": "graph.evaluate_quality",
+            "elapsed_ms": 0.455,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 0.058,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "bb20fae6534c4e74b8be203c34a44b6d",
+            "elapsed_ms": 1251.246
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "68f18b90ce0a4e48af470c4fc097381a",
+            "elapsed_ms": 1138.4
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "914f80affe0e493fbc96356349bff8c6",
+            "elapsed_ms": 412.373
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "434254bc649e4a488e2ede05eb461582",
+            "elapsed_ms": 715.339
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "08b98b2cb8fa4cdcad55b1b217928f3c",
+            "elapsed_ms": 879.694
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "36eb809cf77a4c608db4c4fc437b1e1e",
+            "elapsed_ms": 2139.007
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "62fc5e547f304a32ab4d1f63119dbbca",
+            "elapsed_ms": 907.869
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "bb20fae6534c4e74b8be203c34a44b6d",
+            "usage": {
+              "prompt_tokens": 1007,
+              "completion_tokens": 135,
+              "total_tokens": 1142
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1251.209
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "68f18b90ce0a4e48af470c4fc097381a",
+            "usage": {
+              "prompt_tokens": 463,
+              "completion_tokens": 40,
+              "total_tokens": 503
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1138.359
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "914f80affe0e493fbc96356349bff8c6",
+            "usage": {
+              "prompt_tokens": 39,
+              "completion_tokens": 12,
+              "total_tokens": 51
+            },
+            "usage_complete": true,
+            "elapsed_ms": 412.314
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "434254bc649e4a488e2ede05eb461582",
+            "usage": {
+              "prompt_tokens": 33,
+              "completion_tokens": 28,
+              "total_tokens": 61
+            },
+            "usage_complete": true,
+            "elapsed_ms": 715.299
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "08b98b2cb8fa4cdcad55b1b217928f3c",
+            "usage": {
+              "prompt_tokens": 114,
+              "completion_tokens": 57,
+              "total_tokens": 171
+            },
+            "usage_complete": true,
+            "elapsed_ms": 879.656
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "36eb809cf77a4c608db4c4fc437b1e1e",
+            "usage": {
+              "prompt_tokens": 97,
+              "completion_tokens": 114,
+              "total_tokens": 211
+            },
+            "usage_complete": true,
+            "elapsed_ms": 2138.969
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "62fc5e547f304a32ab4d1f63119dbbca",
+            "usage": {
+              "prompt_tokens": 743,
+              "completion_tokens": 38,
+              "total_tokens": 781
+            },
+            "usage_complete": true,
+            "elapsed_ms": 907.831
+          }
+        ],
+        "estimated_cost_cny": 0.0033439999999999998,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    },
+    {
+      "case_id": "dialogue-110",
+      "turn": 1,
+      "tags": [
+        "rag",
+        "no_evidence",
+        "risk"
+      ],
+      "query": "礼盒里那款饼干有没有花生，能保证不过敏吗",
+      "expected": {
+        "needs_human": true,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [
+          "保证不过敏",
+          "绝对安全",
+          "不含花生"
+        ],
+        "targets": [],
+        "evidence_groups": [],
+        "answer_groups": []
+      },
+      "risk": true,
+      "no_evidence": true,
+      "response": {
+        "query": "礼盒里那款饼干有没有花生，能保证不过敏吗",
+        "trace_id": "069a7d0dfd3b48cfb7af4e6c930b7856",
+        "intent": "product_consult",
+        "confidence": 0.92,
+        "target": "rag",
+        "rewritten_query": "礼盒内饼干是否含花生，能否保证无过敏风险",
+        "reasoning": "询问礼盒内饼干的成分（是否含花生）及过敏风险，属于商品参数/成分咨询。",
+        "results": [],
+        "reply": "回答需人工核验，正在为您转接人工客服。",
+        "search_time_ms": 3041.0,
+        "degradation_level": 5,
+        "degradation_method": "fallback",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": true,
+        "human_reason": "忠实度不足(0.00<0.7), 检索降级严重(Level 5), 资料或回答未完整覆盖当前问题，或核验不可用",
+        "human_priority": "medium",
+        "emotion": "calm",
+        "handoff_payload": {
+          "user_query": "礼盒里那款饼干有没有花生，能保证不过敏吗",
+          "intent": "product_consult",
+          "emotion": "calm",
+          "entities": {},
+          "memory_summary": "",
+          "attempted_actions": "degradation_level=5, correction_rounds=0",
+          "unresolved_reason": "忠实度不足(0.00<0.7), 检索降级严重(Level 5), 资料或回答未完整覆盖当前问题，或核验不可用"
+        },
+        "review_task_id": "74b327e543915947887def0e8cd66468",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "insufficient",
+        "answer_status": "insufficient"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 9012.03,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "069a7d0dfd3b48cfb7af4e6c930b7856",
+        "total_ms": 9005.079,
+        "llm_calls": 7,
+        "llm_attempts": 7,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 7,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 2675,
+          "completion_tokens": 490,
+          "total_tokens": 3165
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 2.123,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.007,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 860.361,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 860.943,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.508,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 737.217,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.rewrite",
+            "elapsed_ms": 605.445,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.rewrite",
+            "elapsed_ms": 1056.184,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.expand",
+            "elapsed_ms": 3041.803,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 793.435,
+            "status": "ok"
+          },
+          {
+            "name": "graph.retrieve",
+            "elapsed_ms": 8085.382,
+            "status": "ok"
+          },
+          {
+            "name": "graph.web_search",
+            "elapsed_ms": 0.516,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 0.01,
+            "status": "ok"
+          },
+          {
+            "name": "graph.generate",
+            "elapsed_ms": 0.242,
+            "status": "ok"
+          },
+          {
+            "name": "graph.evaluate_quality",
+            "elapsed_ms": 0.606,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 0.073,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "7a3b0d9194734a918fb932ec0a3a0526",
+            "elapsed_ms": 860.293
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "26860a41cb7b41e69d4335412ab80f3c",
+            "elapsed_ms": 737.107
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "5862efcaefdf4ae6acb474ea559854c7",
+            "elapsed_ms": 605.405
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "6c5e784ebc2042aea53eb95dc0e6c843",
+            "elapsed_ms": 1056.147
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "230de43f6248430ab904aec9a3727b8e",
+            "elapsed_ms": 1215.269
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "523368f5adae4b388ee65816fd0b5eb4",
+            "elapsed_ms": 1738.721
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "85747147614945c1a3baf5d1ef262a37",
+            "elapsed_ms": 793.318
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "7a3b0d9194734a918fb932ec0a3a0526",
+            "usage": {
+              "prompt_tokens": 1008,
+              "completion_tokens": 148,
+              "total_tokens": 1156
+            },
+            "usage_complete": true,
+            "elapsed_ms": 860.25
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "26860a41cb7b41e69d4335412ab80f3c",
+            "usage": {
+              "prompt_tokens": 657,
+              "completion_tokens": 64,
+              "total_tokens": 721
+            },
+            "usage_complete": true,
+            "elapsed_ms": 737.066
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "5862efcaefdf4ae6acb474ea559854c7",
+            "usage": {
+              "prompt_tokens": 40,
+              "completion_tokens": 7,
+              "total_tokens": 47
+            },
+            "usage_complete": true,
+            "elapsed_ms": 605.363
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "6c5e784ebc2042aea53eb95dc0e6c843",
+            "usage": {
+              "prompt_tokens": 34,
+              "completion_tokens": 47,
+              "total_tokens": 81
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1056.1
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "230de43f6248430ab904aec9a3727b8e",
+            "usage": {
+              "prompt_tokens": 115,
+              "completion_tokens": 40,
+              "total_tokens": 155
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1215.23
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "523368f5adae4b388ee65816fd0b5eb4",
+            "usage": {
+              "prompt_tokens": 98,
+              "completion_tokens": 122,
+              "total_tokens": 220
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1738.68
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "85747147614945c1a3baf5d1ef262a37",
+            "usage": {
+              "prompt_tokens": 723,
+              "completion_tokens": 62,
+              "total_tokens": 785
+            },
+            "usage_complete": true,
+            "elapsed_ms": 793.281
+          }
+        ],
+        "estimated_cost_cny": 0.003655,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    },
+    {
+      "case_id": "dialogue-111",
+      "turn": 1,
+      "tags": [
+        "rag",
+        "no_evidence",
+        "merchant_detail"
+      ],
+      "query": "你们南京新街口门店周日几点关门",
+      "expected": {
+        "needs_human": true,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [
+          "22:00",
+          "晚上十点",
+          "21:00"
+        ],
+        "targets": [],
+        "evidence_groups": [],
+        "answer_groups": []
+      },
+      "risk": false,
+      "no_evidence": true,
+      "response": {
+        "query": "你们南京新街口门店周日几点关门",
+        "trace_id": "0dff9fc84101449da0ec41e0930f6a49",
+        "intent": "product_consult",
+        "confidence": 0.85,
+        "target": "rag",
+        "rewritten_query": "南京新街口门店周日营业结束时间",
+        "reasoning": "咨询门店营业时间属商家信息查询，按规则归为商品咨询类需检索证据。",
+        "results": [],
+        "reply": "回答需人工核验，正在为您转接人工客服。",
+        "search_time_ms": 2057.0,
+        "degradation_level": 5,
+        "degradation_method": "fallback",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": true,
+        "human_reason": "忠实度不足(0.00<0.7), 检索降级严重(Level 5), 资料或回答未完整覆盖当前问题，或核验不可用",
+        "human_priority": "medium",
+        "emotion": "calm",
+        "handoff_payload": {
+          "user_query": "你们南京新街口门店周日几点关门",
+          "intent": "product_consult",
+          "emotion": "calm",
+          "entities": {},
+          "memory_summary": "",
+          "attempted_actions": "degradation_level=5, correction_rounds=0",
+          "unresolved_reason": "忠实度不足(0.00<0.7), 检索降级严重(Level 5), 资料或回答未完整覆盖当前问题，或核验不可用"
+        },
+        "review_task_id": "2048b42b185956dbb442145f0297ca70",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "insufficient",
+        "answer_status": "insufficient"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 10012.65,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "0dff9fc84101449da0ec41e0930f6a49",
+        "total_ms": 10005.012,
+        "llm_calls": 7,
+        "llm_attempts": 7,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 7,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 2693,
+          "completion_tokens": 412,
+          "total_tokens": 3105
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 2.777,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.01,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 1126.677,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 1127.338,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.331,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 897.93,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.rewrite",
+            "elapsed_ms": 415.704,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.rewrite",
+            "elapsed_ms": 519.283,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.expand",
+            "elapsed_ms": 2057.007,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 987.068,
+            "status": "ok"
+          },
+          {
+            "name": "graph.retrieve",
+            "elapsed_ms": 8788.74,
+            "status": "ok"
+          },
+          {
+            "name": "graph.web_search",
+            "elapsed_ms": 0.608,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 0.016,
+            "status": "ok"
+          },
+          {
+            "name": "graph.generate",
+            "elapsed_ms": 0.341,
+            "status": "ok"
+          },
+          {
+            "name": "graph.evaluate_quality",
+            "elapsed_ms": 0.303,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 0.103,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "5a1c705dfc0f4938a3f10e554053d282",
+            "elapsed_ms": 1126.624
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "c5cc6285b69c4f7fb454eaf5f45a8e9e",
+            "elapsed_ms": 897.812
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "cef9cda779684a67ace73c3678162491",
+            "elapsed_ms": 415.676
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "03c2918301214d2185d11b4a7cb868ad",
+            "elapsed_ms": 519.233
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "e1f3e35e42b5417f997c27ddf194a7ae",
+            "elapsed_ms": 794.405
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "72969bc73bd1497ea3490080a0ca64c2",
+            "elapsed_ms": 1134.604
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "6ce28f1e965d44dc8794e145217aef8a",
+            "elapsed_ms": 986.941
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "5a1c705dfc0f4938a3f10e554053d282",
+            "usage": {
+              "prompt_tokens": 1003,
+              "completion_tokens": 131,
+              "total_tokens": 1134
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1126.587
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "c5cc6285b69c4f7fb454eaf5f45a8e9e",
+            "usage": {
+              "prompt_tokens": 672,
+              "completion_tokens": 37,
+              "total_tokens": 709
+            },
+            "usage_complete": true,
+            "elapsed_ms": 897.771
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "cef9cda779684a67ace73c3678162491",
+            "usage": {
+              "prompt_tokens": 35,
+              "completion_tokens": 8,
+              "total_tokens": 43
+            },
+            "usage_complete": true,
+            "elapsed_ms": 415.646
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "03c2918301214d2185d11b4a7cb868ad",
+            "usage": {
+              "prompt_tokens": 29,
+              "completion_tokens": 36,
+              "total_tokens": 65
+            },
+            "usage_complete": true,
+            "elapsed_ms": 519.186
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "e1f3e35e42b5417f997c27ddf194a7ae",
+            "usage": {
+              "prompt_tokens": 110,
+              "completion_tokens": 54,
+              "total_tokens": 164
+            },
+            "usage_complete": true,
+            "elapsed_ms": 794.365
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "72969bc73bd1497ea3490080a0ca64c2",
+            "usage": {
+              "prompt_tokens": 93,
+              "completion_tokens": 113,
+              "total_tokens": 206
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1134.567
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "6ce28f1e965d44dc8794e145217aef8a",
+            "usage": {
+              "prompt_tokens": 751,
+              "completion_tokens": 33,
+              "total_tokens": 784
+            },
+            "usage_complete": true,
+            "elapsed_ms": 986.896
+          }
+        ],
+        "estimated_cost_cny": 0.003517,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    },
+    {
+      "case_id": "dialogue-112",
+      "turn": 1,
+      "tags": [
+        "rag",
+        "multi_turn",
+        "no_evidence"
+      ],
+      "query": "手机壳一般是什么材质",
+      "expected": {
+        "needs_human": false,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [],
+        "targets": [
+          "rag"
+        ],
+        "evidence_groups": [
+          [
+            "faq-032"
+          ]
+        ],
+        "answer_groups": [
+          [
+            "TPU",
+            "软胶"
+          ],
+          [
+            "PC",
+            "硬背板"
+          ]
+        ]
+      },
+      "risk": false,
+      "no_evidence": false,
+      "response": {
+        "query": "手机壳一般是什么材质",
+        "trace_id": "a7435abef77b4b09b1ce01a08e7f8274",
+        "intent": "product_consult",
+        "confidence": 0.95,
+        "target": "rag",
+        "rewritten_query": "手机壳的材质是什么",
+        "reasoning": "询问商品材质参数，属于商品咨询。",
+        "results": [
+          {
+            "chunk_id": "faq-032",
+            "text": "## Q32: 这个手机壳是啥材质？\n\n手机壳采用TPU软胶加PC硬背板双材质，防摔抗震。具体材质见商品参数。\n\n*关键词: 手机壳, 材质, TPU*",
+            "score": 0.7859,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-031",
+            "text": "## Q31: 这件衣服什么面料？\n\n详情页面标注面料成分，如棉、涤纶等。未标注可联系店铺客服索取质检报告。\n\n*关键词: 面料, 成分, 详情*",
+            "score": 0.4265,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-037",
+            "text": "## Q37: 商品安全吗？有甲醛吗？\n\n所有商品通过国家质检认证，符合安全标准。检测报告可在详情页底部查看。\n\n*关键词: 安全, 质检, 认证*",
+            "score": 0.4395,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-049",
+            "text": "## Q49: 包装破损\n\n如外包装破损导致内部商品受损，请拍照上传并申请退换。若商品完好则不影响使用。\n\n*关键词: 包装, 破损, 退换*",
+            "score": 0.4502,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          },
+          {
+            "chunk_id": "faq-035",
+            "text": "## Q35: 有没有防水的款式？\n\n防水手表通常标注IP68或IPX7等级，等级越高防水越好。可在详情中查看防水参数。\n\n*关键词: 防水, 手表, 等级*",
+            "score": 0.4069,
+            "doc_type": "faq_json",
+            "source_file": "corpus.json",
+            "page_number": 0,
+            "heading_path": []
+          }
+        ],
+        "reply": "根据文档内容，这款手机壳采用TPU软胶加PC硬背板双材质，具有防摔抗震的特点。具体材质可查看商品参数。[1]\n\n需要说明的是，该信息仅针对文档中提到的这款手机壳，其他型号手机壳的材质根据已有信息无法确认。",
+        "search_time_ms": 5.2,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 1.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": false,
+        "human_reason": "",
+        "human_priority": "",
+        "emotion": "calm",
+        "handoff_payload": {},
+        "review_task_id": "",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "complete",
+        "answer_status": "complete"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 7269.61,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "a7435abef77b4b09b1ce01a08e7f8274",
+        "total_ms": 7262.939,
+        "llm_calls": 5,
+        "llm_attempts": 5,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 5,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 2741,
+          "completion_tokens": 605,
+          "total_tokens": 3346
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 2.627,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.006,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 884.516,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 885.12,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.499,
+            "status": "ok"
+          },
+          {
+            "name": "graph.retrieve",
+            "elapsed_ms": 460.518,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 1232.853,
+            "status": "ok"
+          },
+          {
+            "name": "generation.answer",
+            "elapsed_ms": 937.209,
+            "status": "ok"
+          },
+          {
+            "name": "generation.faithfulness",
+            "elapsed_ms": 2384.316,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.answer",
+            "elapsed_ms": 1281.118,
+            "status": "ok"
+          },
+          {
+            "name": "graph.generate",
+            "elapsed_ms": 5836.014,
+            "status": "ok"
+          },
+          {
+            "name": "graph.evaluate_quality",
+            "elapsed_ms": 0.49,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 0.098,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "a60bc4f34d654f0ab93efe2b51e0915d",
+            "elapsed_ms": 884.455
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "e0f0ffd5fbe44d539940ecc088a293ac",
+            "elapsed_ms": 1232.711
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "6e5b11a4706f4aa495ec9ae273d24549",
+            "elapsed_ms": 937.094
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "ecdafe57da65409b8633cef9cb0b57b7",
+            "elapsed_ms": 2384.082
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "5738157dcbb247bb9fd2184eb4ccce15",
+            "elapsed_ms": 1280.905
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "a60bc4f34d654f0ab93efe2b51e0915d",
+            "usage": {
+              "prompt_tokens": 999,
+              "completion_tokens": 124,
+              "total_tokens": 1123
+            },
+            "usage_complete": true,
+            "elapsed_ms": 884.417
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "e0f0ffd5fbe44d539940ecc088a293ac",
+            "usage": {
+              "prompt_tokens": 724,
+              "completion_tokens": 85,
+              "total_tokens": 809
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1232.671
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.answer",
+            "status": "ok",
+            "call_id": "6e5b11a4706f4aa495ec9ae273d24549",
+            "usage": {
+              "prompt_tokens": 186,
+              "completion_tokens": 62,
+              "total_tokens": 248
+            },
+            "usage_complete": true,
+            "elapsed_ms": 937.055
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "generation.faithfulness",
+            "status": "ok",
+            "call_id": "ecdafe57da65409b8633cef9cb0b57b7",
+            "usage": {
+              "prompt_tokens": 302,
+              "completion_tokens": 240,
+              "total_tokens": 542
+            },
+            "usage_complete": true,
+            "elapsed_ms": 2384.028
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.answer",
+            "status": "ok",
+            "call_id": "5738157dcbb247bb9fd2184eb4ccce15",
+            "usage": {
+              "prompt_tokens": 530,
+              "completion_tokens": 94,
+              "total_tokens": 624
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1280.857
+          }
+        ],
+        "estimated_cost_cny": 0.0039510000000000005,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    },
+    {
+      "case_id": "dialogue-112",
+      "turn": 2,
+      "tags": [
+        "rag",
+        "multi_turn",
+        "no_evidence"
+      ],
+      "query": "那星云X9联名款手机壳准确厚度是多少毫米",
+      "expected": {
+        "needs_human": true,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [
+          "厚度为2毫米",
+          "厚度是2毫米"
+        ],
+        "targets": [],
+        "evidence_groups": [],
+        "answer_groups": []
+      },
+      "risk": false,
+      "no_evidence": true,
+      "response": {
+        "query": "那星云X9联名款手机壳准确厚度是多少毫米",
+        "trace_id": "2a54117fabe74d7ba569bc3689dea30b",
+        "intent": "product_consult",
+        "confidence": 0.97,
+        "target": "rag",
+        "rewritten_query": "星云X9联名款手机壳厚度多少毫米",
+        "reasoning": "询问商品具体参数（厚度），属于商品咨询。",
+        "results": [],
+        "reply": "回答需人工核验，正在为您转接人工客服。",
+        "search_time_ms": 6.2,
+        "degradation_level": 5,
+        "degradation_method": "fallback",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": true,
+        "human_reason": "忠实度不足(0.00<0.7), 检索降级严重(Level 5), 资料或回答未完整覆盖当前问题，或核验不可用",
+        "human_priority": "medium",
+        "emotion": "calm",
+        "handoff_payload": {
+          "user_query": "那星云X9联名款手机壳准确厚度是多少毫米",
+          "intent": "product_consult",
+          "emotion": "calm",
+          "entities": {
+            "product_name": "星云X9联名款手机壳"
+          },
+          "memory_summary": "【最近对话】\n用户: 手机壳一般是什么材质\n客服: 根据文档内容，这款手机壳采用TPU软胶加PC硬背板双材质，具有防摔抗震的特点。具体材质可查看商品参数。[1]\n\n需要说明的是，该信息仅针对文档中提到的这款手机壳，其他型号手机壳的材质根据已有信息无法确认。",
+          "attempted_actions": "degradation_level=5, correction_rounds=0",
+          "unresolved_reason": "忠实度不足(0.00<0.7), 检索降级严重(Level 5), 资料或回答未完整覆盖当前问题，或核验不可用"
+        },
+        "review_task_id": "55a3294edf7f591f97580e29cc1b6fc7",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "insufficient",
+        "answer_status": "insufficient"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 11671.76,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "2a54117fabe74d7ba569bc3689dea30b",
+        "total_ms": 11650.581,
+        "llm_calls": 8,
+        "llm_attempts": 8,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 8,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 3135,
+          "completion_tokens": 480,
+          "total_tokens": 3615
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 1.805,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.009,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 1439.749,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 2326.124,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.346,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 842.026,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.rewrite",
+            "elapsed_ms": 850.53,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.rewrite",
+            "elapsed_ms": 837.15,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.expand",
+            "elapsed_ms": 2168.384,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 746.419,
+            "status": "ok"
+          },
+          {
+            "name": "graph.retrieve",
+            "elapsed_ms": 9236.781,
+            "status": "ok"
+          },
+          {
+            "name": "graph.web_search",
+            "elapsed_ms": 0.515,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 0.013,
+            "status": "ok"
+          },
+          {
+            "name": "graph.generate",
+            "elapsed_ms": 0.26,
+            "status": "ok"
+          },
+          {
+            "name": "graph.evaluate_quality",
+            "elapsed_ms": 0.254,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 0.064,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "graph.classify_intent",
+            "status": "ok",
+            "call_id": "801027e6e1d84e64ab8dc2d8ec3c01ec",
+            "elapsed_ms": 885.501
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "a4cc9bebada64a70b5cc43c0a493d170",
+            "elapsed_ms": 1439.68
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "bf3acc598c1842e1a631e1434afc2146",
+            "elapsed_ms": 841.913
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "bae31d6920a941369f596ddc9cd655fd",
+            "elapsed_ms": 850.474
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "b3ad9706869f431b90c2efa7ad65fcdb",
+            "elapsed_ms": 837.092
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "7affee10db064eb8bd56badda0f32cb3",
+            "elapsed_ms": 599.287
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "855e2319e38a4376a4f8d5bea8be4e29",
+            "elapsed_ms": 1496.348
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "b3469d9282d94563903dda5ad73bda2a",
+            "elapsed_ms": 746.324
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "graph.classify_intent",
+            "status": "ok",
+            "call_id": "801027e6e1d84e64ab8dc2d8ec3c01ec",
+            "usage": {
+              "prompt_tokens": 371,
+              "completion_tokens": 14,
+              "total_tokens": 385
+            },
+            "usage_complete": true,
+            "elapsed_ms": 885.456
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "a4cc9bebada64a70b5cc43c0a493d170",
+            "usage": {
+              "prompt_tokens": 1008,
+              "completion_tokens": 140,
+              "total_tokens": 1148
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1439.639
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "bf3acc598c1842e1a631e1434afc2146",
+            "usage": {
+              "prompt_tokens": 735,
+              "completion_tokens": 53,
+              "total_tokens": 788
+            },
+            "usage_complete": true,
+            "elapsed_ms": 841.872
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "bae31d6920a941369f596ddc9cd655fd",
+            "usage": {
+              "prompt_tokens": 40,
+              "completion_tokens": 12,
+              "total_tokens": 52
+            },
+            "usage_complete": true,
+            "elapsed_ms": 850.156
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "b3ad9706869f431b90c2efa7ad65fcdb",
+            "usage": {
+              "prompt_tokens": 34,
+              "completion_tokens": 30,
+              "total_tokens": 64
+            },
+            "usage_complete": true,
+            "elapsed_ms": 837.054
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "7affee10db064eb8bd56badda0f32cb3",
+            "usage": {
+              "prompt_tokens": 115,
+              "completion_tokens": 67,
+              "total_tokens": 182
+            },
+            "usage_complete": true,
+            "elapsed_ms": 599.25
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "855e2319e38a4376a4f8d5bea8be4e29",
+            "usage": {
+              "prompt_tokens": 98,
+              "completion_tokens": 106,
+              "total_tokens": 204
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1496.312
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "b3469d9282d94563903dda5ad73bda2a",
+            "usage": {
+              "prompt_tokens": 734,
+              "completion_tokens": 58,
+              "total_tokens": 792
+            },
+            "usage_complete": true,
+            "elapsed_ms": 746.292
+          }
+        ],
+        "estimated_cost_cny": 0.004095,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    }
+  ],
+  "performance": {
+    "schema_version": 1,
+    "complete": true,
+    "observed_turns": 18,
+    "missing_turns": 0,
+    "http_latency": {
+      "count": 18,
+      "p50_ms": 8971.26,
+      "p95_ms": 30980.4,
+      "max_ms": 30980.4
+    },
+    "service_latency": {
+      "count": 18,
+      "p50_ms": 8952.201,
+      "p95_ms": 30964.586,
+      "max_ms": 30964.586
+    },
+    "first_observed_http_ms": 30980.4,
+    "subsequent_http_latency": {
+      "count": 17,
+      "p50_ms": 8971.26,
+      "p95_ms": 17937.25,
+      "max_ms": 17937.25
+    },
+    "llm_calls": 104,
+    "llm_attempts": 104,
+    "llm_retries": 0,
+    "failed_attempts": 0,
+    "usage_missing_attempts": 0,
+    "usage_complete": true,
+    "usage": {
+      "prompt_tokens": 50448,
+      "completion_tokens": 10587,
+      "total_tokens": 61035
+    },
+    "estimated_cost_cny": 0.071622,
+    "stages": {
+      "coverage.answer": {
+        "count": 13,
+        "p50_ms": 1159.253,
+        "p95_ms": 1450.372,
+        "max_ms": 1450.372
+      },
+      "coverage.evidence": {
+        "count": 25,
+        "p50_ms": 897.93,
+        "p95_ms": 1590.946,
+        "max_ms": 1634.654
+      },
+      "generation.answer": {
+        "count": 15,
+        "p50_ms": 958.998,
+        "p95_ms": 1418.531,
+        "max_ms": 1418.531
+      },
+      "generation.faithfulness": {
+        "count": 15,
+        "p50_ms": 1451.747,
+        "p95_ms": 2384.316,
+        "max_ms": 2384.316
+      },
+      "generation.missing_info": {
+        "count": 2,
+        "p50_ms": 439.838,
+        "p95_ms": 929.757,
+        "max_ms": 929.757
+      },
+      "graph.check_human": {
+        "count": 18,
+        "p50_ms": 0.38,
+        "p95_ms": 0.953,
+        "max_ms": 0.953
+      },
+      "graph.classify_intent": {
+        "count": 18,
+        "p50_ms": 1251.878,
+        "p95_ms": 2652.76,
+        "max_ms": 2652.76
+      },
+      "graph.evaluate_quality": {
+        "count": 17,
+        "p50_ms": 0.593,
+        "p95_ms": 3.929,
+        "max_ms": 3.929
+      },
+      "graph.generate": {
+        "count": 17,
+        "p50_ms": 4149.551,
+        "p95_ms": 13948.854,
+        "max_ms": 13948.854
+      },
+      "graph.policy": {
+        "count": 1,
+        "p50_ms": 11.249,
+        "p95_ms": 11.249,
+        "max_ms": 11.249
+      },
+      "graph.retrieve": {
+        "count": 17,
+        "p50_ms": 2907.515,
+        "p95_ms": 23678.187,
+        "max_ms": 23678.187
+      },
+      "graph.web_search": {
+        "count": 4,
+        "p50_ms": 0.516,
+        "p95_ms": 0.679,
+        "max_ms": 0.679
+      },
+      "memory.context": {
+        "count": 18,
+        "p50_ms": 0.009,
+        "p95_ms": 0.017,
+        "max_ms": 0.017
+      },
+      "memory.record": {
+        "count": 18,
+        "p50_ms": 0.076,
+        "p95_ms": 1.206,
+        "max_ms": 1.206
+      },
+      "retrieval.expand": {
+        "count": 4,
+        "p50_ms": 2168.384,
+        "p95_ms": 3102.139,
+        "max_ms": 3102.139
+      },
+      "retrieval.rewrite": {
+        "count": 8,
+        "p50_ms": 605.445,
+        "p95_ms": 1056.184,
+        "max_ms": 1056.184
+      },
+      "routing.classify_and_rewrite": {
+        "count": 17,
+        "p50_ms": 1126.677,
+        "p95_ms": 2650.832,
+        "max_ms": 2650.832
+      },
+      "session.wait": {
+        "count": 18,
+        "p50_ms": 2.123,
+        "p95_ms": 2.996,
+        "max_ms": 2.996
+      }
+    },
+    "llm_by_stage": {
+      "coverage.answer": {
+        "calls": 13,
+        "attempts": 13,
+        "total_tokens": 8504,
+        "elapsed_ms": 15245.423000000004
+      },
+      "coverage.evidence": {
+        "calls": 21,
+        "attempts": 21,
+        "total_tokens": 16615,
+        "elapsed_ms": 21833.282000000003
+      },
+      "generation.answer": {
+        "calls": 14,
+        "attempts": 14,
+        "total_tokens": 3702,
+        "elapsed_ms": 14285.282
+      },
+      "generation.faithfulness": {
+        "calls": 15,
+        "attempts": 15,
+        "total_tokens": 8649,
+        "elapsed_ms": 22830.495999999996
+      },
+      "generation.missing_info": {
+        "calls": 2,
+        "attempts": 2,
+        "total_tokens": 217,
+        "elapsed_ms": 1369.496
+      },
+      "graph.classify_intent": {
+        "calls": 6,
+        "attempts": 6,
+        "total_tokens": 2216,
+        "elapsed_ms": 4268.508
+      },
+      "retrieval.expand": {
+        "calls": 8,
+        "attempts": 8,
+        "total_tokens": 1513,
+        "elapsed_ms": 9997.335000000001
+      },
+      "retrieval.rewrite": {
+        "calls": 8,
+        "attempts": 8,
+        "total_tokens": 464,
+        "elapsed_ms": 5411.739
+      },
+      "routing.classify_and_rewrite": {
+        "calls": 17,
+        "attempts": 17,
+        "total_tokens": 19155,
+        "elapsed_ms": 19996.332000000006
+      }
+    },
+    "limitations": "Nearest-rank sample percentiles, not an online SLO. Stage timings are inclusive and overlap; do not sum nested stages. Total service time includes session wait and memory, excludes monitoring persistence and HTTP transport. Tokens are provider-reported only; missing usage is not zero cost. Costs use the recorded repository rate table, not provider bills; cache discounts are not modeled. First request is listed separately; models were preloaded at service startup."
+  },
+  "created_at": "2026-11-19T10:40:17.142813+00:00",
+  "dataset_sha256": "a63e0442b63e370d4fae1aa3cdaf3fea5f2256a5f32dacb41a84e12ed65feb67",
+  "deployment": {
+    "execution": "http_service",
+    "git": {
+      "commit": "60602f5c6d72a919eee69ad1de99a51c35e59072",
+      "dirty": true
+    },
+    "source_sha256": {
+      "src/engineering/request_trace.py": "d5ef4c82fabdeaefb294cf1976777e2b88628679920c00aa3260c54eb7d212c6",
+      "src/engineering/llm_client.py": "dcf19d7998ce23c12128b713ede50fa4eae58f1bc28fa9234e50960bd48b2a6d",
+      "src/engineering/monitor.py": "a9d6d09700786a2e4b99ec1517c86415accd64ebf8c28c08ba91f6590ff29cf5",
+      "src/evaluation/performance.py": "51cc039c9d27106c8bea7a3840867e58d67113fd02a98c53f52afcb40db1d994",
+      "scripts/run_live_rag_benchmark.py": "c9af4f887db0b8f0444e53f7e34e6a1f165836553c3325fbc36ceffe6f332a95",
+      "src/evaluation/dialogue.py": "310a5da35d7a457129ef4890cc709aecd82270dc1a3fb170c26473a739d8296c",
+      "src/graph/workflow.py": "cba50a3c7db9bbdc4093b19b0ff393d14e1984bdc323f97adfabf998971db92d",
+      "src/conversation/coreference.py": "40c1fa5de19a16601ed816d8aed6c95c8f36baa3d844f6d254898d2f3b622905",
+      "src/conversation/human_in_loop.py": "c72598ea36bc91de786521c750f5d8c1696d43845cb2218b57bea4c2f9f5a69f",
+      "src/conversation/memory.py": "18883245fcb820aac54b2eb4501b32fc5f478e66370e30ecbebb722a889ffac1",
+      "src/routing/router.py": "cc25534b9c6c50a7dbc1221a5b37acd110d34b5934ce5b97af0643d2a77a6a0b",
+      "src/routing/classifier.py": "fe4a2de52c566cda442907e27fb220be69025175d45c4111e6c5841df9010c5a",
+      "src/routing/models.py": "5dff2dd330f751562893b9becdd40c24606654463698332c540ddd9ca1508279",
+      "src/embedding/degradation.py": "374a1d03e96fa521b675bc7aa6d9e1066cd72691d6d0912b4cb70ed72fdc51a2",
+      "src/embedding/retriever.py": "2458f7ee0c4907e00b020953fd53f483ec2515a04dfcae764b6286341ee22eba",
+      "src/embedding/embedder.py": "ebd033b133d9cedd501dd0d5563fdce6e2971a7ed8d923861608cb9ba4adf6f5",
+      "src/retrieval/reranker.py": "a685ea2aea0de6f8a3ae3d676731c0acfb8b2a6b222909631e239123c6150a23",
+      "src/generation/self_correction.py": "78514e981dbce561b4ed45d64da4944a18916fe0f5e417ef3a72b8b358ef5834",
+      "src/generation/hallucination_detector.py": "36bac74a6aa0a30247dcea5aa8b76394986039b8fef1fda3d69ba914203bee64",
+      "src/generation/answerability.py": "5418abc0085c5a855269b3b0f72fade67cb34814246f1b40e268a1d83bb14a5e",
+      "src/api/chat_service.py": "812f2a5a603125397dff1f2949fafa9dc2f3eb3929e90ccfb63b48660b4ea2de",
+      "src/api/models.py": "271cbd5f61f100370360e1d389ef58432dac81ccae76f0c5c0f261d18dc150a0",
+      "src/config.py": "d7f992b7d24331964275f0d3cd94003fb0b589ad296f6118fe518f7889afd9fc",
+      "data/policies/returns.json": "f8b7c9346faf9e1fabe89e805b561a83cbf7ff756060967a9a2e8050c4c4a62c"
+    },
+    "corpus_sha256": "c089d0b3fa41de501055ecbaa60ec39d735e1bfcb8cbbce83d3d27eede776ed1",
+    "faq_count": 60,
+    "models": {
+      "embedding": {
+        "sha256": "a7e6c0579782e27eb500fd12d93d247897f99914300c09286526f7d04ede7a29",
+        "files": [
+          {
+            "file": ".gitattributes",
+            "sha256": "11ad7efa24975ee4b0c3c3a38ed18737f0658a5f75a0a96787b576a78a023361"
+          },
+          {
+            "file": "1_Pooling/config.json",
+            "sha256": "aaa8861589f80c961a03cc86c7eeaef7605c1676b9ab55329d33a304738769c6"
+          },
+          {
+            "file": "config.json",
+            "sha256": "3853a7979202c348751b753e36f579c41d8da7d36af617d3d907e1fc9b441f2a"
+          },
+          {
+            "file": "config_sentence_transformers.json",
+            "sha256": "940d5f50db195fa6e5e6a4f122c095f77880de259d74b14a65779ed48bdd7c56"
+          },
+          {
+            "file": "configuration.json",
+            "sha256": "6bc26d64eb5024b4d1dab5a52371958b429256d6c9d59787f1f5294a54e0cebd"
+          },
+          {
+            "file": "model.safetensors",
+            "sha256": "354763b9b1357bc9c44f62c6be2276321081ed2567773608c0d0785b61d5a026"
+          },
+          {
+            "file": "modules.json",
+            "sha256": "84e40c8e006c9b1d6c122e02cba9b02458120b5fb0c87b746c41e0207cf642cf"
+          },
+          {
+            "file": "pytorch_model.bin",
+            "sha256": "7c5fe667bbed05dc10e246e229b701ad266fe4d95ab946e9e5aa402056611b88"
+          },
+          {
+            "file": "README.md",
+            "sha256": "c48a4eeea77f6b1d38b48ec1c5b8d4f86d5550cc43fa345a0db1b2ca1d082369"
+          },
+          {
+            "file": "sentence_bert_config.json",
+            "sha256": "84e39fda68ccbff05bfa723ae9c0e70e23e2ec373b76e0f8c6e71af72a693cbf"
+          },
+          {
+            "file": "special_tokens_map.json",
+            "sha256": "b6d346be366a7d1d48332dbc9fdf3bf8960b5d879522b7799ddba59e76237ee3"
+          },
+          {
+            "file": "tokenizer.json",
+            "sha256": "48cea5d44424912a6fd1ea647bf4fe50b55ab8b1e5879c3275f80e339e8fae26"
+          },
+          {
+            "file": "tokenizer_config.json",
+            "sha256": "e6f3b96db926a37d4039995fbf5ad17de158dfb8f6343d607e4dbaad18d75f5a"
+          },
+          {
+            "file": "vocab.txt",
+            "sha256": "45bbac6b341c319adc98a532532882e91a9cefc0329aa57bac9ae761c27b291c"
+          }
+        ]
+      },
+      "reranker": {
+        "sha256": "bfab6fd0a5d7718e8659b6c911b59153ce4a77aff663fa90d142ea4adfb49fcf",
+        "files": [
+          {
+            "file": ".gitattributes",
+            "sha256": "31e17e23b1ac71e380c29f1ae4bc7226f2f4746116f60a313d92a07f45f65fa5"
+          },
+          {
+            "file": "config.json",
+            "sha256": "289adf7ada1eb6b4afa7589a48a032d45a076cf2e46dcdb3b4cabc33be14f708"
+          },
+          {
+            "file": "configuration.json",
+            "sha256": "90dccac936e44dcb4567017a5dbb807b583604032fd53bfe2372a15881ed47e1"
+          },
+          {
+            "file": "model.safetensors",
+            "sha256": "ced967c45fd1902eb92716c9ceeca7c95a936770ea9db611f5a841b926e33fbd"
+          },
+          {
+            "file": "onnx/model.onnx",
+            "sha256": "15b9a8c3da82eddf263df571281166e00e9308fe19d077084b642ebfcaf06d2b"
+          },
+          {
+            "file": "pytorch_model.bin",
+            "sha256": "5b475bec40425c52229bbc63f9f50e290315c29f4e52c8f8dd404a159c0469fa"
+          },
+          {
+            "file": "README.md",
+            "sha256": "b4223c8c1e95538f8c79168afc501f8b2da06c63221f013b79b28af78b59366d"
+          },
+          {
+            "file": "sentencepiece.bpe.model",
+            "sha256": "cfc8146abe2a0488e9e2a0c56de7952f7c11ab059eca145a0a727afce0db2865"
+          },
+          {
+            "file": "special_tokens_map.json",
+            "sha256": "d5469a60db23249c7f8945013d78df30b44b6bf686c6bb4740f4223f77b1b535"
+          },
+          {
+            "file": "tokenizer.json",
+            "sha256": "9eb652ac4e40cc093272bbbe0f55d521cf67570060227109b5cdc20945a4489e"
+          },
+          {
+            "file": "tokenizer_config.json",
+            "sha256": "a1d6bc8734a6f635dc158508bef000f8e2e5a759c7d92f984b2c86e5ff53425b"
+          }
+        ]
+      },
+      "dialogue": "deepseek-chat"
+    },
+    "python": "3.12.9",
+    "packages": {
+      "torch": "2.14.0+cpu",
+      "sentence-transformers": "3.4.1",
+      "transformers": "4.48.3",
+      "huggingface-hub": "0.36.2",
+      "tokenizers": "0.21.4",
+      "chromadb": "1.5.9",
+      "langgraph": "1.2.22",
+      "fastapi": "0.163.1",
+      "pydantic": "2.14.3"
+    },
+    "parameters": {
+      "device": "cpu",
+      "torch_threads": 4,
+      "torch_seed": 0,
+      "web_search": false,
+      "cache": "fresh process-local memory, reused within run",
+      "order_backend": "disabled; FAQ suite only",
+      "access_level": "public",
+      "top_k": 5,
+      "use_reranker": true,
+      "dense_threshold": 0.4
+    }
+  },
+  "limitations": "Authored development suite, not user traffic or a blinded holdout. Real BGE and dialogue API; FAQ-only corpus, web search and order backend disabled. Phrase/evidence checks are not a semantic judge."
+}

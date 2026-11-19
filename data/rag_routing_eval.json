@@ -1,0 +1,71 @@
+[
+  {
+    "case_id": "dialogue-301",
+    "tags": ["routing", "followup", "shipping_address"],
+    "rationale": "FAQ-014、FAQ-018 明确区分是否发货，以及发货后尝试联系处理的范围。",
+    "turns": [
+      {
+        "query": "东西都寄出来了，我才发现填错了地址，订单页面还能改吗？",
+        "risk": false,
+        "expect": {
+          "needs_human": false,
+          "targets": ["rag"],
+          "evidence_groups": [["faq-014", "faq-018"]],
+          "answer_groups": [["无法在线修改", "不能在线修改", "不能在订单", "无法在订单", "不能直接修改", "不能修改"]]
+        }
+      },
+      {
+        "query": "那还能找谁试试拦截转寄？",
+        "risk": false,
+        "expect": {
+          "needs_human": false,
+          "targets": ["rag"],
+          "evidence_groups": [["faq-014", "faq-018"]],
+          "answer_groups": [["客服"], ["尝试", "不保证"]]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-302",
+    "tags": ["routing", "multi_part", "delivery"],
+    "rationale": "FAQ-012 给出了发货后省内和省外的预计时效，多项问题应保留两部分。",
+    "turns": [
+      {
+        "query": "东西寄出后，省内和省外分别大概要跑几天呀？",
+        "risk": false,
+        "expect": {
+          "needs_human": false,
+          "targets": ["rag"],
+          "evidence_groups": [["faq-012"]],
+          "answer_groups": [["省内"], ["省外"], ["1-2天", "一到两天"], ["3-5天", "三到五天"]]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-303",
+    "tags": ["routing", "direct", "greeting"],
+    "rationale": "纯问候无需知识库或订单工具。",
+    "turns": [
+      {
+        "query": "下午好呀，辛苦你啦",
+        "risk": false,
+        "expect": {"needs_human": false, "targets": ["direct"]}
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-304",
+    "tags": ["routing", "no_evidence", "pickup"],
+    "rationale": "冻结 FAQ 无法确定具体自提点在节日的营业安排，普通物流说明不能充当证据。",
+    "turns": [
+      {
+        "query": "果茶礼盒今年除夕在苏州自提点，最晚几点还能取货？",
+        "risk": false,
+        "no_evidence": true,
+        "expect": {"needs_human": true, "targets": ["rag"]}
+      }
+    ]
+  }
+]

@@ -134,6 +134,7 @@
 | 功能 | 说明 | 状态 |
 |------|------|------|
 | 13 节点 StateGraph | **13 节点 / 8 条静态边 / 5 组条件边**（13 个分支目标） | ✅ |
+| 意图分类与检索改写 | 一次结构化调用，校验实体与置信度，改写异常时使用原问题。[实现与实测](docs/rag-joint-routing.md) | ✅ |
 | Agentic 回路 | evaluate → human_approval → rewrite → retrieve → generate (最多 3 轮) | ✅ |
 | Human-in-the-Loop | SQLite checkpoint + 管理员批准/拒绝接口 + 图恢复执行 + 结果幂等投递，支持重启后续接 | ✅ |
 | 级联检索可视化 | retrieve 和 web_search 是独立图节点，流程可观测 | ✅ |
