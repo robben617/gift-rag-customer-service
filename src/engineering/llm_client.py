@@ -35,6 +35,7 @@ from typing import Optional
 import httpx
 
 from src.config import settings
+from src.engineering.request_trace import observe_llm, record_provider_usage
 
 logger = logging.getLogger(__name__)
 
@@ -90,6 +91,7 @@ class LLMClient:
 
     # ── 公共 API ──
 
+    @observe_llm("call")
     def chat(
         self,
         messages: list[dict],
@@ -190,6 +192,8 @@ class LLMClient:
 
     # ── 异步 API ──
 
+    @observe_llm("call")
+    @observe_llm("attempt")
     async def achat(
         self,
         messages: list[dict],
@@ -224,6 +228,8 @@ class LLMClient:
         except Exception as e:
             raise LLMClientError(str(e))
 
+    @observe_llm("call")
+    @observe_llm("attempt")
     async def achat_stream(
         self,
         messages: list[dict],
@@ -233,6 +239,7 @@ class LLMClient:
     ) -> AsyncGenerator[str, None]:
         """异步流式调用 LLM，逐 token yield"""
         client = await self._get_async_client()
+        stream_usage = None
 
         try:
             async with client.stream(
@@ -245,6 +252,7 @@ class LLMClient:
                     "temperature": temperature,
                     "max_tokens": max_tokens,
                     "stream": True,
+                    "stream_options": {"include_usage": True},
                 },
                 timeout=httpx.Timeout(timeout),
             ) as response:
@@ -258,7 +266,10 @@ class LLMClient:
                         break
                     try:
                         chunk = json.loads(data)
-                        delta = chunk.get("choices", [{}])[0].get("delta", {})
+                        if chunk.get("usage") is not None:
+                            stream_usage = chunk["usage"]
+                        choices = chunk.get("choices") or []
+                        delta = choices[0].get("delta", {}) if choices else {}
                         content = delta.get("content", "")
                         if content:
                             yield content
@@ -271,6 +282,10 @@ class LLMClient:
             raise LLMClientError(f"流式 HTTP {e.response.status_code}")
         except Exception as e:
             raise LLMClientError(str(e))
+
+        finally:
+            if stream_usage is not None:
+                self._record_usage(stream_usage)
 
     async def achat_with_fallback(
         self,
@@ -360,14 +375,14 @@ class LLMClient:
                         e,
                     )
                     time.sleep(delay)
-                elif attempt < self._max_retries:
-                    # 不可重试的错误，不等待
+                elif not is_retryable:
                     logger.warning(
                         "LLM 调用失败 (不可重试) %d/%d: %s",
                         attempt + 1,
                         self._max_retries,
                         e,
                     )
+                    break
                 else:
                     logger.error("LLM 调用 %d 次后仍失败: %s", self._max_retries + 1, e)
 
@@ -375,11 +390,14 @@ class LLMClient:
 
     def _record_usage(self, usage: dict) -> None:
         """记录单次调用 usage 并累加到会话总量（供成本统计）"""
+        record_provider_usage(usage)
         state = self._usage_state()
         with state.lock:
-            state.last = dict(usage or {})
+            state.last = dict(usage) if isinstance(usage, dict) else {}
             for key in state.total:
-                state.total[key] += state.last.get(key, 0)
+                value = state.last.get(key)
+                if type(value) is int and value >= 0:
+                    state.total[key] += value
 
     def _usage_state(self) -> _RequestUsage:
         state = self._request_usage.get()
@@ -405,6 +423,7 @@ class LLMClient:
         with state.lock:
             return dict(state.total)
 
+    @observe_llm("attempt")
     def _do_call(
         self,
         messages: list[dict],
@@ -457,6 +476,10 @@ class LLMClient:
             raise LLMClientError(f"请求超时 ({timeout}s)")
         except httpx.ConnectError as e:
             raise LLMClientError(f"连接失败: {e}")
+        except httpx.HTTPStatusError as e:
+            raise LLMClientError(
+                f"HTTP {e.response.status_code}", status_code=e.response.status_code
+            ) from e
         except LLMClientError:
             raise
         except Exception as e:

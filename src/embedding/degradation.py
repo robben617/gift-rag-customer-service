@@ -22,6 +22,7 @@ from typing import Optional
 
 from src.config import settings
 from src.engineering.llm_client import get_llm_client
+from src.engineering.request_trace import timed_stage
 
 from .models import SearchResponse, SearchResult
 
@@ -311,6 +312,7 @@ class DegradationStrategy:
             return 0.0
         return max(r.score for r in response.results)
 
+    @timed_stage("retrieval.rewrite")
     def _rewrite_query(self, query: str, attempt: int) -> str:
         """LLM 改写查询"""
         try:
@@ -336,6 +338,7 @@ class DegradationStrategy:
             logger.warning("查询改写失败: %s", e)
             return query
 
+    @timed_stage("retrieval.expand")
     def _expand_and_search(
         self, query: str, top_k: int, access_level: str = "public"
     ) -> SearchResponse:

@@ -125,6 +125,7 @@ class ChatResponse(BaseModel):
     """客服对话响应"""
 
     query: str
+    trace_id: str = ""  # Opaque correlation ID; detailed accounting stays internal.
     intent: str
     confidence: float
     target: str

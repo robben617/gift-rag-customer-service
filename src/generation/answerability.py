@@ -14,6 +14,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from src.engineering.llm_client import get_llm_client
 from src.engineering.singleton import singleton_factory
+from src.engineering.request_trace import stage
 
 logger = logging.getLogger(__name__)
 
@@ -81,6 +82,12 @@ class AnswerabilityVerifier:
         self.client = client
 
     def assess(
+        self, query: str, docs: list[dict], *, answer: str | None = None
+    ) -> Assessment:
+        with stage("coverage.answer" if answer is not None else "coverage.evidence"):
+            return self._assess(query, docs, answer=answer)
+
+    def _assess(
         self, query: str, docs: list[dict], *, answer: str | None = None
     ) -> Assessment:
         packet, digest = evidence_input(query, docs, answer)

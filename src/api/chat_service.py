@@ -2,7 +2,6 @@
 
 import asyncio
 import logging
-import time
 
 from src.access import is_admin
 from src.api.auth import CurrentUser
@@ -11,6 +10,7 @@ from src.config import settings
 from src.conversation import Message, get_session_manager, get_session_memory
 from src.engineering.pii_redactor import get_pii_redactor
 from src.engineering.session_lock import session_guard
+from src.engineering.request_trace import request_trace, stage
 from src.graph import get_workflow
 
 logger = logging.getLogger(__name__)
@@ -27,13 +27,80 @@ async def execute_chat(req: ChatRequest, current_user: CurrentUser) -> ChatRespo
 def run_chat(req: ChatRequest, current_user: CurrentUser) -> ChatResponse:
     """Serialize turns within one user/session, across both transport adapters."""
     sid = f"{current_user.username}:{req.session_id}"
-    with session_guard(sid):
+    from src.engineering.llm_client import get_llm_client
+
+    with request_trace() as trace:
         try:
-            return _run_chat(req, current_user)
+            get_llm_client().reset_usage()
+            # ExitStack separates lock wait from time spent holding the lock.
+            from contextlib import ExitStack
+
+            with ExitStack() as stack:
+                with stage("session.wait"):
+                    stack.enter_context(session_guard(sid))
+                response = _run_chat(req, current_user)
         except Exception:
             logger.exception("对话服务执行失败: session=%s", sid)
             # Initialization failures must not echo raw PII or internal exceptions.
-            return _build_response({"answer": ERROR_REPLY}, "")
+            response = _build_response({"answer": ERROR_REPLY}, "")
+        response.trace_id = trace.trace_id
+        _record_trace(response, sid, trace.snapshot())
+        return response
+
+
+def _record_trace(response: ChatResponse, sid: str, performance: dict) -> None:
+    """Include early returns/errors; missing usage is never estimated from text."""
+    try:
+        from src.engineering import get_monitor
+        from src.engineering.monitor import PRICING, QueryRecord, estimate_cost
+
+        attempts = performance["attempts"]
+        cost_known = performance["usage_complete"] and all(
+            a["model"] in PRICING for a in attempts
+        )
+        cost = (
+            sum(
+                estimate_cost(
+                    a["model"],
+                    a["usage"]["prompt_tokens"],
+                    a["usage"]["completion_tokens"],
+                )
+                for a in attempts
+            )
+            if cost_known
+            else None
+        )
+        performance.update(
+            estimated_cost_cny=cost,
+            pricing_snapshot={
+                a["model"]: PRICING[a["model"]]
+                for a in attempts
+                if a["model"] in PRICING
+            },
+        )
+        get_monitor().record(
+            QueryRecord(
+                query_id=response.trace_id,
+                user_query=response.query,
+                intent=response.intent,
+                retrieval_method=response.degradation_method,
+                degradation_level=response.degradation_level,
+                retrieval_docs_count=len(response.results),
+                retrieval_time_ms=response.search_time_ms,
+                hallucination_detected=response.was_corrected,
+                self_correction_rounds=response.correction_rounds,
+                faithfulness=response.faithfulness,
+                **performance["usage"],
+                llm_cost=cost if cost is not None else 0,
+                total_time_ms=performance["total_ms"],
+                final_answer_length=len(response.reply),
+                session_id=sid,
+                model_used=settings.default_model,
+                performance=performance,
+            )
+        )
+    except Exception as exc:
+        logger.warning("请求监控记录失败: %s", type(exc).__name__)
 
 
 def _finalize_result(result: dict, safe_query: str, memory_context: str) -> dict:
@@ -68,7 +135,6 @@ def _finalize_result(result: dict, safe_query: str, memory_context: str) -> dict
 
 def _run_chat(req: ChatRequest, current_user: CurrentUser) -> ChatResponse:
     # ── 模块33: 会话按用户隔离（用户 A 永远只能触达 "{username}:" 前缀的 key）──
-    started = time.perf_counter()
     sid = f"{current_user.username}:{req.session_id}"
 
     # ── 第0步: PII 脱敏 ──
@@ -95,11 +161,6 @@ def _run_chat(req: ChatRequest, current_user: CurrentUser) -> ChatResponse:
         )
         return _build_response(result, safe_query)
 
-    # 重置 LLM token 累加器，统计本次请求真实用量（而非字符数估算）
-    from src.engineering.llm_client import get_llm_client
-
-    get_llm_client().reset_usage()
-
     # ── 多轮对话: 加载会话历史（指代消解用）──
     session_manager = get_session_manager()
     session = session_manager.refresh_session(sid)
@@ -108,7 +169,8 @@ def _run_chat(req: ChatRequest, current_user: CurrentUser) -> ChatResponse:
     history = [{"role": m.role, "content": m.content} for m in session.messages[-6:]]
 
     # 三层记忆: 组装"最小有用上下文"（实体ledger/滚动摘要/历史片段）
-    memory_context = get_session_memory(sid).build_context(safe_query)
+    with stage("memory.context"):
+        memory_context = get_session_memory(sid).build_context(safe_query)
 
     try:
         result = workflow.run(
@@ -162,50 +224,10 @@ def _run_chat(req: ChatRequest, current_user: CurrentUser) -> ChatResponse:
 
     # 三层记忆: 记录本轮（抽实体 + 更新滚动摘要）
     try:
-        get_session_memory(sid).record_turn(safe_query, result.get("answer", ""))
+        with stage("memory.record"):
+            get_session_memory(sid).record_turn(safe_query, result.get("answer", ""))
     except Exception:
         logger.warning("记录会话记忆失败: %s", sid)
-
-    # 成本监控: 记录本次查询（token 数按长度粗略估算，成本用官方价格折算）
-    try:
-        from src.engineering import get_monitor
-        from src.engineering.llm_client import get_llm_client
-        from src.engineering.monitor import QueryRecord, estimate_cost
-
-        _answer = result.get("answer", "")
-        _usage = get_llm_client().total_usage
-        _prompt_tokens = _usage.get("prompt_tokens") or max(1, len(safe_query))
-        _completion_tokens = _usage.get("completion_tokens") or max(
-            1, len(_answer) // 2
-        )
-        _total_tokens = _usage.get("total_tokens") or (
-            _prompt_tokens + _completion_tokens
-        )
-        get_monitor().record(
-            QueryRecord(
-                user_query=safe_query,
-                intent=result.get("intent", ""),
-                retrieval_method=result.get("degradation_method", "dense"),
-                degradation_level=result.get("degradation_level", 1),
-                retrieval_docs_count=len(result.get("retrieved_docs", [])),
-                retrieval_time_ms=result.get("search_time_ms", 0),
-                hallucination_detected=result.get("was_corrected", False),
-                self_correction_rounds=result.get("correction_rounds", 0),
-                faithfulness=result.get("faithfulness", 0),
-                prompt_tokens=_prompt_tokens,
-                completion_tokens=_completion_tokens,
-                total_tokens=_total_tokens,
-                llm_cost=estimate_cost(
-                    settings.default_model, _prompt_tokens, _completion_tokens
-                ),
-                total_time_ms=(time.perf_counter() - started) * 1000,
-                final_answer_length=len(_answer),
-                session_id=sid,
-                model_used=settings.default_model,
-            )
-        )
-    except Exception as e:
-        logger.warning("成本监控记录失败: %s", e)
 
     return _build_response(result, safe_query)
 

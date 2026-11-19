@@ -78,6 +78,7 @@ class QueryRecord:
     final_answer_length: int = 0
     session_id: str = ""
     model_used: str = ""
+    performance: dict = field(default_factory=dict)
 
 
 class QueryMonitor:
@@ -98,6 +99,7 @@ class QueryMonitor:
         """初始化 SQLite 数据库"""
         self._db_path.parent.mkdir(parents=True, exist_ok=True)
         with sqlite3.connect(self._db_path) as conn:
+            conn.execute("BEGIN IMMEDIATE")
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS query_records (
                     query_id TEXT PRIMARY KEY,
@@ -129,6 +131,13 @@ class QueryMonitor:
             conn.execute("""
                 CREATE INDEX IF NOT EXISTS idx_intent ON query_records(intent)
             """)
+            columns = {
+                row[1] for row in conn.execute("PRAGMA table_info(query_records)")
+            }
+            if "performance_json" not in columns:
+                conn.execute(
+                    "ALTER TABLE query_records ADD COLUMN performance_json TEXT NOT NULL DEFAULT '{}'"
+                )
             conn.commit()
 
     def record(self, record: QueryRecord) -> None:
@@ -145,8 +154,8 @@ class QueryMonitor:
                     hallucination_detected, self_correction_rounds, faithfulness,
                     prompt_tokens, completion_tokens, total_tokens,
                     llm_cost, embedding_cost, cache_hit,
-                    total_time_ms, final_answer_length, session_id, model_used
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                    total_time_ms, final_answer_length, session_id, model_used, performance_json
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                 (
                     record.query_id,
                     record.timestamp,
@@ -169,6 +178,7 @@ class QueryMonitor:
                     record.final_answer_length,
                     record.session_id,
                     record.model_used,
+                    json.dumps(record.performance, ensure_ascii=False),
                 ),
             )
             conn.commit()
@@ -241,6 +251,16 @@ class QueryMonitor:
             ).fetchone()
             p99_latency = p99_row["total_time_ms"] if p99_row else 0
 
+            accounting = [
+                json.loads(r[0])
+                for r in conn.execute(
+                    "SELECT performance_json FROM query_records WHERE timestamp LIKE ?",
+                    (f"{date}%",),
+                )
+            ]
+            usage_unknown = sum(not p.get("usage_complete", False) for p in accounting)
+            cost_unknown = sum(p.get("estimated_cost_cny") is None for p in accounting)
+
             return {
                 "date": date,
                 "total_queries": total,
@@ -254,6 +274,9 @@ class QueryMonitor:
                 "total_prompt_tokens": row["total_prompt_tokens"] or 0,
                 "total_completion_tokens": row["total_completion_tokens"] or 0,
                 "total_tokens": row["total_tokens"] or 0,
+                "usage_unknown_queries": usage_unknown,
+                "cost_unknown_queries": cost_unknown,
+                "accounting_complete": not (usage_unknown or cost_unknown),
                 "intent_distribution": [
                     {"intent": r["intent"], "count": r["count"]} for r in intent_dist
                 ],
@@ -278,6 +301,16 @@ class QueryMonitor:
         """检查告警规则"""
         stats = self.get_daily_stats(date)
         alerts = []
+        if not stats["accounting_complete"]:
+            alerts.append(
+                {
+                    "type": "accounting_incomplete",
+                    "severity": "warning",
+                    "message": "部分请求缺少供应商用量或定价，成本合计不代表完整账单",
+                    "usage_unknown_queries": stats["usage_unknown_queries"],
+                    "cost_unknown_queries": stats["cost_unknown_queries"],
+                }
+            )
 
         # 幻觉率 > 5%
         if stats["hallucination_rate"] > 0.05:

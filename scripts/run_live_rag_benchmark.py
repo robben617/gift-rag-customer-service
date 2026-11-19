@@ -118,6 +118,10 @@ def serve(run_dir: Path, port: int, corpus_path: Path):
     embedder.embed_query("预热")
     reranker.rerank("预热", ["预热文档"], top_n=1)
     source_files = [
+        "src/engineering/request_trace.py",
+        "src/engineering/llm_client.py",
+        "src/engineering/monitor.py",
+        "src/evaluation/performance.py",
         "scripts/run_live_rag_benchmark.py",
         "src/evaluation/dialogue.py",
         "src/graph/workflow.py",
@@ -134,6 +138,7 @@ def serve(run_dir: Path, port: int, corpus_path: Path):
         "src/generation/hallucination_detector.py",
         "src/generation/answerability.py",
         "src/api/chat_service.py",
+        "src/api/models.py",
         "src/config.py",
         "data/policies/returns.json",
     ]
@@ -307,6 +312,9 @@ def main():
                 return result
 
             report = evaluate_dialogues(cases, progress, execution="http_service")
+            from src.evaluation.performance import attach_performance
+
+            attach_performance(report, run_dir / "data/monitoring.db")
             report.update(
                 created_at=datetime.now(timezone.utc).isoformat(),
                 dataset_sha256=file_sha256(dataset),

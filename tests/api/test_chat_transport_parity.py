@@ -136,7 +136,11 @@ def test_transports_return_same_business_result_and_persist_once(environment, sc
     assert regular.status_code == streaming.status_code == 200
     events = _events(streaming)
     result = next(event["data"] for event in events if event["event"] == "result")
-    assert result == regular.json()
+    regular_data = regular.json()
+    assert result["trace_id"] and result["trace_id"] != regular_data["trace_id"]
+    assert {k: v for k, v in result.items() if k != "trace_id"} == {
+        k: v for k, v in regular_data.items() if k != "trace_id"
+    }
     assert (
         "".join(event["data"] for event in events if event["event"] == "token")
         == result["reply"]
@@ -163,6 +167,10 @@ def test_transports_return_same_business_result_and_persist_once(environment, sc
     assert len(env.manager.get_session("alice:same").messages) == 4
     assert len(env.memories["alice:same"].turns) == 2
     assert len(env.records) == 2
+    assert env.records[0].query_id == regular_data["trace_id"]
+    assert env.records[1].query_id == result["trace_id"]
+    assert env.records[0].performance["llm_attempts"] == 0
+    assert env.records[0].total_tokens == 0  # No character-count fallback.
 
 
 def test_pii_is_redacted_before_workflow_storage_and_sse(environment):
@@ -263,13 +271,29 @@ async def test_closing_stream_cancels_waiting_adapter_task(environment, monkeypa
 
 
 def test_real_graph_token_usage_reaches_request_monitor(environment, monkeypatch):
+    import httpx
     from src.engineering.llm_client import get_llm_client
     from src.graph import workflow
 
-    def classify(state):
-        get_llm_client()._record_usage(
-            {"prompt_tokens": 10, "completion_tokens": 2, "total_tokens": 12}
+    client = get_llm_client()
+    client._sync_client = httpx.Client(
+        transport=httpx.MockTransport(
+            lambda req: httpx.Response(
+                200,
+                json={
+                    "choices": [{"message": {"content": "ok"}}],
+                    "usage": {
+                        "prompt_tokens": 10,
+                        "completion_tokens": 2,
+                        "total_tokens": 12,
+                    },
+                },
+            )
         )
+    )
+
+    def classify(state):
+        get_llm_client().chat([{"role": "user", "content": "hello"}])
         return {
             "intent": "chitchat",
             "target": "direct",
@@ -286,6 +310,32 @@ def test_real_graph_token_usage_reaches_request_monitor(environment, monkeypatch
     monkeypatch.setattr(chat_service, "get_workflow", lambda: graph)
     assert environment.tc.post("/api/chat", json={"query": "你好"}).status_code == 200
     assert environment.records[-1].total_tokens == 12
+    performance = environment.records[-1].performance
+    assert performance["llm_calls"] == performance["llm_attempts"] == 1
+    assert performance["attempts"][0]["stage"] == "graph.classify_intent"
+    client.close_sync()
+
+
+@pytest.mark.parametrize("mode", ["pending", "initialization_error"])
+def test_early_returns_have_fresh_empty_accounting(environment, monkeypatch, mode):
+    if mode == "pending":
+        monkeypatch.setattr(
+            "src.api.review_service.register_pending",
+            lambda *args: {"task_id": "pending"},
+        )
+    else:
+
+        def fail():
+            raise RuntimeError("private error")
+
+        monkeypatch.setattr(chat_service, "get_workflow", fail)
+    response = environment.tc.post("/api/chat", json={"query": "hello"}).json()
+    record = environment.records[-1]
+    assert record.query_id == response["trace_id"]
+    assert record.performance["llm_calls"] == record.performance["llm_attempts"] == 0
+    assert record.performance["usage_complete"]
+    assert record.total_tokens == 0
+    assert "private error" not in json.dumps(record.performance)
 
 
 @pytest.mark.asyncio
@@ -464,6 +514,9 @@ def test_real_langgraph_branches_have_transport_parity(
     streamed = next(
         event["data"] for event in _events(response) if event["event"] == "result"
     )
+    assert streamed["trace_id"] != regular["trace_id"]
+    streamed.pop("trace_id")
+    regular.pop("trace_id")
     if branch == "reject":
         assert streamed["review_task_id"] and regular["review_task_id"]
         assert streamed["review_task_id"] != regular["review_task_id"]

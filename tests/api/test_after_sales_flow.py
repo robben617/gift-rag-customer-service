@@ -121,7 +121,10 @@ def test_consultations_and_actions_have_transport_parity(env, query, human, word
     streamed = _streamed(
         env.tc.post("/api/chat/stream", params={"query": query, "session_id": "sse"})
     )
-    assert regular == streamed
+    assert regular["trace_id"] and regular["trace_id"] != streamed["trace_id"]
+    assert {k: v for k, v in regular.items() if k != "trace_id"} == {
+        k: v for k, v in streamed.items() if k != "trace_id"
+    }
     assert regular["needs_human"] is human and word in regular["reply"]
     assert env.calls == []
     if not human:

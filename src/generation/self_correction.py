@@ -14,6 +14,7 @@ import logging
 from typing import Optional
 
 from src.engineering.llm_client import get_llm_client
+from src.engineering.request_trace import timed_stage
 
 from .hallucination_detector import HallucinationDetector, get_detector
 from .models import GenerationResult, HallucinationCheck
@@ -242,6 +243,7 @@ class SelfCorrector:
             final_level=4,
         )
 
+    @timed_stage("generation.answer")
     def _generate(self, query: str, docs: list[str]) -> str:
         """调用 LLM 生成回答（带缓存，使用统一 LLMClient）"""
         context = "\n\n".join(
@@ -280,6 +282,7 @@ class SelfCorrector:
 
         return result
 
+    @timed_stage("generation.missing_info")
     def _extract_missing_info(self, query: str, check: HallucinationCheck) -> str:
         """从幻觉检测结果中提取缺失信息（使用统一 LLMClient）"""
         hallucination_details = "\n".join(

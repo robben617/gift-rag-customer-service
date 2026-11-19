@@ -8,6 +8,7 @@ import logging
 from typing import Optional
 
 from src.engineering.llm_client import get_llm_client
+from src.engineering.request_trace import timed_stage
 
 from .models import Claim, ClaimVerdict, HallucinationCheck
 
@@ -58,6 +59,7 @@ class HallucinationDetector:
         else:
             self._client = get_llm_client()
 
+    @timed_stage("generation.faithfulness")
     def check(self, answer: str, docs: list[str]) -> HallucinationCheck:
         """检查回答是否有幻觉
 
@@ -84,7 +86,7 @@ class HallucinationDetector:
     def _call_llm(self, answer: str, docs: list[str]) -> HallucinationCheck:
         """调用 LLM 进行幻觉检测（使用统一 LLMClient）"""
         docs_text = "\n\n".join(
-            f"[文档{i+1}] {d[:1000]}" for i, d in enumerate(docs[:5])
+            f"[文档{i + 1}] {d[:1000]}" for i, d in enumerate(docs[:5])
         )
 
         data = self._client.chat_json(

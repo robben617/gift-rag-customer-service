@@ -38,6 +38,7 @@ from typing_extensions import TypedDict
 from src.conversation import get_human_handler
 from src.embedding.degradation import get_degradation_strategy
 from src.generation import get_corrector
+from src.engineering.request_trace import timed_stage
 from src.routing import RouteTarget, get_router
 
 logger = logging.getLogger(__name__)
@@ -850,19 +851,22 @@ def build_rag_workflow() -> StateGraph:
     workflow = StateGraph(RAGState)
 
     # ── 添加节点 ──
-    workflow.add_node("classify_intent", classify_intent)
-    workflow.add_node("check_human", check_human_needed)
-    workflow.add_node("retrieve", retrieve_docs)
-    workflow.add_node("web_search", web_search)  # 新增: 联网搜索兜底
-    workflow.add_node("generate", generate_answer)
-    workflow.add_node("evaluate_quality", evaluate_quality)  # 新增
-    workflow.add_node("human_approval", human_approval)  # 新增: 真正的 HITL
-    workflow.add_node("rewrite_and_retrieve", rewrite_and_retrieve)  # 新增: 改写回路
-    workflow.add_node("human", handle_human)
-    workflow.add_node("sql", handle_sql)
-    workflow.add_node("policy", handle_policy)  # 新增: 退货结构化政策工具
-    workflow.add_node("direct", handle_direct)
-    workflow.add_node("error", handle_error)
+    for name, node in (
+        ("classify_intent", classify_intent),
+        ("check_human", check_human_needed),
+        ("retrieve", retrieve_docs),
+        ("web_search", web_search),
+        ("generate", generate_answer),
+        ("evaluate_quality", evaluate_quality),
+        ("human_approval", human_approval),
+        ("rewrite_and_retrieve", rewrite_and_retrieve),
+        ("human", handle_human),
+        ("sql", handle_sql),
+        ("policy", handle_policy),
+        ("direct", handle_direct),
+        ("error", handle_error),
+    ):
+        workflow.add_node(name, timed_stage(f"graph.{name}")(node))
 
     # ── 设置入口 ──
     workflow.set_entry_point("classify_intent")
