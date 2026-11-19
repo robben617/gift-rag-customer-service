@@ -18,6 +18,8 @@ python scripts/run_live_rag_benchmark.py --dataset data/rag_routing_eval.json --
 
 三组都是隔离服务上的固定题实测。各次运行的模型服务响应和冷启动耗时会波动。自动化回归覆盖已知订单实体、异常返回、改写回退与工作流，真实 HTTP 评测使用 FAQ 索引，订单后端禁用。
 
+本页的 18 轮短提示结果也作为后续发布检查的固定集 Token 基线。[对话发布检查](rag-release-gate.md)
+
 ## 固定集结果
 
 | 指标 | 压缩前 | 压缩后 |

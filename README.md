@@ -174,6 +174,7 @@
 | Latency Score | 延迟归一化 + P50/P95/P99 | ✅ |
 | 完整 RAG 评估 | `with_generation=True` 走检索+生成全链路 | ✅ |
 | **质量门禁** | `scripts/eval_gate.py` 阈值不达标 exit 1（发布前手动跑，依赖真实知识库与 API Key，未接入 CI） | ✅ |
+| **对话发布检查** | 两套真实 HTTP 对话回归，检查答案、证据、风险转人工和固定集 Token 预算。[运行与阈值](docs/rag-release-gate.md) | ✅ |
 
 ### 🔧 工程基础设施
 
