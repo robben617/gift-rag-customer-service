@@ -131,6 +131,7 @@ def test_valid_reports_gate_and_apply_only_regression_budget(release_fixture):
         ("trace_id", "trace_id_mismatch"),
         ("model", "baseline_models_mismatch"),
         ("stale_source", "stale_source_fingerprint"),
+        ("new_source", "stale_source_fingerprint"),
         ("wrong_dataset", "dataset_mismatch"),
     ],
 )
@@ -163,6 +164,9 @@ def test_incomplete_or_inconsistent_report_is_rejected(release_fixture, problem,
         report["deployment"]["models"]["dialogue"] = "other"
     elif problem == "stale_source":
         report["deployment"]["source_sha256"]["workflow.py"] = "outdated"
+    elif problem == "new_source":
+        (root / "new_policy.py").write_text("modified", encoding="utf-8")
+        report["deployment"]["source_sha256"]["new_policy.py"] = "outdated"
     elif problem == "wrong_dataset":
         report["dataset_sha256"] = "outdated"
     _write(root / "release/report.json", report)

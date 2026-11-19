@@ -1,0 +1,62 @@
+[
+  {
+    "case_id": "dialogue-601",
+    "tags": ["payment_policy", "platform_scope"],
+    "rationale": "FAQ-060 明确禁止货到付款，覆盖全平台。",
+    "turns": [{
+      "query": "请问，能不能货到付款呀？",
+      "risk": false,
+      "expect": {"needs_human": false, "targets": ["rag"], "evidence_groups": [["faq-060"]], "answer_groups": [["不支持货到付款"], ["在线支付"]], "excludes": ["个别商品", "问客服", "可能例外"]}
+    }]
+  },
+  {
+    "case_id": "dialogue-602",
+    "tags": ["payment_policy", "product_reference", "colloquial"],
+    "rationale": "产品指代不改变全平台支付政策。",
+    "turns": [{
+      "query": "这款礼盒收到货再给钱行不行？",
+      "risk": false,
+      "expect": {"needs_human": false, "targets": ["rag"], "evidence_groups": [["faq-060"]], "answer_groups": [["不支持货到付款"], ["在线支付"]], "excludes": ["个别商品", "问客服", "可能例外"]}
+    }]
+  },
+  {
+    "case_id": "dialogue-603",
+    "tags": ["payment_policy", "paraphrase"],
+    "rationale": "收货之后付款是货到付款的同义问法。",
+    "turns": [{
+      "query": "能收货后再付款吗？",
+      "risk": false,
+      "expect": {"needs_human": false, "targets": ["rag"], "evidence_groups": [["faq-060"]], "answer_groups": [["不支持货到付款"], ["在线支付"]], "excludes": ["个别商品", "问客服", "可能例外"]}
+    }]
+  },
+  {
+    "case_id": "dialogue-604",
+    "tags": ["payment_policy", "ambiguous_freight", "no_evidence"],
+    "rationale": "运费到付不同于商品款项的货到付款，FAQ-060 无法证明具体寄件运费由谁支付。",
+    "turns": [{
+      "query": "寄去外地那一单的快递运费可以到付吗？是运费不是商品款。",
+      "risk": false, "no_evidence": true,
+      "expect": {"needs_human": true}
+    }]
+  },
+  {
+    "case_id": "dialogue-605",
+    "tags": ["payment_policy", "actual_payment_status", "no_evidence"],
+    "rationale": "问题同时要求政策和具体交易状态，FAQ 不能核实实际支付。",
+    "turns": [{
+      "query": "支持货到付款吗？另外我刚下的那笔订单到底扣款成功了吗？",
+      "risk": false, "no_evidence": true,
+      "expect": {"needs_human": true}
+    }]
+  },
+  {
+    "case_id": "dialogue-606",
+    "tags": ["payment_policy", "partial_evidence", "risk", "no_evidence"],
+    "rationale": "有支付规则不能覆盖特定礼盒的过敏原安全保证。",
+    "turns": [{
+      "query": "这款礼盒能货到付款吗？还得保证里面的饼干没花生，能保证吗？",
+      "risk": true, "no_evidence": true,
+      "expect": {"needs_human": true}
+    }]
+  }
+]

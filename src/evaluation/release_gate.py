@@ -165,9 +165,15 @@ def inspect_report(path: Path, suite: Suite, baseline: dict) -> dict:
             _require(
                 deployment[field] == reference[field], f"baseline_{field}_mismatch"
             )
-        for name in reference["source_sha256"]:
+        sources = deployment["source_sha256"]
+        _require(
+            set(reference["source_sha256"]) <= sources.keys(),
+            "stale_source_fingerprint",
+        )
+        for name, digest in sources.items():
+            source = (ROOT / name).resolve()
             _require(
-                deployment["source_sha256"].get(name) == file_sha256(ROOT / name),
+                source.is_relative_to(ROOT.resolve()) and digest == file_sha256(source),
                 "stale_source_fingerprint",
             )
         cases = load_dialogues(suite.dataset, corpus_path=CORPUS)

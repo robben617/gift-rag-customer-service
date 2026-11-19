@@ -138,6 +138,7 @@ def serve(run_dir: Path, port: int, corpus_path: Path):
         "src/generation/self_correction.py",
         "src/generation/hallucination_detector.py",
         "src/generation/answerability.py",
+        "src/generation/payment_policy.py",
         "src/api/chat_service.py",
         "src/api/models.py",
         "src/config.py",

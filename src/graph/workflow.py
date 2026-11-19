@@ -38,7 +38,7 @@ from typing_extensions import TypedDict
 from src.conversation import get_human_handler
 from src.embedding.degradation import get_degradation_strategy
 from src.generation import get_corrector
-from src.engineering.request_trace import timed_stage
+from src.engineering.request_trace import stage, timed_stage
 from src.routing import RouteTarget, get_router
 
 logger = logging.getLogger(__name__)
@@ -258,6 +258,7 @@ def retrieve_docs(state: RAGState) -> dict:
         evidence_input,
         get_answerability_verifier,
     )
+    from src.generation.payment_policy import match_payment_policy
 
     retriever = get_retriever()
     strategy = get_degradation_strategy(retriever)
@@ -265,10 +266,23 @@ def retrieve_docs(state: RAGState) -> dict:
     checked: dict[str, Assessment] = {}
 
     def check_candidates(rows):
-        docs = [{"chunk_id": row.chunk_id, "text": row.text} for row in rows[:5]]
+        docs = [
+            {"chunk_id": row.chunk_id, "text": row.text, "doc_type": row.doc_type}
+            for row in rows[:5]
+        ]
         _, digest = evidence_input(coverage_query, docs)
         if digest not in checked:
-            assessment = get_answerability_verifier().assess(coverage_query, docs)
+            quote = match_payment_policy(state["query"], coverage_query, docs)
+            assessment = (
+                Assessment(
+                    "complete",
+                    "已核对适用问法及完整支付 FAQ",
+                    digest,
+                    [{"doc_id": quote.doc_id, "source_quote": quote.text}],
+                )
+                if quote
+                else get_answerability_verifier().assess(coverage_query, docs)
+            )
             # A transient error can be tried again after degradation. Neither status
             # can qualify candidates for an early return.
             if assessment.status != "unavailable":
@@ -389,13 +403,42 @@ def generate_answer(state: RAGState) -> dict:
     from src.embedding.retriever import get_retriever
 
     retrieved_docs = state.get("retrieved_docs", [])
-    from src.generation.answerability import evidence_input, get_answerability_verifier
+    from src.generation.answerability import (
+        Assessment,
+        evidence_input,
+        get_answerability_verifier,
+    )
+    from src.generation.payment_policy import match_payment_policy
 
     # Search keywords may broaden a generic question or drop a user constraint.
     # Answer and verify the completed user request, not its retrieval abstraction.
     query = state.get("resolved_query") or state["rewritten_query"]
-    verifier = get_answerability_verifier()
     _, digest = evidence_input(query, retrieved_docs)
+    quote = match_payment_policy(state.get("query", ""), query, retrieved_docs)
+    if quote and state.get("degradation_level", 1) < 4:
+        with stage("generation.policy_quote"):
+            answer = f"{quote.text}[{quote.index}]"
+            _, answer_digest = evidence_input(query, retrieved_docs, answer)
+            support = {"doc_id": quote.doc_id, "source_quote": quote.text}
+            return {
+                "answer": answer,
+                # Exact source text, rather than a model-estimated score.
+                "faithfulness": 1.0,
+                "correction_rounds": 0,
+                "was_corrected": False,
+                "evidence_assessment": Assessment(
+                    "complete", "已核对适用问法及完整支付 FAQ", digest, [support]
+                ).to_dict(),
+                "evidence_status": "complete",
+                "answer_assessment": Assessment(
+                    "complete",
+                    "答复逐字引用已核准政策",
+                    answer_digest,
+                    [{**support, "answer_quote": quote.text}],
+                ).to_dict(),
+                "answer_status": "complete",
+            }
+    verifier = get_answerability_verifier()
     assessment = state.get("evidence_assessment") or {}
     if assessment.get("input_hash") != digest or assessment.get("status") not in (
         "complete",

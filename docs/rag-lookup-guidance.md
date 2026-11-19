@@ -43,3 +43,5 @@ python scripts/rag_release_gate.py --run-dir reports/rag-release/lookup-guidance
 - [首次门禁判定](baselines/2026-11-19-rag-lookup-guidance-gate.json)
 - [固定集独立复跑报告](baselines/2026-11-19-rag-lookup-guidance-regression-repeat.json)
 - [独立复跑后的门禁判定](baselines/2026-11-19-rag-lookup-guidance-gate-repeat.json)
+
+后续针对货到付款的波动增加了 [核准 FAQ 原文答复](rag-payment-policy.md)。
