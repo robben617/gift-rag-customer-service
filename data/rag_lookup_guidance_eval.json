@@ -1,0 +1,61 @@
+[
+  {
+    "case_id": "dialogue-501",
+    "tags": ["lookup_guidance", "followup", "shipping"],
+    "rationale": "FAQ-011 给出预售发货时间的查询入口及现货的通常时效，不能声称知道这件商品的实际日期。",
+    "turns": [
+      {
+        "query": "这件还是预售，我该去哪儿查准确的发货日？现在能确定是哪天吗？",
+        "risk": false,
+        "expect": {
+          "needs_human": false, "targets": ["rag"], "evidence_groups": [["faq-011"]],
+          "answer_groups": [["商品页", "页面", "详情页"], ["标注", "显示", "注明"], ["无法确定", "无法确认", "不能确定", "不能确认", "无具体", "没有具体", "未提供", "无法直接给出", "不能直接给出", "未列出"]]
+        }
+      },
+      {
+        "query": "如果换成不是预售的普通现货，付款后一般几个工作日才发出？",
+        "risk": false,
+        "expect": {
+          "needs_human": false, "targets": ["rag"], "evidence_groups": [["faq-011", "faq-019", "faq-020"]],
+          "answer_groups": [["1-3个工作日", "1至3个工作日", "1到3个工作日", "一到三个工作日", "一至三个工作日"]]
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "dialogue-502",
+    "tags": ["actual_date", "no_evidence"],
+    "rationale": "只问实际发货时间，通用的查阅指引不能替代具体商品日期。",
+    "turns": [{
+      "query": "我付了预售的星河限定礼盒，明天上午十点前到底会不会发货？",
+      "risk": false, "no_evidence": true, "expect": {"needs_human": true}
+    }]
+  },
+  {
+    "case_id": "dialogue-503",
+    "tags": ["lookup_guidance", "unknown_location", "no_evidence"],
+    "rationale": "用户明确问入口，但资料未指定此自提柜的查询入口或营业时间。",
+    "turns": [{
+      "query": "滨江自提柜节假日开到几点，从哪个页面能查到？",
+      "risk": false, "no_evidence": true, "expect": {"needs_human": true}
+    }]
+  },
+  {
+    "case_id": "dialogue-504",
+    "tags": ["lookup_guidance", "partial_evidence", "no_evidence"],
+    "rationale": "资料可以回答去哪里核对预售发货，无法回答另一个自提站营业时间问题。",
+    "turns": [{
+      "query": "预售礼盒的发货时间在哪里查？另外南京鼓楼自提点今晚几点关？两件都想确认。",
+      "risk": false, "no_evidence": true, "expect": {"needs_human": true}
+    }]
+  },
+  {
+    "case_id": "dialogue-505",
+    "tags": ["lookup_guidance", "allergen_guarantee", "no_evidence"],
+    "rationale": "询问查看方式不能替代食品过敏安全保证，语料无此款产品的芒果成分或交叉接触证据。",
+    "turns": [{
+      "query": "我对芒果过敏，这款饼干能保证我放心吃吗？去哪里查最准确？",
+      "risk": true, "no_evidence": true, "expect": {"needs_human": true}
+    }]
+  }
+]

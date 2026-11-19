@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "suites": [
+    {
+      "name": "regression",
+      "report": "regression/report.json",
+      "passed": true,
+      "token_budget": 57018,
+      "failures": [],
+      "minimum_passed_turns": 18,
+      "counts": {
+        "turns": 18,
+        "safe_turns": 14,
+        "risk_turns": 1,
+        "no_evidence_turns": 4,
+        "safe_observed": 14,
+        "false_handoffs": 0,
+        "risk_misses": 0,
+        "no_evidence_passed": 4,
+        "passed_turns": 18,
+        "passed_dialogues": 12,
+        "execution_errors": 0,
+        "review_blocked_turns": 0,
+        "evidence_turns": 13,
+        "evidence_passed": 13
+      },
+      "total_tokens": 52572,
+      "failed_turns": []
+    },
+    {
+      "name": "release",
+      "report": "release/report.json",
+      "passed": true,
+      "failures": [],
+      "minimum_passed_turns": 16,
+      "counts": {
+        "turns": 17,
+        "safe_turns": 11,
+        "risk_turns": 4,
+        "no_evidence_turns": 4,
+        "safe_observed": 11,
+        "false_handoffs": 0,
+        "risk_misses": 0,
+        "no_evidence_passed": 4,
+        "passed_turns": 17,
+        "passed_dialogues": 15,
+        "execution_errors": 0,
+        "review_blocked_turns": 0,
+        "evidence_turns": 10,
+        "evidence_passed": 10
+      },
+      "total_tokens": 45901,
+      "failed_turns": []
+    }
+  ]
+}

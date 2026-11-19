@@ -7,6 +7,7 @@ rejects invented evidence; model unavailability never grants permission to answe
 import hashlib
 import json
 import logging
+import re
 from dataclasses import asdict, dataclass, field
 from typing import Literal
 
@@ -17,6 +18,17 @@ from src.engineering.singleton import singleton_factory
 from src.engineering.request_trace import stage
 
 logger = logging.getLogger(__name__)
+
+_LOOKUP_REQUEST = re.compile(
+    r"(?:看|查|核对|确认)[^，。！？!?\n]{0,5}(?:哪[里儿]|哪个(?:页面|入口)|哪一?页)"
+    r"|(?:哪[里儿]|哪个(?:页面|入口)|哪一?页)[^，。！？!?\n]{0,12}(?:看|查|核对|确认|找)"
+    r"|(?:怎么|如何)(?:查[询看]?|核对|确认)"
+)
+
+
+def requests_lookup_guidance(query: str) -> bool:
+    """Enable scoped guidance only when the question asks how or where to verify."""
+    return bool(_LOOKUP_REQUEST.search(query))
 
 
 class Support(BaseModel):
@@ -58,6 +70,9 @@ SYSTEM_PROMPT = """你是电商客服的证据核验器，不负责替用户办�
 {"complete":true或false,"reason":"覆盖或缺失的必要信息","supports":[{"doc_id":"...","source_quote":"资料原文片段，至少4字","answer_quote":"回答原文片段；未提供answer时为空"}]}
 complete=true 必须提供非空支持片段；无法确认时 complete=false，不编造片段。"""
 
+LOOKUP_GUIDANCE_PROMPT = """
+查询指引规则：用户明确询问去哪里或如何核对，且资料明确指定同一事项的查阅入口时，可以在不知个案值的情况下覆盖这项请求。例：预售发货具体时间以商品页标注为准；可指引用户查看商品页发货时间，但不能给出该商品的实际日期。只引用直接证明该事项及入口的片段。订单进度的查看入口不是预售发货日期的来源。候选回答如把其他入口当成该事项的查询入口或称为更准确，即使也提到正确入口，仍判 false。如同时问个案值且资料无该值，必须明确不作具体判断或承诺。仅问具体事实、其他独立子问题缺证据、只有笼统的“查页面/问客服”，或涉及退款办理、价格承诺、健康与安全保证时，不适用这条规则，仍按完整覆盖判断。"""
+
 
 def evidence_input(
     query: str, docs: list[dict], answer: str | None = None
@@ -94,10 +109,13 @@ class AnswerabilityVerifier:
         sources = {row["doc_id"]: row["text"] for row in packet["documents"]}
         if not query.strip() or not sources or any(not key for key in sources):
             return Assessment("insufficient", "没有可核验的本地证据", digest)
+        system_prompt = SYSTEM_PROMPT
+        if requests_lookup_guidance(query):
+            system_prompt += LOOKUP_GUIDANCE_PROMPT
         try:
             raw = (self.client or get_llm_client()).chat_json(
                 messages=[
-                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "system", "content": system_prompt},
                     {"role": "user", "content": json.dumps(packet, ensure_ascii=False)},
                 ],
                 temperature=0,

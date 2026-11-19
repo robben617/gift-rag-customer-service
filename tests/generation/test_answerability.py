@@ -4,7 +4,12 @@ from types import SimpleNamespace
 
 import pytest
 
-from src.generation.answerability import AnswerabilityVerifier, evidence_input
+from src.generation.answerability import (
+    LOOKUP_GUIDANCE_PROMPT,
+    AnswerabilityVerifier,
+    evidence_input,
+    requests_lookup_guidance,
+)
 
 DOCS = [{"chunk_id": "faq-060", "text": "本平台不支持货到付款，所有订单需在线支付。"}]
 
@@ -97,3 +102,48 @@ def test_quoted_evidence_must_be_inside_generator_excerpt():
     docs = [{"chunk_id": "faq-060", "text": "a" * 800 + "不支持货到付款"}]
     verifier = AnswerabilityVerifier(SimpleNamespace(chat_json=lambda **kw: verdict()))
     assert verifier.assess("付款方式", docs).status == "unavailable"
+
+
+@pytest.mark.parametrize(
+    "question,expected",
+    [
+        ("预售哪天发货，去哪儿查最准？", True),
+        ("我去哪个页面核对发货时间？", True),
+        ("付款后怎么查询发货时间？", True),
+        ("预售礼盒明天几点发？", False),
+        ("哪里能买到这个礼盒？", False),
+        ("现在买能保证今晚到吗？", False),
+    ],
+)
+def test_lookup_rule_requires_how_or_where_to_verify(question, expected):
+    assert requests_lookup_guidance(question) is expected
+
+
+def test_lookup_policy_reaches_both_verifiers_without_bypassing_spans():
+    docs = [{"chunk_id": "shipping", "text": "预售商品以页面标注时间为准。"}]
+    q = "预售的发货日期看哪里最准？能确定是哪天吗？"
+    answer = "请到商品页查看标注时间，现有资料无法确认具体日期。"
+    prompts = []
+
+    def verify(**kwargs):
+        messages = kwargs["messages"]
+        prompts.append(messages[0]["content"])
+        return {
+            "complete": True,
+            "reason": "指引适用于预售发货时间",
+            "supports": [
+                {
+                    "doc_id": "shipping",
+                    "source_quote": "以页面标注时间为准",
+                    "answer_quote": "查看标注时间",
+                },
+            ],
+        }
+
+    verifier = AnswerabilityVerifier(SimpleNamespace(chat_json=verify))
+    assert verifier.assess(q, docs).status == "complete"
+    assert verifier.assess(q, docs, answer=answer).status == "complete"
+    assert verifier.assess(q, docs, answer="明天会发货。").status == "unavailable"
+    verifier.assess("我的商品明天几点发货？", docs)
+    assert all(LOOKUP_GUIDANCE_PROMPT in prompt for prompt in prompts[:3])
+    assert LOOKUP_GUIDANCE_PROMPT not in prompts[3]

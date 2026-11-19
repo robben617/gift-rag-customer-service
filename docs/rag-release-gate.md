@@ -56,3 +56,5 @@ python scripts/rag_release_gate.py --run-dir reports/rag-release/candidate-01 --
 - [首轮门禁判定](baselines/2026-11-19-rag-release-first-gate.json)
 - [固定集逐轮报告](baselines/2026-11-19-rag-release-first-regression.json)
 - [新题逐轮报告](baselines/2026-11-19-rag-release-first-heldout.json)
+
+预售误转与现货追问的修复见 [查询入口与个案状态的核验规则](rag-lookup-guidance.md)。

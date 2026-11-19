@@ -16,6 +16,7 @@ from typing import Optional
 from src.engineering.llm_client import get_llm_client
 from src.engineering.request_trace import timed_stage
 
+from .answerability import requests_lookup_guidance
 from .hallucination_detector import HallucinationDetector, get_detector
 from .models import GenerationResult, HallucinationCheck
 
@@ -37,11 +38,18 @@ GENERATION_PROMPT = """你是一个电商客服助手。请基于以下参考文
 4. 回答要简洁、专业、有帮助
 5. 资料只说明某款或某类商品时，注明这个适用范围，不扩展为所有型号的结论；未知具体型号参数或安全保证必须明确无法确认。
 6. 当资料明确说明支持或不支持某项服务时，直接回答。只在资料明确记载时给出例外、替代办法或后续操作，不暗示可以通过人工获得例外。
-
+{lookup_rule}
 参考文档:
 {context}
 
 用户问题: {query}"""
+
+LOOKUP_REPLY_RULE = (
+    "7. 用户明确问如何核对时，只给出资料为该事项指定的查阅入口，勿附加相近事项的入口。"
+    "例如，预售日期看商品页标注，不能把查看订单进度的入口当作日期来源。"
+    "若还问具体日期或状态但资料没有，说明无法确定这项实际值，不编造、不承诺。"
+    "保留适用条件，不用这一指引代替其他问题的答案。\n"
+)
 
 # 缺失信息提取 Prompt
 EXTRACT_MISSING_PROMPT = """根据幻觉检测结果，提取回答中缺失的关键信息。
@@ -250,7 +258,11 @@ class SelfCorrector:
         context = "\n\n".join(
             f"[文档{i + 1}] {d[:800]}" for i, d in enumerate(docs[:5])
         )
-        prompt = GENERATION_PROMPT.format(context=context, query=query)
+        prompt = GENERATION_PROMPT.format(
+            context=context,
+            query=query,
+            lookup_rule=LOOKUP_REPLY_RULE if requests_lookup_guidance(query) else "",
+        )
 
         # 检查 LLM 缓存
         try:
