@@ -5,7 +5,7 @@
 > 基于 LangGraph 13 节点编排的 Agentic RAG 系统 — 双路召回、L0 至 L5 六级降级、幻觉检测自纠正、Human-in-the-Loop、三层记忆、业务工具调用
 
 [![CI](https://github.com/robben617/gift-rag-customer-service/actions/workflows/ci.yml/badge.svg)](https://github.com/robben617/gift-rag-customer-service/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/badge/tests-410%20passed-brightgreen.svg)](#-工程质量)
+[![Tests](https://img.shields.io/badge/tests-663%20passed-brightgreen.svg)](#-工程质量)
 [![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-green.svg)](https://fastapi.tiangolo.com/)
 [![Chroma](https://img.shields.io/badge/Chroma-0.5+-orange.svg)](https://www.trychroma.com/)
@@ -16,7 +16,7 @@
 
 - **是什么**：私域礼赠场景的电商智能客服。目标不是把平均准确率抬高一点，而是**让高频重复咨询自助闭环，把高风险问答识别出来交给人工**。
 - **核心链路**：LangGraph 13 节点 StateGraph（8 条静态边 / 5 组条件边）→ 双路召回 + L0 至 L5 六级降级 → claims 级幻觉核验与自纠正 → 高敏承诺护栏 → Human-in-the-Loop 转人工（带交接包）。
-- **如何验证**：49 条原始题目保留，新增固定 FAQ ID 检索基线（34 题可评分，15 题明确排除；历史相似度结果见下）+ **410 条单测** + GitHub Actions 四段 CI（lint / test / typecheck / security）全绿。
+- **如何验证**：49 条原始题目保留，新增固定 FAQ ID 检索基线（34 题可评分，15 题明确排除；历史相似度结果见下）+ **663 条单测** + 对话级发布门禁（两套真实 HTTP + Token 预算）+ GitHub Actions 四段 CI（lint / test / typecheck / security）全绿。
 - **如何上手**：`python scripts/demo_offline.py` **不需要任何 API Key 与本地模型**即可打开问答界面（见 [零 Key 离线体验](#0-零-key-离线体验)）；完整体验需本地 BGE 模型与 DeepSeek Key。
 
 ---
@@ -281,13 +281,13 @@ Level 5: 诚实兜底
 
 | 项 | 现状 | 怎么自己验证 |
 |------|------|------|
-| **单元 / 集成测试** | **410 条通过**（另 9 条标 `slow` / `integration`，默认按 marker 排除） | `pytest tests/ -q` |
+| **单元 / 集成测试** | **663 条通过**（另 9 条标 `slow` / `integration`，默认按 marker 排除） | `pytest tests/ -q` |
 | **CI** | GitHub Actions 四段：`ruff` 静态检查 → `pytest`（含覆盖率上传） → `mypy` 类型检查 → 硬编码密钥扫描 | [Actions 页面](https://github.com/robben617/gift-rag-customer-service/actions/workflows/ci.yml) |
 | **质量门禁** | `scripts/eval_gate.py` 对 `recall@5 / mrr / precision@5` 三项卡阈值，不达标 `exit 1`（发布前手动跑，未接入 CI：依赖真实知识库与 API Key） | `python scripts/eval_gate.py` |
 | **评测回归** | 49 条自建评测集 + 单路/双路 A/B 对照脚本，可随时重跑 | `python scripts/run_benchmark.py` |
 | **AI 行为回归** | workflow 静态中断与断点续接（HITL）有独立测试，断言「中断未被误判为正常完成」 | `pytest tests/graph/test_workflow_hitl.py -v` |
 
-> 顶部 `tests-410 passed` 是静态徽章，会随用例增减漂移；**实时结论以 CI 徽章为准**。
+> 顶部 `tests-663 passed` 是静态徽章，会随用例增减漂移；**实时结论以 CI 徽章为准**。
 
 ---
 
@@ -388,23 +388,25 @@ src/
 ├── ingestion/       # 多格式摄入 (PDF文本快路径/RapidOCR/Word/Excel/PPT/Image/JSON/web/TXT)
 ├── chunking/        # 4 种分块策略 + 内容形态路由 + 策略变更检测
 ├── embedding/       # Embedder(本地bge) + Chroma store + Retriever + 双路召回 + L0至L5六级降级
-├── routing/         # LLM Function Calling 意图分类 + 指代护栏 + 工具路由
+├── routing/         # 联合路由(意图+实体+检索改写一次调用) + 指代护栏 + 工具路由
 ├── retrieval/       # 本地 CrossEncoder Reranker 重排序
-├── generation/      # claims聚合幻觉检测 + 自纠正闭环 + 高敏护栏
-├── conversation/    # SSE 流式 + 会话管理 + 三层记忆 + 情绪识别 + 人工介入
-├── engineering/     # 熔断器/缓存/监控/日志/错误处理/安全/PII/统一LLMClient
-├── evaluation/      # 评估器 + 9 指标 + 金标准测试
-├── graph/           # LangGraph 13 节点 StateGraph + 条件边 + HITL
+├── generation/      # claims聚合幻觉检测 + 自纠正 + 高敏护栏 + 证据覆盖核验 + 支付政策原文答复
+├── conversation/    # 流式 + 会话管理 + 三层记忆 + 情绪识别 + 人工介入 + 审批任务存储
+├── engineering/     # 熔断器/缓存/监控/请求级追踪/日志/错误处理/安全/PII/统一LLMClient/文件锁
+├── evaluation/      # FAQ ID 基线 + 对话评测 + 性能统计 + 发布门禁
+├── graph/           # LangGraph 13 节点 StateGraph + 条件边 + 持久化 checkpoint 续接
 ├── orders/          # 订单/物流查询工具 (MySQL + mock 降级)
-├── business/        # 退货结构化政策工具
-├── api/             # FastAPI + 路由 (auth/query/chat/stream/upload/evaluate/stats)
-├── admin/           # Gradio UI ×3 (入库/聊天/管理员)
+├── business/        # 售后政策：咨询/办理/进度分流 + 版本化规则与条件校验
+├── api/             # FastAPI + 路由 (auth/query/chat/stream/upload/evaluate/stats/reviews) + 共享对话服务
+├── admin/           # Gradio UI ×3 (入库/聊天/管理员) + 回答审批操作台
 ├── demo/            # 零依赖离线演示（纯标准库 FAQ 关键词检索，与生产链路隔离）
 └── config.py        # pydantic-settings 配置中心
 
-scripts/demo_offline.py  # 离线演示入口（无需模型与 Key）
+scripts/demo_offline.py       # 离线演示入口（无需模型与 Key）
+scripts/rag_release_gate.py   # 发布门禁（两套真实 HTTP 对话 + Token 预算）
 local_models/        # 本地 BGE 模型权重（Embedding + Reranker）
 data/chroma/         # Chroma 持久化目录
+data/workflow_*.db   # 审批 checkpoint 与任务库（重启后续接依赖它）
 ```
 
 ---
@@ -413,7 +415,7 @@ data/chroma/         # Chroma 持久化目录
 
 | 文档 | 内容 | 适合谁看 |
 |------|------|----------|
-| [docs/项目产品报告-完整交接.md](docs/项目产品报告-完整交接.md) | **交接总纲**：业务定义 / 架构 / 13 节点 / 17 接口 / 数据模型 / 启动验收 / 风险登记册 / 上手路径 | **第一次接手这个项目的人或 Agent** |
+| [docs/项目产品报告-完整交接.md](docs/项目产品报告-完整交接.md) | **交接总纲**：业务定义 / 架构 / 13 节点 / 20 接口 / 持久化审批 / 发布门禁 / 数据模型 / 启动验收 / 风险登记册 | **第一次接手这个项目的人或 Agent** |
 | [docs/使用教程.md](docs/使用教程.md) | 从零跑通全流程：环境准备、启动、知识库入库、问答、转人工、常见问题排查 | 想动手跑一遍的人 |
 | [docs/ADR.md](docs/ADR.md) | 10 篇架构决策记录（背景 / 备选方案 / 取舍 / 后果） | 想看设计取舍的人 |
 | [docs/optimization-report.md](docs/optimization-report.md) | 迭代过程中的问题定位与优化记录 | 想看调优过程与踩坑的人 |
