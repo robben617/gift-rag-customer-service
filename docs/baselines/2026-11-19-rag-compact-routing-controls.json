@@ -1,0 +1,2044 @@
+{
+  "schema_version": 2,
+  "run_id": "fbe9c314d2c54816b3267afe6cbe780c",
+  "execution": "http_service",
+  "complete": true,
+  "dialogues": 6,
+  "counts": {
+    "turns": 6,
+    "safe_turns": 0,
+    "risk_turns": 3,
+    "no_evidence_turns": 6,
+    "safe_observed": 0,
+    "false_handoffs": 0,
+    "risk_misses": 0,
+    "no_evidence_passed": 6,
+    "passed_turns": 6,
+    "passed_dialogues": 6,
+    "execution_errors": 0,
+    "review_blocked_turns": 0,
+    "evidence_turns": 0,
+    "evidence_passed": 0
+  },
+  "metrics": {
+    "false_handoff_rate": null,
+    "safe_observation_coverage": null,
+    "risk_miss_rate": 0.0,
+    "no_evidence_pass_rate": 1.0,
+    "evidence_group_pass_rate": null,
+    "turn_pass_rate": 1.0,
+    "dialogue_pass_rate": 1.0
+  },
+  "details": [
+    {
+      "case_id": "dialogue-201",
+      "turn": 1,
+      "tags": [
+        "guard_control",
+        "no_evidence",
+        "unknown_inventory"
+      ],
+      "query": "星云X9耳机今天在南京仓还有多少件现货",
+      "expected": {
+        "needs_human": true,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [],
+        "targets": [],
+        "evidence_groups": [],
+        "answer_groups": []
+      },
+      "risk": false,
+      "no_evidence": true,
+      "response": {
+        "query": "星云X9耳机今天在南京仓还有多少件现货",
+        "trace_id": "a78bc6f29c8f48f1830bc967368f76fc",
+        "intent": "product_consult",
+        "confidence": 0.85,
+        "target": "rag",
+        "rewritten_query": "星云X9耳机今天在南京仓的现货库存数量",
+        "reasoning": "询问商品在特定仓库的现货库存，属商品信息咨询。",
+        "results": [],
+        "reply": "回答需人工核验，正在为您转接人工客服。",
+        "search_time_ms": 3.8,
+        "degradation_level": 5,
+        "degradation_method": "fallback",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": true,
+        "human_reason": "忠实度不足(0.00<0.7), 检索降级严重(Level 5), 资料或回答未完整覆盖当前问题，或核验不可用",
+        "human_priority": "medium",
+        "emotion": "calm",
+        "handoff_payload": {
+          "user_query": "星云X9耳机今天在南京仓还有多少件现货",
+          "intent": "product_consult",
+          "emotion": "calm",
+          "entities": {
+            "product_name": "星云X9耳机"
+          },
+          "memory_summary": "",
+          "attempted_actions": "degradation_level=5, correction_rounds=0",
+          "unresolved_reason": "忠实度不足(0.00<0.7), 检索降级严重(Level 5), 资料或回答未完整覆盖当前问题，或核验不可用"
+        },
+        "review_task_id": "df38ab6b4c535a708343b932220dbaef",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "insufficient",
+        "answer_status": "insufficient"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 28093.43,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "a78bc6f29c8f48f1830bc967368f76fc",
+        "total_ms": 28061.525,
+        "llm_calls": 7,
+        "llm_attempts": 7,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 7,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 2484,
+          "completion_tokens": 454,
+          "total_tokens": 2938
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 3.104,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.012,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 2986.574,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 2988.327,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 1.255,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 837.159,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.rewrite",
+            "elapsed_ms": 769.124,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.rewrite",
+            "elapsed_ms": 994.166,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.expand",
+            "elapsed_ms": 2181.858,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 1296.221,
+            "status": "ok"
+          },
+          {
+            "name": "graph.retrieve",
+            "elapsed_ms": 24937.015,
+            "status": "ok"
+          },
+          {
+            "name": "graph.web_search",
+            "elapsed_ms": 0.613,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 0.015,
+            "status": "ok"
+          },
+          {
+            "name": "graph.generate",
+            "elapsed_ms": 0.448,
+            "status": "ok"
+          },
+          {
+            "name": "graph.evaluate_quality",
+            "elapsed_ms": 2.576,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 1.364,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "3d4240d3d6524afb9e91087b3a11b1d5",
+            "elapsed_ms": 2986.508
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "da9276e1acc44ef49971a387860c0943",
+            "elapsed_ms": 837.006
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "33492d8001c44e47ae95f112f2847f96",
+            "elapsed_ms": 769.09
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "51b37d8fdf5041c5ab1e27c1d3208d97",
+            "elapsed_ms": 994.125
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "25f111ace42d40d9973ad0cef1d80773",
+            "elapsed_ms": 743.001
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "03123735ee584b0ea35960ca8c81d075",
+            "elapsed_ms": 1318.517
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "cb24a46293fa4098839f43892b9b5166",
+            "elapsed_ms": 1296.11
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "3d4240d3d6524afb9e91087b3a11b1d5",
+            "usage": {
+              "prompt_tokens": 623,
+              "completion_tokens": 140,
+              "total_tokens": 763
+            },
+            "usage_complete": true,
+            "elapsed_ms": 2986.459
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "da9276e1acc44ef49971a387860c0943",
+            "usage": {
+              "prompt_tokens": 777,
+              "completion_tokens": 42,
+              "total_tokens": 819
+            },
+            "usage_complete": true,
+            "elapsed_ms": 836.928
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "33492d8001c44e47ae95f112f2847f96",
+            "usage": {
+              "prompt_tokens": 39,
+              "completion_tokens": 13,
+              "total_tokens": 52
+            },
+            "usage_complete": true,
+            "elapsed_ms": 769.044
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "51b37d8fdf5041c5ab1e27c1d3208d97",
+            "usage": {
+              "prompt_tokens": 33,
+              "completion_tokens": 22,
+              "total_tokens": 55
+            },
+            "usage_complete": true,
+            "elapsed_ms": 994.076
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "25f111ace42d40d9973ad0cef1d80773",
+            "usage": {
+              "prompt_tokens": 114,
+              "completion_tokens": 63,
+              "total_tokens": 177
+            },
+            "usage_complete": true,
+            "elapsed_ms": 742.95
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "03123735ee584b0ea35960ca8c81d075",
+            "usage": {
+              "prompt_tokens": 97,
+              "completion_tokens": 124,
+              "total_tokens": 221
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1318.465
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "cb24a46293fa4098839f43892b9b5166",
+            "usage": {
+              "prompt_tokens": 801,
+              "completion_tokens": 50,
+              "total_tokens": 851
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1296.072
+          }
+        ],
+        "estimated_cost_cny": 0.003392,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    },
+    {
+      "case_id": "dialogue-202",
+      "turn": 1,
+      "tags": [
+        "guard_control",
+        "no_evidence",
+        "allergen"
+      ],
+      "query": "礼盒里的饼干能保证不含花生吗，我家孩子花生过敏",
+      "expected": {
+        "needs_human": true,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [],
+        "targets": [],
+        "evidence_groups": [],
+        "answer_groups": []
+      },
+      "risk": true,
+      "no_evidence": true,
+      "response": {
+        "query": "礼盒里的饼干能保证不含花生吗，我家孩子花生过敏",
+        "trace_id": "43685b46839444a493c7dbc4e85e8245",
+        "intent": "product_consult",
+        "confidence": 0.85,
+        "target": "rag",
+        "rewritten_query": "礼盒里的饼干是否保证不含花生（孩子花生过敏）",
+        "reasoning": "询问礼盒中饼干是否含花生，属于商品成分/规格咨询。",
+        "results": [],
+        "reply": "您反馈的食用后不适或食品安全问题需要优先人工跟进。请保留商品包装、批次和订单信息，客服会进一步核实。",
+        "search_time_ms": 0.0,
+        "degradation_level": 1,
+        "degradation_method": "dense",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": true,
+        "human_reason": "涉及实际食品安全或食用后不适，需人工优先跟进",
+        "human_priority": "high",
+        "emotion": "calm",
+        "handoff_payload": {
+          "user_query": "礼盒里的饼干能保证不含花生吗，我家孩子花生过敏",
+          "intent": "product_consult",
+          "emotion": "calm",
+          "entities": {
+            "product_name": "礼盒里的饼干"
+          },
+          "memory_summary": "",
+          "attempted_actions": "degradation_level=1, correction_rounds=0",
+          "unresolved_reason": "涉及实际食品安全或食用后不适，需人工优先跟进",
+          "policy_context": {}
+        },
+        "review_task_id": "",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "",
+        "answer_status": ""
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 1332.83,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "43685b46839444a493c7dbc4e85e8245",
+        "total_ms": 1323.02,
+        "llm_calls": 1,
+        "llm_attempts": 1,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 1,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 624,
+          "completion_tokens": 141,
+          "total_tokens": 765
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 3.059,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.01,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 1268.157,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 1269.036,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.237,
+            "status": "ok"
+          },
+          {
+            "name": "graph.human",
+            "elapsed_ms": 0.39,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 0.124,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "07f13d0cfdad4a2c9c4af46ceb8e97b8",
+            "elapsed_ms": 1268.071
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "07f13d0cfdad4a2c9c4af46ceb8e97b8",
+            "usage": {
+              "prompt_tokens": 624,
+              "completion_tokens": 141,
+              "total_tokens": 765
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1268.02
+          }
+        ],
+        "estimated_cost_cny": 0.000906,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    },
+    {
+      "case_id": "dialogue-203",
+      "turn": 1,
+      "tags": [
+        "guard_control",
+        "no_evidence",
+        "merchant_hours"
+      ],
+      "query": "你们苏州工业园门店今晚几点打烊",
+      "expected": {
+        "needs_human": true,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [],
+        "targets": [],
+        "evidence_groups": [],
+        "answer_groups": []
+      },
+      "risk": false,
+      "no_evidence": true,
+      "response": {
+        "query": "你们苏州工业园门店今晚几点打烊",
+        "trace_id": "e0293a7ce7a84bfc9065b6512946dc36",
+        "intent": "product_consult",
+        "confidence": 0.9,
+        "target": "rag",
+        "rewritten_query": "苏州工业园门店今晚几点打烊",
+        "reasoning": "询问门店营业时间，属门店及营业信息咨询。",
+        "results": [],
+        "reply": "回答需人工核验，正在为您转接人工客服。",
+        "search_time_ms": 4.5,
+        "degradation_level": 5,
+        "degradation_method": "fallback",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": true,
+        "human_reason": "忠实度不足(0.00<0.7), 检索降级严重(Level 5), 资料或回答未完整覆盖当前问题，或核验不可用",
+        "human_priority": "medium",
+        "emotion": "calm",
+        "handoff_payload": {
+          "user_query": "你们苏州工业园门店今晚几点打烊",
+          "intent": "product_consult",
+          "emotion": "calm",
+          "entities": {},
+          "memory_summary": "",
+          "attempted_actions": "degradation_level=5, correction_rounds=0",
+          "unresolved_reason": "忠实度不足(0.00<0.7), 检索降级严重(Level 5), 资料或回答未完整覆盖当前问题，或核验不可用"
+        },
+        "review_task_id": "f89f203a8a1b585e93d30f6a17eafd86",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "insufficient",
+        "answer_status": "insufficient"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 10379.24,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "e0293a7ce7a84bfc9065b6512946dc36",
+        "total_ms": 10370.076,
+        "llm_calls": 7,
+        "llm_attempts": 7,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 7,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 2098,
+          "completion_tokens": 351,
+          "total_tokens": 2449
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 3.109,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.009,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 985.107,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 985.826,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.565,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 748.897,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.rewrite",
+            "elapsed_ms": 640.691,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.rewrite",
+            "elapsed_ms": 997.426,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.expand",
+            "elapsed_ms": 2398.17,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 1165.111,
+            "status": "ok"
+          },
+          {
+            "name": "graph.retrieve",
+            "elapsed_ms": 9326.595,
+            "status": "ok"
+          },
+          {
+            "name": "graph.web_search",
+            "elapsed_ms": 0.594,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 0.012,
+            "status": "ok"
+          },
+          {
+            "name": "graph.generate",
+            "elapsed_ms": 0.316,
+            "status": "ok"
+          },
+          {
+            "name": "graph.evaluate_quality",
+            "elapsed_ms": 0.434,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 0.072,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "ecaa22c7c0e9413193e3c9220b813ed9",
+            "elapsed_ms": 985.013
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "6bf7371795b442fd86d4cbd1e2163be2",
+            "elapsed_ms": 748.808
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "83ff056226ef46c4989746372c50ac3b",
+            "elapsed_ms": 640.663
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "9b27bbbb3e3c473f810dd1954c92ac44",
+            "elapsed_ms": 997.386
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "a508a955e410444abe8eb9039beba965",
+            "elapsed_ms": 951.995
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "774f6ff83e1541a2be88ecb462b7eba3",
+            "elapsed_ms": 1310.331
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "9c90a0ec4c4442b3b33ed751a147e355",
+            "elapsed_ms": 1164.948
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "ecaa22c7c0e9413193e3c9220b813ed9",
+            "usage": {
+              "prompt_tokens": 620,
+              "completion_tokens": 108,
+              "total_tokens": 728
+            },
+            "usage_complete": true,
+            "elapsed_ms": 984.955
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "6bf7371795b442fd86d4cbd1e2163be2",
+            "usage": {
+              "prompt_tokens": 465,
+              "completion_tokens": 37,
+              "total_tokens": 502
+            },
+            "usage_complete": true,
+            "elapsed_ms": 748.773
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "83ff056226ef46c4989746372c50ac3b",
+            "usage": {
+              "prompt_tokens": 36,
+              "completion_tokens": 11,
+              "total_tokens": 47
+            },
+            "usage_complete": true,
+            "elapsed_ms": 640.633
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "9b27bbbb3e3c473f810dd1954c92ac44",
+            "usage": {
+              "prompt_tokens": 30,
+              "completion_tokens": 25,
+              "total_tokens": 55
+            },
+            "usage_complete": true,
+            "elapsed_ms": 997.344
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "a508a955e410444abe8eb9039beba965",
+            "usage": {
+              "prompt_tokens": 111,
+              "completion_tokens": 49,
+              "total_tokens": 160
+            },
+            "usage_complete": true,
+            "elapsed_ms": 951.95
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "774f6ff83e1541a2be88ecb462b7eba3",
+            "usage": {
+              "prompt_tokens": 94,
+              "completion_tokens": 87,
+              "total_tokens": 181
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1310.299
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "9c90a0ec4c4442b3b33ed751a147e355",
+            "usage": {
+              "prompt_tokens": 742,
+              "completion_tokens": 34,
+              "total_tokens": 776
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1164.888
+          }
+        ],
+        "estimated_cost_cny": 0.0028,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    },
+    {
+      "case_id": "dialogue-204",
+      "turn": 1,
+      "tags": [
+        "guard_control",
+        "no_evidence",
+        "unknown_safety_spec"
+      ],
+      "query": "星云X9联名手机壳能耐多少摄氏度高温",
+      "expected": {
+        "needs_human": true,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [],
+        "targets": [],
+        "evidence_groups": [],
+        "answer_groups": []
+      },
+      "risk": true,
+      "no_evidence": true,
+      "response": {
+        "query": "星云X9联名手机壳能耐多少摄氏度高温",
+        "trace_id": "873e33d2fbb348a8bf976450049200c7",
+        "intent": "product_consult",
+        "confidence": 0.95,
+        "target": "rag",
+        "rewritten_query": "星云X9联名手机壳能耐多少摄氏度高温",
+        "reasoning": "询问商品耐高温参数，属商品规格咨询。",
+        "results": [],
+        "reply": "回答需人工核验，正在为您转接人工客服。",
+        "search_time_ms": 3.0,
+        "degradation_level": 5,
+        "degradation_method": "fallback",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": true,
+        "human_reason": "忠实度不足(0.00<0.7), 检索降级严重(Level 5), 资料或回答未完整覆盖当前问题，或核验不可用",
+        "human_priority": "medium",
+        "emotion": "calm",
+        "handoff_payload": {
+          "user_query": "星云X9联名手机壳能耐多少摄氏度高温",
+          "intent": "product_consult",
+          "emotion": "calm",
+          "entities": {
+            "product_name": "星云X9联名手机壳"
+          },
+          "memory_summary": "",
+          "attempted_actions": "degradation_level=5, correction_rounds=0",
+          "unresolved_reason": "忠实度不足(0.00<0.7), 检索降级严重(Level 5), 资料或回答未完整覆盖当前问题，或核验不可用"
+        },
+        "review_task_id": "22857789c04353ab929169ba8758e1f2",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "insufficient",
+        "answer_status": "insufficient"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 9992.35,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "873e33d2fbb348a8bf976450049200c7",
+        "total_ms": 9971.626,
+        "llm_calls": 6,
+        "llm_attempts": 6,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 6,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 1633,
+          "completion_tokens": 419,
+          "total_tokens": 2052
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 3.006,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.007,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 1695.812,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 1696.346,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.515,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 928.583,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.rewrite",
+            "elapsed_ms": 740.673,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.rewrite",
+            "elapsed_ms": 570.682,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.expand",
+            "elapsed_ms": 2742.826,
+            "status": "ok"
+          },
+          {
+            "name": "graph.retrieve",
+            "elapsed_ms": 8206.276,
+            "status": "ok"
+          },
+          {
+            "name": "graph.web_search",
+            "elapsed_ms": 1.092,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 0.019,
+            "status": "ok"
+          },
+          {
+            "name": "graph.generate",
+            "elapsed_ms": 0.874,
+            "status": "ok"
+          },
+          {
+            "name": "graph.evaluate_quality",
+            "elapsed_ms": 0.962,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 0.085,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "9c3a9d7981d5490e9382cbb5801f108a",
+            "elapsed_ms": 1695.741
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "d84e6ad0c5fa44c1af744cf77fa8c12b",
+            "elapsed_ms": 928.415
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "891a90bf63da41f79b6f6172d9210b31",
+            "elapsed_ms": 740.646
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "f3f61e4e413f41fe8b66f415583a2266",
+            "elapsed_ms": 570.636
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "681296f90b4c4990aa92881f06fe34f5",
+            "elapsed_ms": 1263.463
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "3b901f3c40844626992c43628d935ce9",
+            "elapsed_ms": 1364.978
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "9c3a9d7981d5490e9382cbb5801f108a",
+            "usage": {
+              "prompt_tokens": 622,
+              "completion_tokens": 139,
+              "total_tokens": 761
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1695.696
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "d84e6ad0c5fa44c1af744cf77fa8c12b",
+            "usage": {
+              "prompt_tokens": 732,
+              "completion_tokens": 63,
+              "total_tokens": 795
+            },
+            "usage_complete": true,
+            "elapsed_ms": 928.365
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "891a90bf63da41f79b6f6172d9210b31",
+            "usage": {
+              "prompt_tokens": 38,
+              "completion_tokens": 13,
+              "total_tokens": 51
+            },
+            "usage_complete": true,
+            "elapsed_ms": 740.616
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "f3f61e4e413f41fe8b66f415583a2266",
+            "usage": {
+              "prompt_tokens": 32,
+              "completion_tokens": 24,
+              "total_tokens": 56
+            },
+            "usage_complete": true,
+            "elapsed_ms": 570.59
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "681296f90b4c4990aa92881f06fe34f5",
+            "usage": {
+              "prompt_tokens": 113,
+              "completion_tokens": 69,
+              "total_tokens": 182
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1263.416
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "3b901f3c40844626992c43628d935ce9",
+            "usage": {
+              "prompt_tokens": 96,
+              "completion_tokens": 111,
+              "total_tokens": 207
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1364.938
+          }
+        ],
+        "estimated_cost_cny": 0.002471,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    },
+    {
+      "case_id": "dialogue-205",
+      "turn": 1,
+      "tags": [
+        "guard_control",
+        "no_evidence",
+        "unknown_campaign"
+      ],
+      "query": "平台会员今年双十一满减券的准确过期时间是什么",
+      "expected": {
+        "needs_human": true,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [],
+        "targets": [],
+        "evidence_groups": [],
+        "answer_groups": []
+      },
+      "risk": false,
+      "no_evidence": true,
+      "response": {
+        "query": "平台会员今年双十一满减券的准确过期时间是什么",
+        "trace_id": "40997b8f01f5428e974bf1c92f7ba14b",
+        "intent": "product_consult",
+        "confidence": 0.62,
+        "target": "rag",
+        "rewritten_query": "平台会员今年双十一满减券的准确过期时间",
+        "reasoning": "询问平台会员双十一满减券的过期时间，属于优惠活动信息咨询，非订单或物流问题。",
+        "results": [],
+        "reply": "回答需人工核验，正在为您转接人工客服。",
+        "search_time_ms": 3.9,
+        "degradation_level": 5,
+        "degradation_method": "fallback",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": true,
+        "human_reason": "忠实度不足(0.00<0.7), 检索降级严重(Level 5), 资料或回答未完整覆盖当前问题，或核验不可用",
+        "human_priority": "medium",
+        "emotion": "calm",
+        "handoff_payload": {
+          "user_query": "平台会员今年双十一满减券的准确过期时间是什么",
+          "intent": "product_consult",
+          "emotion": "calm",
+          "entities": {},
+          "memory_summary": "",
+          "attempted_actions": "degradation_level=5, correction_rounds=0",
+          "unresolved_reason": "忠实度不足(0.00<0.7), 检索降级严重(Level 5), 资料或回答未完整覆盖当前问题，或核验不可用"
+        },
+        "review_task_id": "720be44983245241827b3efe52d9fcf6",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "insufficient",
+        "answer_status": "insufficient"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 15566.21,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "40997b8f01f5428e974bf1c92f7ba14b",
+        "total_ms": 15557.979,
+        "llm_calls": 7,
+        "llm_attempts": 7,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 7,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 2438,
+          "completion_tokens": 435,
+          "total_tokens": 2873
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 3.686,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.009,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 1207.016,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 1207.624,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.484,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 750.5,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.rewrite",
+            "elapsed_ms": 723.791,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.rewrite",
+            "elapsed_ms": 1030.322,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.expand",
+            "elapsed_ms": 3132.12,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 674.755,
+            "status": "ok"
+          },
+          {
+            "name": "graph.retrieve",
+            "elapsed_ms": 14254.007,
+            "status": "ok"
+          },
+          {
+            "name": "graph.web_search",
+            "elapsed_ms": 0.395,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 0.015,
+            "status": "ok"
+          },
+          {
+            "name": "graph.generate",
+            "elapsed_ms": 0.333,
+            "status": "ok"
+          },
+          {
+            "name": "graph.evaluate_quality",
+            "elapsed_ms": 0.537,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 0.097,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "3e2945889f8646ec95c2660458a751e1",
+            "elapsed_ms": 1206.95
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "2139fe7abdff4d1aac3c6b913e73532c",
+            "elapsed_ms": 750.371
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "d3914ec1a5904c45b77a916c77185c39",
+            "elapsed_ms": 723.754
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "73a8ea1dc7d04a0c85834c951392ed46",
+            "elapsed_ms": 1030.277
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "958aacce8cc342819fbf2ad6b72359b7",
+            "elapsed_ms": 1139.379
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "6786eaca163f48e4b367796393b2afb0",
+            "elapsed_ms": 1848.933
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "c8d89084cba04791bbd8efb67bc854da",
+            "elapsed_ms": 674.637
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "3e2945889f8646ec95c2660458a751e1",
+            "usage": {
+              "prompt_tokens": 623,
+              "completion_tokens": 123,
+              "total_tokens": 746
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1206.898
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "2139fe7abdff4d1aac3c6b913e73532c",
+            "usage": {
+              "prompt_tokens": 766,
+              "completion_tokens": 38,
+              "total_tokens": 804
+            },
+            "usage_complete": true,
+            "elapsed_ms": 750.318
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "d3914ec1a5904c45b77a916c77185c39",
+            "usage": {
+              "prompt_tokens": 39,
+              "completion_tokens": 12,
+              "total_tokens": 51
+            },
+            "usage_complete": true,
+            "elapsed_ms": 723.703
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "73a8ea1dc7d04a0c85834c951392ed46",
+            "usage": {
+              "prompt_tokens": 33,
+              "completion_tokens": 34,
+              "total_tokens": 67
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1030.232
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "958aacce8cc342819fbf2ad6b72359b7",
+            "usage": {
+              "prompt_tokens": 114,
+              "completion_tokens": 42,
+              "total_tokens": 156
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1139.337
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "6786eaca163f48e4b367796393b2afb0",
+            "usage": {
+              "prompt_tokens": 97,
+              "completion_tokens": 134,
+              "total_tokens": 231
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1848.897
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "c8d89084cba04791bbd8efb67bc854da",
+            "usage": {
+              "prompt_tokens": 766,
+              "completion_tokens": 52,
+              "total_tokens": 818
+            },
+            "usage_complete": true,
+            "elapsed_ms": 674.597
+          }
+        ],
+        "estimated_cost_cny": 0.0033079999999999997,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    },
+    {
+      "case_id": "dialogue-206",
+      "turn": 1,
+      "tags": [
+        "guard_control",
+        "no_evidence",
+        "price_promise"
+      ],
+      "query": "星云X9耳机现在能保证全网最低价吗",
+      "expected": {
+        "needs_human": true,
+        "policy_status": [],
+        "missing_fields": [],
+        "contains_any": [],
+        "excludes": [],
+        "targets": [],
+        "evidence_groups": [],
+        "answer_groups": []
+      },
+      "risk": true,
+      "no_evidence": true,
+      "response": {
+        "query": "星云X9耳机现在能保证全网最低价吗",
+        "trace_id": "11d9b1ba31f944b0bb282ece9de8912f",
+        "intent": "product_consult",
+        "confidence": 0.9,
+        "target": "rag",
+        "rewritten_query": "星云X9耳机现在是否保证全网最低价",
+        "reasoning": "询问商品价格优惠/最低价保障，属商品咨询中的优惠信息。",
+        "results": [],
+        "reply": "回答需人工核验，正在为您转接人工客服。",
+        "search_time_ms": 3.0,
+        "degradation_level": 5,
+        "degradation_method": "fallback",
+        "faithfulness": 0.0,
+        "correction_rounds": 0,
+        "was_corrected": false,
+        "needs_human": true,
+        "human_reason": "忠实度不足(0.00<0.7), 检索降级严重(Level 5), 资料或回答未完整覆盖当前问题，或核验不可用",
+        "human_priority": "medium",
+        "emotion": "calm",
+        "handoff_payload": {
+          "user_query": "星云X9耳机现在能保证全网最低价吗",
+          "intent": "product_consult",
+          "emotion": "calm",
+          "entities": {
+            "product_name": "星云X9耳机"
+          },
+          "memory_summary": "",
+          "attempted_actions": "degradation_level=5, correction_rounds=0",
+          "unresolved_reason": "忠实度不足(0.00<0.7), 检索降级严重(Level 5), 资料或回答未完整覆盖当前问题，或核验不可用"
+        },
+        "review_task_id": "1e26c89dd9565ae0acd50542d68a8c2d",
+        "policy_status": "",
+        "policy_missing_fields": [],
+        "policy_version": "",
+        "evidence_status": "insufficient",
+        "answer_status": "insufficient"
+      },
+      "failures": [],
+      "error_type": null,
+      "elapsed_ms": 13410.13,
+      "performance": {
+        "schema_version": 1,
+        "trace_id": "11d9b1ba31f944b0bb282ece9de8912f",
+        "total_ms": 13383.441,
+        "llm_calls": 7,
+        "llm_attempts": 7,
+        "llm_retries": 0,
+        "failed_attempts": 0,
+        "usage_reported_attempts": 7,
+        "usage_missing_attempts": 0,
+        "usage_complete": true,
+        "usage": {
+          "prompt_tokens": 2358,
+          "completion_tokens": 448,
+          "total_tokens": 2806
+        },
+        "stages": [
+          {
+            "name": "session.wait",
+            "elapsed_ms": 2.956,
+            "status": "ok"
+          },
+          {
+            "name": "memory.context",
+            "elapsed_ms": 0.007,
+            "status": "ok"
+          },
+          {
+            "name": "routing.classify_and_rewrite",
+            "elapsed_ms": 1035.264,
+            "status": "ok"
+          },
+          {
+            "name": "graph.classify_intent",
+            "elapsed_ms": 1035.883,
+            "status": "ok"
+          },
+          {
+            "name": "graph.check_human",
+            "elapsed_ms": 0.423,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 1007.599,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.rewrite",
+            "elapsed_ms": 1041.987,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.rewrite",
+            "elapsed_ms": 781.59,
+            "status": "ok"
+          },
+          {
+            "name": "retrieval.expand",
+            "elapsed_ms": 2472.088,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 906.096,
+            "status": "ok"
+          },
+          {
+            "name": "graph.retrieve",
+            "elapsed_ms": 12247.175,
+            "status": "ok"
+          },
+          {
+            "name": "graph.web_search",
+            "elapsed_ms": 0.559,
+            "status": "ok"
+          },
+          {
+            "name": "coverage.evidence",
+            "elapsed_ms": 0.013,
+            "status": "ok"
+          },
+          {
+            "name": "graph.generate",
+            "elapsed_ms": 0.288,
+            "status": "ok"
+          },
+          {
+            "name": "graph.evaluate_quality",
+            "elapsed_ms": 0.281,
+            "status": "ok"
+          },
+          {
+            "name": "memory.record",
+            "elapsed_ms": 0.144,
+            "status": "ok"
+          }
+        ],
+        "calls": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "566e623f905146f68e1a7b701ad234f0",
+            "elapsed_ms": 1035.209
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "a3143ce0e3e84a31bb9dad916aeb4cec",
+            "elapsed_ms": 1007.409
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "e54fb26f980d47d1b3bbe929018c7a91",
+            "elapsed_ms": 1041.918
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "861df939e1c44f48bcc1c338261cb02b",
+            "elapsed_ms": 781.547
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "0946498f38944a46897e1fbba68a4623",
+            "elapsed_ms": 717.411
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "133840efbe6c4a22ba1f2ecdaaa8c3aa",
+            "elapsed_ms": 1655.639
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "24020890e1bf4736aaeb11c7f5ae473f",
+            "elapsed_ms": 905.921
+          }
+        ],
+        "attempts": [
+          {
+            "model": "deepseek-chat",
+            "stage": "routing.classify_and_rewrite",
+            "status": "ok",
+            "call_id": "566e623f905146f68e1a7b701ad234f0",
+            "usage": {
+              "prompt_tokens": 622,
+              "completion_tokens": 140,
+              "total_tokens": 762
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1035.165
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "a3143ce0e3e84a31bb9dad916aeb4cec",
+            "usage": {
+              "prompt_tokens": 731,
+              "completion_tokens": 46,
+              "total_tokens": 777
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1007.355
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "e54fb26f980d47d1b3bbe929018c7a91",
+            "usage": {
+              "prompt_tokens": 38,
+              "completion_tokens": 11,
+              "total_tokens": 49
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1041.86
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.rewrite",
+            "status": "ok",
+            "call_id": "861df939e1c44f48bcc1c338261cb02b",
+            "usage": {
+              "prompt_tokens": 32,
+              "completion_tokens": 33,
+              "total_tokens": 65
+            },
+            "usage_complete": true,
+            "elapsed_ms": 781.504
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "0946498f38944a46897e1fbba68a4623",
+            "usage": {
+              "prompt_tokens": 113,
+              "completion_tokens": 54,
+              "total_tokens": 167
+            },
+            "usage_complete": true,
+            "elapsed_ms": 717.332
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "retrieval.expand",
+            "status": "ok",
+            "call_id": "133840efbe6c4a22ba1f2ecdaaa8c3aa",
+            "usage": {
+              "prompt_tokens": 96,
+              "completion_tokens": 118,
+              "total_tokens": 214
+            },
+            "usage_complete": true,
+            "elapsed_ms": 1655.601
+          },
+          {
+            "model": "deepseek-chat",
+            "stage": "coverage.evidence",
+            "status": "ok",
+            "call_id": "24020890e1bf4736aaeb11c7f5ae473f",
+            "usage": {
+              "prompt_tokens": 726,
+              "completion_tokens": 46,
+              "total_tokens": 772
+            },
+            "usage_complete": true,
+            "elapsed_ms": 905.824
+          }
+        ],
+        "estimated_cost_cny": 0.003254,
+        "pricing_snapshot": {
+          "deepseek-chat": {
+            "input": 0.001,
+            "output": 0.002
+          }
+        }
+      }
+    }
+  ],
+  "performance": {
+    "schema_version": 1,
+    "complete": true,
+    "observed_turns": 6,
+    "missing_turns": 0,
+    "http_latency": {
+      "count": 6,
+      "p50_ms": 10379.24,
+      "p95_ms": 28093.43,
+      "max_ms": 28093.43
+    },
+    "service_latency": {
+      "count": 6,
+      "p50_ms": 10370.076,
+      "p95_ms": 28061.525,
+      "max_ms": 28061.525
+    },
+    "first_observed_http_ms": 28093.43,
+    "subsequent_http_latency": {
+      "count": 5,
+      "p50_ms": 10379.24,
+      "p95_ms": 15566.21,
+      "max_ms": 15566.21
+    },
+    "llm_calls": 35,
+    "llm_attempts": 35,
+    "llm_retries": 0,
+    "failed_attempts": 0,
+    "usage_missing_attempts": 0,
+    "usage_complete": true,
+    "usage": {
+      "prompt_tokens": 11635,
+      "completion_tokens": 2248,
+      "total_tokens": 13883
+    },
+    "estimated_cost_cny": 0.016131,
+    "stages": {
+      "coverage.evidence": {
+        "count": 14,
+        "p50_ms": 748.897,
+        "p95_ms": 1296.221,
+        "max_ms": 1296.221
+      },
+      "graph.check_human": {
+        "count": 6,
+        "p50_ms": 0.484,
+        "p95_ms": 1.255,
+        "max_ms": 1.255
+      },
+      "graph.classify_intent": {
+        "count": 6,
+        "p50_ms": 1207.624,
+        "p95_ms": 2988.327,
+        "max_ms": 2988.327
+      },
+      "graph.evaluate_quality": {
+        "count": 5,
+        "p50_ms": 0.537,
+        "p95_ms": 2.576,
+        "max_ms": 2.576
+      },
+      "graph.generate": {
+        "count": 5,
+        "p50_ms": 0.333,
+        "p95_ms": 0.874,
+        "max_ms": 0.874
+      },
+      "graph.human": {
+        "count": 1,
+        "p50_ms": 0.39,
+        "p95_ms": 0.39,
+        "max_ms": 0.39
+      },
+      "graph.retrieve": {
+        "count": 5,
+        "p50_ms": 12247.175,
+        "p95_ms": 24937.015,
+        "max_ms": 24937.015
+      },
+      "graph.web_search": {
+        "count": 5,
+        "p50_ms": 0.594,
+        "p95_ms": 1.092,
+        "max_ms": 1.092
+      },
+      "memory.context": {
+        "count": 6,
+        "p50_ms": 0.009,
+        "p95_ms": 0.012,
+        "max_ms": 0.012
+      },
+      "memory.record": {
+        "count": 6,
+        "p50_ms": 0.097,
+        "p95_ms": 1.364,
+        "max_ms": 1.364
+      },
+      "retrieval.expand": {
+        "count": 5,
+        "p50_ms": 2472.088,
+        "p95_ms": 3132.12,
+        "max_ms": 3132.12
+      },
+      "retrieval.rewrite": {
+        "count": 10,
+        "p50_ms": 769.124,
+        "p95_ms": 1041.987,
+        "max_ms": 1041.987
+      },
+      "routing.classify_and_rewrite": {
+        "count": 6,
+        "p50_ms": 1207.016,
+        "p95_ms": 2986.574,
+        "max_ms": 2986.574
+      },
+      "session.wait": {
+        "count": 6,
+        "p50_ms": 3.059,
+        "p95_ms": 3.686,
+        "max_ms": 3.686
+      }
+    },
+    "llm_by_stage": {
+      "coverage.evidence": {
+        "calls": 9,
+        "attempts": 9,
+        "total_tokens": 6914,
+        "elapsed_ms": 8313.625
+      },
+      "retrieval.expand": {
+        "calls": 10,
+        "attempts": 10,
+        "total_tokens": 1896,
+        "elapsed_ms": 12313.646999999999
+      },
+      "retrieval.rewrite": {
+        "calls": 10,
+        "attempts": 10,
+        "total_tokens": 548,
+        "elapsed_ms": 8290.042
+      },
+      "routing.classify_and_rewrite": {
+        "calls": 6,
+        "attempts": 6,
+        "total_tokens": 4525,
+        "elapsed_ms": 9177.492
+      }
+    },
+    "limitations": "Nearest-rank sample percentiles, not an online SLO. Stage timings are inclusive and overlap; do not sum nested stages. Total service time includes session wait and memory, excludes monitoring persistence and HTTP transport. Tokens are provider-reported only; missing usage is not zero cost. Costs use the recorded repository rate table, not provider bills; cache discounts are not modeled. First request is listed separately; models were preloaded at service startup."
+  },
+  "created_at": "2026-11-19T11:01:51.018439+00:00",
+  "dataset_sha256": "d26640bbb25ee034d68e4f5beb1b6d0aa4c202fffbb107e8371e1c95b1091356",
+  "deployment": {
+    "execution": "http_service",
+    "git": {
+      "commit": "ccffae42bc51ea377141f33cc2988a5db56872c0",
+      "dirty": true
+    },
+    "source_sha256": {
+      "src/engineering/request_trace.py": "d5ef4c82fabdeaefb294cf1976777e2b88628679920c00aa3260c54eb7d212c6",
+      "src/engineering/llm_client.py": "dcf19d7998ce23c12128b713ede50fa4eae58f1bc28fa9234e50960bd48b2a6d",
+      "src/engineering/monitor.py": "a9d6d09700786a2e4b99ec1517c86415accd64ebf8c28c08ba91f6590ff29cf5",
+      "src/evaluation/performance.py": "51cc039c9d27106c8bea7a3840867e58d67113fd02a98c53f52afcb40db1d994",
+      "scripts/run_live_rag_benchmark.py": "c9af4f887db0b8f0444e53f7e34e6a1f165836553c3325fbc36ceffe6f332a95",
+      "src/evaluation/dialogue.py": "310a5da35d7a457129ef4890cc709aecd82270dc1a3fb170c26473a739d8296c",
+      "src/graph/workflow.py": "cba50a3c7db9bbdc4093b19b0ff393d14e1984bdc323f97adfabf998971db92d",
+      "src/conversation/coreference.py": "40c1fa5de19a16601ed816d8aed6c95c8f36baa3d844f6d254898d2f3b622905",
+      "src/conversation/human_in_loop.py": "c72598ea36bc91de786521c750f5d8c1696d43845cb2218b57bea4c2f9f5a69f",
+      "src/conversation/memory.py": "18883245fcb820aac54b2eb4501b32fc5f478e66370e30ecbebb722a889ffac1",
+      "src/routing/router.py": "cc25534b9c6c50a7dbc1221a5b37acd110d34b5934ce5b97af0643d2a77a6a0b",
+      "src/routing/classifier.py": "99088c3059959a93f1ff6fb3553c743d550cb55053d57856acfa463a5fcc34eb",
+      "src/routing/models.py": "5dff2dd330f751562893b9becdd40c24606654463698332c540ddd9ca1508279",
+      "src/embedding/degradation.py": "374a1d03e96fa521b675bc7aa6d9e1066cd72691d6d0912b4cb70ed72fdc51a2",
+      "src/embedding/retriever.py": "2458f7ee0c4907e00b020953fd53f483ec2515a04dfcae764b6286341ee22eba",
+      "src/embedding/embedder.py": "ebd033b133d9cedd501dd0d5563fdce6e2971a7ed8d923861608cb9ba4adf6f5",
+      "src/retrieval/reranker.py": "a685ea2aea0de6f8a3ae3d676731c0acfb8b2a6b222909631e239123c6150a23",
+      "src/generation/self_correction.py": "1dff19473252703cfbca9871574ca1bd8f159ef43dd91d1bb61e0018cc66a3de",
+      "src/generation/hallucination_detector.py": "36bac74a6aa0a30247dcea5aa8b76394986039b8fef1fda3d69ba914203bee64",
+      "src/generation/answerability.py": "5418abc0085c5a855269b3b0f72fade67cb34814246f1b40e268a1d83bb14a5e",
+      "src/api/chat_service.py": "812f2a5a603125397dff1f2949fafa9dc2f3eb3929e90ccfb63b48660b4ea2de",
+      "src/api/models.py": "271cbd5f61f100370360e1d389ef58432dac81ccae76f0c5c0f261d18dc150a0",
+      "src/config.py": "d7f992b7d24331964275f0d3cd94003fb0b589ad296f6118fe518f7889afd9fc",
+      "data/policies/returns.json": "f8b7c9346faf9e1fabe89e805b561a83cbf7ff756060967a9a2e8050c4c4a62c"
+    },
+    "corpus_sha256": "c089d0b3fa41de501055ecbaa60ec39d735e1bfcb8cbbce83d3d27eede776ed1",
+    "faq_count": 60,
+    "models": {
+      "embedding": {
+        "sha256": "a7e6c0579782e27eb500fd12d93d247897f99914300c09286526f7d04ede7a29",
+        "files": [
+          {
+            "file": ".gitattributes",
+            "sha256": "11ad7efa24975ee4b0c3c3a38ed18737f0658a5f75a0a96787b576a78a023361"
+          },
+          {
+            "file": "1_Pooling/config.json",
+            "sha256": "aaa8861589f80c961a03cc86c7eeaef7605c1676b9ab55329d33a304738769c6"
+          },
+          {
+            "file": "config.json",
+            "sha256": "3853a7979202c348751b753e36f579c41d8da7d36af617d3d907e1fc9b441f2a"
+          },
+          {
+            "file": "config_sentence_transformers.json",
+            "sha256": "940d5f50db195fa6e5e6a4f122c095f77880de259d74b14a65779ed48bdd7c56"
+          },
+          {
+            "file": "configuration.json",
+            "sha256": "6bc26d64eb5024b4d1dab5a52371958b429256d6c9d59787f1f5294a54e0cebd"
+          },
+          {
+            "file": "model.safetensors",
+            "sha256": "354763b9b1357bc9c44f62c6be2276321081ed2567773608c0d0785b61d5a026"
+          },
+          {
+            "file": "modules.json",
+            "sha256": "84e40c8e006c9b1d6c122e02cba9b02458120b5fb0c87b746c41e0207cf642cf"
+          },
+          {
+            "file": "pytorch_model.bin",
+            "sha256": "7c5fe667bbed05dc10e246e229b701ad266fe4d95ab946e9e5aa402056611b88"
+          },
+          {
+            "file": "README.md",
+            "sha256": "c48a4eeea77f6b1d38b48ec1c5b8d4f86d5550cc43fa345a0db1b2ca1d082369"
+          },
+          {
+            "file": "sentence_bert_config.json",
+            "sha256": "84e39fda68ccbff05bfa723ae9c0e70e23e2ec373b76e0f8c6e71af72a693cbf"
+          },
+          {
+            "file": "special_tokens_map.json",
+            "sha256": "b6d346be366a7d1d48332dbc9fdf3bf8960b5d879522b7799ddba59e76237ee3"
+          },
+          {
+            "file": "tokenizer.json",
+            "sha256": "48cea5d44424912a6fd1ea647bf4fe50b55ab8b1e5879c3275f80e339e8fae26"
+          },
+          {
+            "file": "tokenizer_config.json",
+            "sha256": "e6f3b96db926a37d4039995fbf5ad17de158dfb8f6343d607e4dbaad18d75f5a"
+          },
+          {
+            "file": "vocab.txt",
+            "sha256": "45bbac6b341c319adc98a532532882e91a9cefc0329aa57bac9ae761c27b291c"
+          }
+        ]
+      },
+      "reranker": {
+        "sha256": "bfab6fd0a5d7718e8659b6c911b59153ce4a77aff663fa90d142ea4adfb49fcf",
+        "files": [
+          {
+            "file": ".gitattributes",
+            "sha256": "31e17e23b1ac71e380c29f1ae4bc7226f2f4746116f60a313d92a07f45f65fa5"
+          },
+          {
+            "file": "config.json",
+            "sha256": "289adf7ada1eb6b4afa7589a48a032d45a076cf2e46dcdb3b4cabc33be14f708"
+          },
+          {
+            "file": "configuration.json",
+            "sha256": "90dccac936e44dcb4567017a5dbb807b583604032fd53bfe2372a15881ed47e1"
+          },
+          {
+            "file": "model.safetensors",
+            "sha256": "ced967c45fd1902eb92716c9ceeca7c95a936770ea9db611f5a841b926e33fbd"
+          },
+          {
+            "file": "onnx/model.onnx",
+            "sha256": "15b9a8c3da82eddf263df571281166e00e9308fe19d077084b642ebfcaf06d2b"
+          },
+          {
+            "file": "pytorch_model.bin",
+            "sha256": "5b475bec40425c52229bbc63f9f50e290315c29f4e52c8f8dd404a159c0469fa"
+          },
+          {
+            "file": "README.md",
+            "sha256": "b4223c8c1e95538f8c79168afc501f8b2da06c63221f013b79b28af78b59366d"
+          },
+          {
+            "file": "sentencepiece.bpe.model",
+            "sha256": "cfc8146abe2a0488e9e2a0c56de7952f7c11ab059eca145a0a727afce0db2865"
+          },
+          {
+            "file": "special_tokens_map.json",
+            "sha256": "d5469a60db23249c7f8945013d78df30b44b6bf686c6bb4740f4223f77b1b535"
+          },
+          {
+            "file": "tokenizer.json",
+            "sha256": "9eb652ac4e40cc093272bbbe0f55d521cf67570060227109b5cdc20945a4489e"
+          },
+          {
+            "file": "tokenizer_config.json",
+            "sha256": "a1d6bc8734a6f635dc158508bef000f8e2e5a759c7d92f984b2c86e5ff53425b"
+          }
+        ]
+      },
+      "dialogue": "deepseek-chat"
+    },
+    "python": "3.12.9",
+    "packages": {
+      "torch": "2.14.0+cpu",
+      "sentence-transformers": "3.4.1",
+      "transformers": "4.48.3",
+      "huggingface-hub": "0.36.2",
+      "tokenizers": "0.21.4",
+      "chromadb": "1.5.9",
+      "langgraph": "1.2.22",
+      "fastapi": "0.163.1",
+      "pydantic": "2.14.3"
+    },
+    "parameters": {
+      "device": "cpu",
+      "torch_threads": 4,
+      "torch_seed": 0,
+      "web_search": false,
+      "cache": "fresh process-local memory, reused within run",
+      "order_backend": "disabled; FAQ suite only",
+      "access_level": "public",
+      "top_k": 5,
+      "use_reranker": true,
+      "dense_threshold": 0.4
+    }
+  },
+  "limitations": "Authored development suite, not user traffic or a blinded holdout. Real BGE and dialogue API; FAQ-only corpus, web search and order backend disabled. Phrase/evidence checks are not a semantic judge."
+}
